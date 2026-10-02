@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<title>Mi portal · ECOVSA</title>
+<base target="_top">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#0f2a57">
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="icon" href="favicon.ico">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800;900&display=swap">
+<!-- api 3.17 · Portal de clientes: micro (una sede), sede de un macro y corporativo.
+     Entra con un PIN de 6 números propio de cada persona; los accesos los da el administrador. -->
+<script>window.PUENTE_CONFIG={sinCopia:/./, indicador:'oculto', enSupabase:/^api_(?!optimizarRuta$)/, escritura:/^api_ptl(?!Inicio$|Invitacion$|Constancia$)|^api_pedir/};</script>
+<script src="puente.js"></script>
+<script src="cargador.js" data-solo></script>
+<script src="archivos.js"></script>
+<style>
+:root{
+  --navy:#0f2a57; --marca:#14306b; --acento:#F5B301; --tinta:#0f2140; --gris:#667489;
+  --fondo:#f3f5f8; --tarjeta:#fff; --linea:#e1e6ee; --suave:#f6f8fb; --azulclaro:#e8effb;
+  --ok:#2f9e44; --ok-bg:#eaf6e4; --warn:#a87400; --warn-bg:#fff4d6; --bad:#d64045; --bad-bg:#fdecea; --info:#3b6fd4; --info-bg:#e8effb;
+  --letra:Archivo,system-ui,-apple-system,"Segoe UI",Arial,sans-serif; --radio:14px; --radio-b:9px; color-scheme:light;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0}
+body{background:var(--fondo);color:var(--tinta);font:15px/1.5 var(--letra);min-height:100vh}
+button,input,select,textarea{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--info);outline-offset:2px}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+.barra{background:var(--navy);color:#fff;display:flex;align-items:center;gap:14px;padding:calc(8px + env(safe-area-inset-top,0px)) 18px 8px;min-height:58px;position:sticky;top:0;z-index:20}
+.barra img.l{height:15px;display:block}
+.barra .sep{width:1px;height:24px;background:rgba(255,255,255,.22)}
+.barra .mod{font-weight:600;font-size:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}
+.barra .sp{flex:1}
+.barra .usr{display:flex;gap:9px;align-items:center;font-size:13px}
+.barra .av{width:30px;height:30px;border-radius:50%;background:#fff;color:var(--navy);display:grid;place-items:center;font-weight:800;font-size:12px;flex:none}
+.barra .salir{background:transparent;border:1px solid rgba(255,255,255,.35);color:#fff;border-radius:8px;padding:4px 10px;cursor:pointer;font-size:12.5px}
+.cuerpo{display:grid;grid-template-columns:220px minmax(0,1fr);min-height:calc(100vh - 58px)}
+.menu{background:#fff;border-right:1px solid var(--linea);padding:14px 10px}
+.menu h6{margin:12px 10px 6px;font-size:10.5px;letter-spacing:.8px;text-transform:uppercase;color:var(--gris)}
+.menu button{display:flex;width:100%;gap:10px;align-items:center;text-align:left;background:none;border:0;border-radius:9px;padding:9px 10px;cursor:pointer;color:var(--tinta);font-size:14px}
+.menu button:hover{background:var(--suave)}
+.menu button[aria-current="page"]{background:var(--azulclaro);color:var(--marca);font-weight:700}
+.menu button[disabled]{opacity:.45;cursor:not-allowed}
+.menu .n{margin-left:auto;background:var(--bad);color:#fff;border-radius:10px;font-size:11px;padding:0 6px;font-weight:700}
+.main{padding:22px 24px 40px;min-width:0;max-width:1080px}
+.main h1{font-size:22px;margin:0 0 2px;color:var(--marca);text-wrap:balance}
+.main .bajada{color:var(--gris);margin:0 0 16px}
+@media (max-width:820px){
+  .cuerpo{grid-template-columns:minmax(0,1fr)}
+  .menu{border-right:0;border-bottom:1px solid var(--linea);padding:8px 10px;display:flex;gap:4px;overflow-x:auto;position:sticky;top:58px;z-index:10}
+  .menu h6{display:none}.menu button{width:auto;white-space:nowrap;padding:7px 11px;font-size:13.5px}
+  .main{padding:16px 16px 40px}.barra .usr span{display:none}
+}
+.grid{display:grid;gap:14px}.g2{grid-template-columns:repeat(2,minmax(0,1fr))}.g3{grid-template-columns:repeat(3,minmax(0,1fr))}.g4{grid-template-columns:repeat(4,minmax(0,1fr))}
+@media (max-width:820px){.g3,.g4{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:520px){.g2,.g3{grid-template-columns:minmax(0,1fr)}}
+.card{background:var(--tarjeta);border:1px solid var(--linea);border-radius:var(--radio);padding:16px 18px;min-width:0}
+.card>h3{margin:0 0 10px;font-size:11.5px;letter-spacing:.8px;text-transform:uppercase;color:var(--gris);display:flex;gap:8px;align-items:center}
+.card>h3 .sp{flex:1}
+.kpi b{display:block;font-size:26px;line-height:1.15;color:var(--tinta);font-variant-numeric:tabular-nums}
+.kpi span{color:var(--gris);font-size:13px}
+.tag{display:inline-flex;gap:5px;align-items:center;font-size:12px;font-weight:700;border-radius:999px;padding:2px 9px;white-space:nowrap}
+.t-ok{background:var(--ok-bg);color:var(--ok)}.t-warn{background:var(--warn-bg);color:var(--warn)}.t-bad{background:var(--bad-bg);color:var(--bad)}.t-info{background:var(--info-bg);color:var(--info)}.t-gris{background:#eef1f5;color:var(--gris)}
+.btn{display:inline-flex;gap:7px;align-items:center;justify-content:center;background:#fff;border:1px solid #cdd5e1;color:var(--marca);border-radius:var(--radio-b);padding:8px 14px;font-weight:600;cursor:pointer;font-size:14px;text-decoration:none}
+.btn:hover{background:var(--suave)}.btn.pri{background:var(--marca);border-color:var(--marca);color:#fff}.btn.sm{padding:5px 10px;font-size:13px}.btn[disabled]{opacity:.5;cursor:not-allowed}
+.fila{display:flex;gap:12px;align-items:center;padding:10px 0;border-top:1px solid #eef1f5}
+.fila:first-of-type{border-top:0}.fila .tx{flex:1;min-width:0}.fila .tx small{display:block;color:var(--gris)}
+.fecha{flex:none;width:50px;text-align:center;border:1px solid var(--linea);border-radius:10px;padding:4px 0;line-height:1.1}
+.fecha b{display:block;font-size:19px;color:var(--marca)}.fecha span{font-size:10.5px;text-transform:uppercase;letter-spacing:.5px;color:var(--gris)}
+.tabla{overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:14px}
+th{text-align:left;font-size:11px;letter-spacing:.6px;text-transform:uppercase;color:var(--gris);border-bottom:1.5px solid var(--linea);padding:8px 8px;white-space:nowrap}
+td{border-bottom:1px solid #eef1f5;padding:10px 8px;vertical-align:middle}
+td small{display:block;color:var(--gris)}
+.n{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+.aviso{display:flex;gap:12px;align-items:flex-start;border-radius:12px;padding:12px 14px;margin:0 0 16px}
+.aviso .tx{flex:1}.aviso.warn{background:var(--warn-bg);color:#5c4200}.aviso.bad{background:var(--bad-bg);color:#7d1d16}.aviso.info{background:var(--info-bg);color:#1f3f86}.aviso.ok{background:var(--ok-bg);color:#1d5e22}
+.aviso .acc{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
+.pista{background:var(--suave);border:1px dashed #cfd7e3;border-radius:10px;padding:9px 12px;color:var(--gris);font-size:13px}
+.campo{display:grid;gap:5px;margin-bottom:12px}.campo label{font-size:12.5px;font-weight:700;color:var(--gris)}
+.campo input,.campo select,.campo textarea{border:1px solid #cdd5e1;border-radius:var(--radio-b);padding:9px 11px;background:#fff;width:100%}
+.candado{display:grid;place-items:center;text-align:center;padding:30px 16px;color:var(--gris)}
+.ent{max-width:420px;margin:0 auto;padding:34px 16px}
+.ent .card{text-align:center;padding:26px 22px}
+.ent .eco-lg{margin:0 auto;box-shadow:0 0 0 1px var(--linea),0 8px 24px rgba(15,33,64,.1)}
+.ent h2{margin:12px 0 4px;color:var(--marca);font-size:20px}
+.pts{display:flex;gap:9px;justify-content:center;margin:16px 0}
+.pts i{width:16px;height:16px;border-radius:50%;border:2px solid #b8c2d2}.pts i.on{background:var(--marca);border-color:var(--marca)}
+.tec{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;max-width:270px;margin:0 auto}
+.tec button{height:52px;border-radius:12px;border:1px solid var(--linea);background:#fff;font-size:20px;font-weight:600;cursor:pointer}
+.tec button:hover{background:var(--suave)}
+.msg{min-height:20px;color:var(--bad);font-size:13.5px;margin-top:8px}
+.fondo{position:fixed;inset:0;background:rgba(15,33,64,.45);z-index:50;display:flex;align-items:flex-start;justify-content:center;padding:40px 14px;overflow:auto}
+.modal{background:#fff;border-radius:16px;width:100%;max-width:520px;padding:18px 20px;box-shadow:0 20px 60px rgba(0,0,0,.3)}
+.modal h2{margin:0 0 4px;font-size:18px;color:var(--marca)}.modal .pie{display:flex;gap:8px;justify-content:flex-end;margin-top:14px;flex-wrap:wrap}
+.catg{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:12px}
+.cat{border:1px solid var(--linea);border-radius:12px;padding:12px 14px;background:#fff;display:flex;flex-direction:column;gap:6px}
+.cat b{font-size:14.5px}.cat small{color:var(--gris);flex:1}
+#toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:#0f2140;color:#fff;border-radius:10px;padding:10px 16px;font-size:14px;display:none;z-index:60;max-width:90vw}
+.pie-p{padding:20px 16px 28px;text-align:center;font-size:11.5px;color:#6a7689;line-height:1.6}
+</style>
+</head>
+<body>
+<div id="app"><div class="ent"><div class="card" id="espera">Abriendo su portal…</div></div></div>
+<div id="toast"></div>
+<script>
+/* ═══ utilidades ═══ */
+/* en clientes.ecovsaapp.com los documentos (recibo, certificados) se abren desde ecovsaapp.com */
+var DOCS = /^clientes\./.test(location.hostname) ? 'https://ecovsaapp.com/' : '';
+function doc(u){ return /^https?:/.test(u||'') ? u : DOCS + (u||''); }
+var S = null, SES = '', V = 'inicio', PIN = '', PIN1 = '', ESTADO = '', INV = '', CLI = '', COD = '';
+var MES = ['ene','feb','mar','abr','may','jun','jul','ago','sep','oct','nov','dic'], MESL = ['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'];
+function $(i){ return document.getElementById(i); }
+function esc(s){ return String(s==null?'':s).replace(/[&<>"']/g,function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]; }); }
+function q(k){ var m=(location.search||'').match(new RegExp('[?&]'+k+'=([^&]+)')); return m?decodeURIComponent(m[1]):''; }
+function f(i){ var d=new Date(String(i)+'T12:00:00'); return isNaN(d)?String(i||''):d.getDate()+' '+MES[d.getMonth()]+' '+d.getFullYear(); }
+function fl(i){ var d=new Date(String(i)+'T12:00:00'); return isNaN(d)?String(i||''):d.getDate()+' de '+MESL[d.getMonth()]+' de '+d.getFullYear(); }
+function kg(v){ return (Math.round((Number(v)||0)*100)/100).toLocaleString('es-PA'); }
+function B(v){ return 'B/. '+(Number(v)||0).toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2}); }
+function toast(t){ var a=$('toast'); a.textContent=t; a.style.display='block'; clearTimeout(a._t); a._t=setTimeout(function(){ a.style.display='none'; },3500); }
+function ls(k,v){ try{ if(v===undefined) return localStorage.getItem(k)||''; if(v) localStorage.setItem(k,v); else localStorage.removeItem(k); }catch(e){ return ''; } }
+function llamar(fn){ var a=[].slice.call(arguments,1); return new Promise(function(ok,no){ var r=google.script.run.withSuccessHandler(ok).withFailureHandler(no); r[fn].apply(r,a); }); }
+function logo(px,arma){ return window.ECOCARGA?ECOCARGA.logo(px||76,{arma:!!arma}):'<img src="logo-ecovsa.png" alt="ECOVSA" style="width:'+(px||76)+'px">'; }
+function cerrarModal(){ var m=$('fondo'); if(m) m.remove(); }
+function modal(h){ cerrarModal(); var d=document.createElement('div'); d.className='fondo'; d.id='fondo'; d.innerHTML='<div class="modal" role="dialog">'+h+'</div>'; d.onclick=function(e){ if(e.target===d) cerrarModal(); }; document.body.appendChild(d); }
+function ocupado(b,si,t){ if(!b) return; if(si){ b._t=b.innerHTML; b.disabled=true; b.textContent=t||'Enviando…'; } else { b.disabled=false; if(b._t) b.innerHTML=b._t; } }
+
+/* ═══ entrada ═══ */
+function pantallaPin(titulo, sub, extra){
+  $('app').innerHTML='<div class="ent"><div class="card">'+logo(76,true)+'<h2>'+titulo+'</h2><p style="color:var(--gris);margin:0">'+sub+'</p><div class="pts" id="pts"></div>'+
+    '<div class="tec" id="tec">'+['1','2','3','4','5','6','7','8','9','','0','⌫'].map(function(x){ return x===''?'<span></span>':'<button type="button" data-k="'+x+'" aria-label="'+(x==='⌫'?'Borrar':x)+'">'+x+'</button>'; }).join('')+'</div>'+
+    '<div class="msg" id="msg"></div>'+(extra||'')+'</div></div>';
+  PIN=''; pts();
+  $('tec').onclick=function(e){ var b=e.target.closest('button'); if(!b) return; var k=b.getAttribute('data-k'); if(k==='⌫') PIN=PIN.slice(0,-1); else if(PIN.length<6) PIN+=k; pts(); if(PIN.length===6) setTimeout(alPin,120); };
+}
+document.addEventListener('keydown',function(e){ if(!$('tec')) return; if(/^\d$/.test(e.key)&&PIN.length<6){ PIN+=e.key; pts(); if(PIN.length===6) setTimeout(alPin,120); } else if(e.key==='Backspace'){ PIN=PIN.slice(0,-1); pts(); } });
+function pts(){ var p=$('pts'); if(p){ var h=''; for(var i=0;i<6;i++) h+='<i class="'+(i<PIN.length?'on':'')+'"></i>'; p.innerHTML=h; } }
+var alPin=function(){};
+function entrar(){
+  ESTADO='entrar';
+  pantallaPin('Entrar a su portal','Escriba su PIN de 6 números.',
+    '<p style="margin:16px 0 0;font-size:13.5px">'+(CLI?'<a href="?cli='+encodeURIComponent(CLI)+'&cod='+encodeURIComponent(COD)+'&p=activar">¿Primera vez? Activar mi acceso</a> · <a href="?cli='+encodeURIComponent(CLI)+'&cod='+encodeURIComponent(COD)+'&p=olvide">Olvidé mi PIN</a>':'¿Primera vez u olvidó su PIN? Escanee el QR del distintivo de su establecimiento o escríbanos al WhatsApp <b>6264-1647</b>.')+'</p>');
+  alPin=function(){ var m=$('msg'); m.style.color='var(--gris)'; m.textContent='Revisando…';
+    llamar('api_ptlEntrar',PIN).then(function(r){ if(!r||!r.ok){ m.style.color=''; m.textContent=(r&&r.error)||'No se pudo entrar.'; PIN=''; pts(); return; } SES=r.sesion; ls('ptl_ses',SES); cargar(); },
+      function(){ m.style.color=''; m.textContent='Sin conexión. Intente de nuevo.'; PIN=''; pts(); }); };
+}
+function invitacion(){
+  llamar('api_ptlInvitacion',INV).then(function(r){
+    if(!r||!r.ok){ $('app').innerHTML='<div class="ent"><div class="card">'+logo(76)+'<h2>Invitación no válida</h2><p style="color:var(--gris)">'+esc((r&&r.error)||'')+'</p><a class="btn pri" href="Portal.html">Entrar con mi PIN</a></div></div>'; return; }
+    var de=r.nivel==='corp'?'<b>'+esc(r.de)+'</b> (todas las sedes)':'<b>'+esc(r.de)+'</b>';
+    var crear=function(){ pantallaPin('Bienvenido, '+esc(String(r.nombre).split(' ')[0]),'ECOVSA le da acceso al portal de '+de+'.<br><b style="color:var(--tinta)">Cree su PIN de 6 números.</b>','<p class="pista" style="margin-top:14px">No use su fecha de nacimiento ni números seguidos. Es solo suyo: no lo comparta.</p>');
+      alPin=function(){ PIN1=PIN; pantallaPin('Repita su PIN','Escríbalo otra vez para confirmarlo.'); alPin=function(){
+        var m=$('msg'); m.style.color='var(--gris)'; m.textContent='Guardando…';
+        llamar('api_ptlCrearPin',INV,PIN1,PIN).then(function(x){ if(!x||!x.ok){ toast((x&&x.error)||'No se pudo'); crear(); setTimeout(function(){ var mm=$('msg'); if(mm) mm.textContent=(x&&x.error)||''; },50); return; }
+          SES=x.sesion; ls('ptl_ses',SES); history.replaceState(null,'','Portal.html'); guia(); }, function(){ m.style.color=''; m.textContent='Sin conexión. Intente de nuevo.'; }); }; }; };
+    crear();
+  },function(){ toast('Sin conexión'); });
+}
+var EV_INST=null; window.addEventListener('beforeinstallprompt',function(e){ e.preventDefault(); EV_INST=e; });
+function guia(){
+  var ios=/iphone|ipad|ipod/i.test(navigator.userAgent);
+  $('app').innerHTML='<div class="ent" style="max-width:520px"><div class="card"><span class="tag t-ok">✓ PIN creado</span><h2>Tenga ECOVSA en su celular</h2><p style="color:var(--gris);margin:0 0 14px">Un toque y le queda el ícono de ECOVSA junto a sus aplicaciones. No hay que descargar nada.</p>'+
+    (ios?'<div class="pista" style="text-align:left">En iPhone: toque el botón <b>Compartir</b> (el cuadro con la flecha) y elija <b>«Agregar a inicio»</b>.</div>':
+      '<button class="btn pri" id="inst" type="button">Instalar ECOVSA</button><div class="pista" style="text-align:left;margin-top:10px">Si no aparece el botón: menú del navegador (⋮) › <b>«Agregar a la pantalla principal»</b>.</div>')+
+    '<div style="display:flex;gap:8px;justify-content:center;margin-top:16px"><button class="btn" type="button" onclick="cargar()">Ahora no</button><button class="btn pri" type="button" onclick="cargar()">Entrar a mi portal</button></div></div></div>';
+  var b=$('inst'); if(b) b.onclick=function(){ if(EV_INST){ EV_INST.prompt(); EV_INST=null; } else toast('Use el menú del navegador › «Agregar a la pantalla principal»'); };
+}
+function pedirAcceso(tipo){
+  var olv=tipo==='olvide';
+  $('app').innerHTML='<div class="ent"><div class="card" style="text-align:left">'+'<div style="text-align:center">'+logo(70,true)+'</div><h2 style="text-align:center">'+(olv?'Olvidé mi PIN':'Activar mi acceso')+'</h2>'+
+    '<p style="color:var(--gris);margin:0 0 14px;text-align:center">'+(olv?'Pida un PIN nuevo. ':'Pida su acceso al portal de este establecimiento. ')+'Por seguridad, ECOVSA le manda la invitación al WhatsApp registrado del establecimiento.</p>'+
+    '<div class="campo"><label for="pa-n">Su nombre</label><input id="pa-n" autocomplete="name"></div><div class="campo"><label for="pa-c">Su cargo</label><input id="pa-c" placeholder="Ej. Administradora"></div>'+
+    '<div class="campo"><label for="pa-o">Nota (opcional)</label><input id="pa-o"></div><button class="btn pri" style="width:100%" id="pa-b" type="button">Enviar el pedido</button><div class="msg" id="msg"></div>'+
+    '<p style="text-align:center;margin:14px 0 0;font-size:13.5px"><a href="Portal.html'+(CLI?'?cli='+encodeURIComponent(CLI)+'&cod='+encodeURIComponent(COD):'')+'">Ya tengo mi PIN</a></p></div></div>';
+  $('pa-b').onclick=function(){ var b=this; ocupado(b,true);
+    llamar('api_ptlPedirAcceso',CLI,COD,{tipo:olv?'olvide':'activar',nombre:$('pa-n').value,cargo:$('pa-c').value,nota:$('pa-o').value}).then(function(r){ ocupado(b,false);
+      if(!r||!r.ok){ $('msg').textContent=(r&&r.error)||'No se pudo'; return; }
+      $('app').innerHTML='<div class="ent"><div class="card">'+logo(70)+'<h2>Pedido recibido</h2><p style="color:var(--gris)">'+esc(r.mensaje||'')+'</p>'+(r.folio?'<span class="tag t-info">'+esc(r.folio)+'</span>':'')+'</div></div>'; },
+      function(){ ocupado(b,false); $('msg').textContent='Sin conexión. Intente de nuevo.'; }); };
+}
+
+/* ═══ portal ═══ */
+function cargar(){
+  if(!SES){ entrar(); return; }
+  if(!S) $('app').innerHTML='<div class="ent"><div class="card">'+logo(76,true)+'<p style="color:var(--gris);margin:14px 0 0">Trayendo su información…</p></div></div>';
+  llamar('api_ptlInicio',SES).then(function(r){
+    if(!r||!r.ok){ if(r&&r.salir){ SES=''; ls('ptl_ses',''); S=null; entrar(); setTimeout(function(){ var m=$('msg'); if(m) m.textContent=r.error||''; },60); return; } toast((r&&r.error)||'No se pudo'); return; }
+    S=r; pintar();
+  },function(){ toast('Sin conexión. Intente de nuevo en un momento.'); if(!S) $('app').innerHTML='<div class="ent"><div class="card">'+logo(76)+'<h2>Sin conexión</h2><p style="color:var(--gris)">No pudimos conectar. Revise su señal.</p><button class="btn pri" onclick="cargar()">Reintentar</button></div></div>'; });
+}
+function salir(){ llamar('api_ptlSalir',SES).catch(function(){}); SES=''; S=null; ls('ptl_ses',''); entrar(); }
+function nivel(){ return S.yo.nivel; }
+function abierto(v){
+  var c=S.cuenta.estado, n=nivel();
+  if(c!=='suspendida') return true;
+  if(n==='micro') return v==='facturas';
+  if(n==='corp') return v==='inicio'||v==='facturas';
+  return v==='inicio';
+}
+function menu(){
+  var n=nivel(), pend=S.pedidos.filter(function(p){ return !p.cerrada; }).length;
+  var L=[['GENERAL',[['inicio',n==='corp'?'Resumen':'Inicio']].concat(n==='corp'?[['sedes','Sus sedes']]:[])],
+    ['DOCUMENTOS',[['recibos','Recibos de visita'],['certificados','Certificados']].concat(n==='sede'?[]:[['facturas','Facturas y pagos']])],
+    ['SERVICIOS',[['servicios','Servicios y productos'],['solicitudes','Solicitudes',pend]]]].concat(n==='corp'?[['SU EMPRESA',[['equipo','Accesos de su equipo']]]]:[]);
+  return L.map(function(g){ return '<h6>'+g[0]+'</h6>'+g[1].map(function(b){ var ok=abierto(b[0]); return '<button type="button" data-v="'+b[0]+'"'+(V===b[0]?' aria-current="page"':'')+(ok?'':' disabled title="Disponible al regularizar su cuenta"')+'>'+b[1]+(b[2]?'<span class="n">'+b[2]+'</span>':'')+'</button>'; }).join(''); }).join('');
+}
+function pintar(){
+  if(!abierto(V)) V=nivel()==='micro'&&S.cuenta.estado==='suspendida'?'facturas':'inicio';
+  var y=S.yo, cuenta=y.nivel==='corp'?y.razonSocial:(S.sedes[0]||{}).nombre, ini=String(y.nombre||'').split(' ').map(function(x){ return x.charAt(0); }).join('').slice(0,2).toUpperCase();
+  $('app').innerHTML='<div class="barra"><img class="l" src="ecovsa-letras.png" alt="ECOVSA"><span class="sep"></span><span class="mod">'+esc(cuenta)+'</span><span class="sp"></span><span class="usr"><span>'+esc(y.nombre)+'</span><span class="av">'+esc(ini)+'</span></span><button class="salir" type="button" onclick="salir()">Salir</button></div>'+
+    '<div class="cuerpo"><nav class="menu" id="menu" aria-label="Secciones">'+menu()+'</nav><main class="main" id="main"></main></div>';
+  $('menu').onclick=function(e){ var b=e.target.closest('button[data-v]'); if(!b||b.disabled) return; V=b.getAttribute('data-v'); pintar(); window.scrollTo(0,0); };
+  var vistas={inicio:vInicio,sedes:vSedes,recibos:vRecibos,certificados:vCerts,facturas:vFacturas,servicios:vServicios,solicitudes:vSolicitudes,equipo:vEquipo};
+  $('main').innerHTML=avisoCuenta()+(vistas[V]||vInicio)()+'<div class="pie-p">'+legal()+'</div>';
+}
+function avisoCuenta(){
+  var c=S.cuenta, n=nivel();
+  if(c.estado==='suspendida') return '<div class="aviso bad"><div class="tx"><b>Su servicio está en pausa.</b> '+(n==='sede'?'La corporación maneja el pago de la cuenta. ':'Para reactivarlo, regularice las facturas pendientes. ')+'Escríbanos al WhatsApp 6264-1647.'+(n!=='sede'?'<div class="acc"><button class="btn sm pri" onclick="comprobante()">Subir comprobante</button><button class="btn sm" onclick="plan()">Proponer un plan de pago</button></div>':'')+'</div></div>';
+  if(c.estado==='atraso'&&n!=='sede') return '<div class="aviso warn"><div class="tx"><b>Tiene '+(c.vencidas.length||'')+' factura'+(c.vencidas.length===1?'':'s')+' vencida'+(c.vencidas.length===1?'':'s')+'</b>'+(c.vencidas.length?' ('+c.vencidas.map(function(v){ return esc(v.factura)+' · '+B(v.saldo); }).join(', ')+')':'')+'. Los certificados de los periodos sin pagar se liberan al confirmar el pago.'+
+    '<div class="acc"><button class="btn sm pri" onclick="comprobante()">Subir comprobante</button><button class="btn sm" onclick="plan()">Proponer un plan de pago</button></div></div></div>';
+  return '';
+}
+function legal(){ var e=S.empresa||{}; return esc(e.razonSocial||'')+' · '+esc(e.comercial||'ECOVSA')+' · RUC '+esc(e.ruc||'')+(e.dv?' DV '+esc(e.dv):'')+'<br>'+esc(e.direccion||'')+'<br>'+esc(e.resolucion||'')+'<br>Tel. 310-2268 · WhatsApp 6264-1647 · info@ecovsa.com'; }
+function titulo(t,s){ return '<h1>'+t+'</h1>'+(s?'<p class="bajada">'+s+'</p>':''); }
+
+function vInicio(){
+  var n=nivel(), sedes=S.sedes, rec=S.recibos, mes=S.hoy.slice(0,7);
+  var visMes=rec.filter(function(r){ return r.fecha.slice(0,7)===mes; }).length, kg90=sedes.reduce(function(s,x){ return s+x.kg90; },0), ult=rec[0];
+  var h=titulo((n==='corp'?'Resumen de ':'Hola, ')+esc(n==='corp'?S.yo.razonSocial:String(S.yo.nombre).split(' ')[0]), n==='corp'?sedes.length+' sedes con servicio de ECOVSA':esc((sedes[0]||{}).nombre)+(sedes[0]&&sedes[0].frecuencia?' · frecuencia '+esc(sedes[0].frecuencia).toLowerCase():''));
+  if(S.cuenta.estado==='suspendida'&&n!=='sede') return h+'<div class="card"><h3>Facturas pendientes</h3><div class="kpi"><b>'+B(S.cuenta.saldo)+'</b><span>saldo de la cuenta</span></div><div style="margin-top:12px"><button class="btn pri" onclick="ir(\'facturas\')">Ver facturas y pagos</button></div></div>';
+  h+='<div class="grid g4">'+[[visMes,'visitas este mes'],[kg(kg90)+' kg','recolectados en 90 días'],[ult?f(ult.fecha):'—','última visita'+(ult&&n==='corp'?' · '+ult.sede:'')],[n==='sede'?S.certificados.length:B(S.cuenta.saldo),n==='sede'?'certificados':'saldo de la cuenta']].map(function(k){ return '<div class="card kpi"><b>'+esc(k[0])+'</b><span>'+esc(k[1])+'</span></div>'; }).join('')+'</div>';
+  h+='<div class="grid g2" style="margin-top:14px"><div class="card"><h3>Últimas visitas<span class="sp"></span><button class="btn sm" onclick="ir(\'recibos\')">Ver todas</button></h3>'+(rec.length?rec.slice(0,5).map(filaRec).join(''):'<p style="color:var(--gris)">Todavía no hay visitas registradas.</p>')+'</div>'+
+    '<div class="card"><h3>Su certificado de servicio</h3>'+(S.servicio.length?S.servicio.map(function(c){ return '<div class="fila"><div class="tx"><b>N.° '+esc(c.numero||c.folio)+'</b><small>'+(c.tipo==='cuenta'?'De la cuenta':'De '+esc(c.establecimiento))+' · vigente hasta el '+fl(c.vence)+'</small></div><a class="btn sm" href="'+esc(doc(c.url))+'" target="_blank" rel="noopener">Ver</a></div>'; }).join(''):'<p style="color:var(--gris);margin:0">Su certificado de servicio llega con la entrega del distintivo. Si lo necesita antes, pídalo en «Servicios y productos».</p>')+
+    '<div class="pista" style="margin-top:12px">Desechos sólidos: <b>próximamente</b> en su portal.</div></div></div>';
+  return h;
+}
+function ir(v){ V=v; pintar(); window.scrollTo(0,0); }
+function filaRec(r){ var d=new Date(r.fecha+'T12:00:00'); return '<div class="fila"><div class="fecha"><b>'+d.getDate()+'</b><span>'+MES[d.getMonth()]+'</span></div><div class="tx"><b>Recibo '+esc(r.recibo||'s/n')+'</b><small>'+(nivel()==='corp'?esc(r.sede)+' · ':'')+kg(r.kg)+' kg'+(r.bolsas?' · '+r.bolsas+' bolsas':'')+'</small></div>'+(r.recibo?'<a class="btn sm" href="'+esc(doc(r.url))+'" target="_blank" rel="noopener">Ver</a>':'')+'</div>'; }
+function vSedes(){
+  return titulo('Sus sedes',S.sedes.length+' sedes · frecuencia, última visita y lo recolectado')+'<div class="card tabla"><table><thead><tr><th>Sede</th><th>Frecuencia</th><th>Última visita</th><th class="n">Visitas del mes</th><th class="n">Kg en 90 días</th><th>Servicio</th></tr></thead><tbody>'+
+    S.sedes.map(function(s){ return '<tr><td><b>'+esc(s.nombre)+'</b><small>'+esc(s.direccion)+'</small></td><td>'+esc(s.frecuencia||'—')+'</td><td>'+(s.ultimaVisita?f(s.ultimaVisita):'—')+'</td><td class="n">'+s.visitasMes+'</td><td class="n">'+kg(s.kg90)+'</td><td>'+(s.estado==='activo'?'<span class="tag t-ok">Vigente</span>':s.estado==='apagado'?'<span class="tag t-warn">En pausa</span>':'<span class="tag t-gris">Fuera</span>')+'</td></tr>'; }).join('')+'</tbody></table></div>';
+}
+function vRecibos(){
+  var R=S.recibos;
+  return titulo('Recibos de visita','Cada visita de ECOVSA, con su recibo firmado en el establecimiento')+'<div class="card">'+(R.length?R.map(filaRec).join(''):'<p style="color:var(--gris)">Todavía no hay visitas registradas.</p>')+'</div>';
+}
+function vCerts(){
+  var C=S.certificados;
+  return titulo('Certificados','El certificado de servicio y los de tratamiento y disposición final por periodo')+
+    (S.servicio.length?'<div class="card" style="margin-bottom:14px"><h3>Certificado de servicio</h3>'+S.servicio.map(function(c){ return '<div class="fila"><div class="tx"><b>N.° '+esc(c.numero||c.folio)+'</b><small>'+(c.tipo==='cuenta'?'De la cuenta':esc(c.establecimiento))+' · vigente hasta el '+fl(c.vence)+'</small></div><a class="btn sm" href="'+esc(doc(c.url))+'" target="_blank" rel="noopener">Ver</a></div>'; }).join('')+'</div>':'')+
+    '<div class="card"><h3>Tratamiento y disposición final</h3>'+(C.length?C.map(function(c){ return '<div class="fila"><div class="tx"><b>'+esc(c.folio)+'</b><small>'+(nivel()==='corp'?esc(c.sede)+' · ':'')+'Del '+f(c.desde)+' al '+f(c.hasta)+' · '+kg(c.kg)+' kg</small></div>'+
+      (c.cerrado?'<span class="tag t-warn" title="Se libera al confirmar el pago del periodo">🔒 Se libera al pagar</span>':'<a class="btn sm" href="'+esc(doc(c.url))+'" target="_blank" rel="noopener">Descargar</a>')+'</div>'; }).join(''):'<p style="color:var(--gris);margin:0">Todavía no hay certificados emitidos. Mercadeo los emite por periodo.</p>')+'</div>';
+}
+function vFacturas(){
+  var F=S.facturas, est={PAGADA:['t-ok','Pagada'],PARCIAL:['t-info','Abonada'],VENCIDA:['t-bad','Vencida'],PENDIENTE:['t-gris','Por pagar'],INCOBRABLE:['t-gris','—']};
+  return titulo('Facturas y pagos','Sus facturas, lo pagado y lo pendiente')+
+    '<div class="grid g2" style="margin-bottom:14px"><div class="card kpi"><b>'+B(S.cuenta.saldo)+'</b><span>saldo pendiente</span></div><div class="card"><h3>¿Ya pagó?</h3><div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn pri sm" onclick="comprobante()">Subir comprobante</button><button class="btn sm" onclick="plan()">Proponer un plan de pago</button></div><p style="color:var(--gris);font-size:13px;margin:8px 0 0">Cobros lo confirma y su cuenta queda al día.</p></div></div>'+
+    '<div class="card tabla">'+(F.length?'<table><thead><tr><th>Factura</th><th>Fecha</th><th class="n">Total</th><th class="n">Saldo</th><th>Estado</th></tr></thead><tbody>'+F.map(function(x){ var e=est[x.estado]||['t-gris',x.estado]; return '<tr><td><b>'+esc(x.factura)+'</b>'+(x.periodo?'<small>'+esc(x.periodo)+'</small>':'')+'</td><td>'+f(x.fecha)+(x.vencimiento&&x.saldo>0?'<small>vence '+f(x.vencimiento)+'</small>':'')+'</td><td class="n">'+B(x.total)+'</td><td class="n">'+B(x.saldo)+'</td><td><span class="tag '+e[0]+'">'+e[1]+'</span></td></tr>'; }).join('')+'</tbody></table>':'<p style="color:var(--gris);margin:0">No hay facturas registradas.</p>')+'</div>';
+}
+function vServicios(){
+  var cat=S.catalogo, sedeSel=nivel()==='corp';
+  return titulo('Servicios y productos','Lo que ECOVSA le puede ofrecer. Pídalo aquí: Mercadeo le contacta.')+
+    '<div class="catg">'+'<div class="cat"><b>Recolección extra</b><small>Una visita adicional, fuera de su frecuencia.</small><button class="btn sm pri" onclick="extra()">Solicitar</button></div>'+
+    cat.map(function(c,i){ return '<div class="cat"><span class="tag t-info" style="align-self:flex-start">'+esc(c.tipo==='producto'?'Producto':'Servicio')+'</span><b>'+esc(c.nombre)+'</b><small>'+esc(c.descripcion||'')+'</small><button class="btn sm" onclick="servicio('+i+')">Solicitar</button></div>'; }).join('')+
+    '<div class="cat"><b>Otro servicio</b><small>Cuéntenos lo que necesita.</small><button class="btn sm" onclick="servicio(-1)">Solicitar</button></div>'+
+    '<div class="cat" style="opacity:.75"><span class="tag t-gris" style="align-self:flex-start">Próximamente</span><b>Desechos sólidos</b><small>Recolección de desechos comunes de su establecimiento.</small><button class="btn sm" onclick="servicio(-2)">Avisarme</button></div></div>';
+}
+function selSede(id){ if(nivel()!=='corp') return ''; return '<div class="campo"><label for="'+id+'">Sede</label><select id="'+id+'">'+S.sedes.map(function(s){ return '<option value="'+esc(s.clienteId)+'">'+esc(s.nombre)+'</option>'; }).join('')+'</select></div>'; }
+function servicio(i){
+  var c=i>=0?S.catalogo[i]:null, nom=c?c.nombre:(i===-2?'Desechos sólidos (avisarme)':'');
+  modal('<h2>'+(c?esc(c.nombre):i===-2?'Desechos sólidos':'Otro servicio')+'</h2><p style="color:var(--gris);margin:0 0 12px">Mercadeo le contacta para coordinar.</p>'+(c||i===-2?'':'<div class="campo"><label for="sv-i">¿Qué necesita?</label><input id="sv-i"></div>')+
+    (i===-2?'':'<div class="campo"><label for="sv-c">Cantidad o frecuencia</label><input id="sv-c" placeholder="Ej. 2 cajas, mensual"></div>')+selSede('sv-s')+'<div class="campo"><label for="sv-n">Nota (opcional)</label><textarea id="sv-n" rows="2"></textarea></div>'+
+    '<div class="pie"><button class="btn" onclick="cerrarModal()">Cancelar</button><button class="btn pri" id="sv-b">Enviar</button></div>');
+  $('sv-b').onclick=function(){ var b=this, it=nom||($('sv-i')||{}).value; ocupado(b,true);
+    llamar('api_ptlPedirServicio',SES,{item:it,cantidad:($('sv-c')||{}).value||'',clienteId:($('sv-s')||{}).value||'',nota:$('sv-n').value}).then(function(r){ ocupado(b,false); if(!r||!r.ok){ toast((r&&r.error)||'No se pudo'); return; } cerrarModal(); toast('Pedido enviado · '+r.folio); cargar(); },function(){ ocupado(b,false); toast('Sin conexión'); }); };
+}
+function extra(){
+  modal('<h2>Recolección extra</h2><p style="color:var(--gris);margin:0 0 12px">Logística le confirma por WhatsApp.</p>'+selSede('ex-s')+
+    '<div class="campo"><label for="ex-w">¿Para cuándo?</label><select id="ex-w"><option>Lo antes posible</option><option>Esta semana</option><option>La próxima semana</option></select></div>'+
+    '<div class="campo"><label for="ex-q">¿Cuánto hay?</label><input id="ex-q" placeholder="Ej. 3 bolsas y 1 guardián"></div><div class="campo"><label for="ex-m">Motivo</label><input id="ex-m" placeholder="Ej. limpieza, inspección"></div>'+
+    '<div class="pie"><button class="btn" onclick="cerrarModal()">Cancelar</button><button class="btn pri" id="ex-b">Pedir</button></div>');
+  $('ex-b').onclick=function(){ var b=this; ocupado(b,true);
+    llamar('api_ptlRecoleccion',SES,($('ex-s')||{}).value||'',{cuando:$('ex-w').value,cantidad:$('ex-q').value,motivo:$('ex-m').value}).then(function(r){ ocupado(b,false); if(!r||!r.ok){ toast((r&&r.error)||'No se pudo'); return; } cerrarModal(); toast('Pedido enviado · '+r.folio); cargar(); },function(){ ocupado(b,false); toast('Sin conexión'); }); };
+}
+function vSolicitudes(){
+  var P=S.pedidos;
+  return titulo('Solicitudes','Lo que ha pedido a ECOVSA y en qué va')+'<div class="card">'+(P.length?P.map(function(p){ return '<div class="fila"><div class="tx"><b>'+esc(p.resumen||p.tipo)+'</b><small>'+(p.sede?esc(p.sede)+' · ':'')+esc(p.folio||'')+(p.fecha?' · '+f(p.fecha):'')+'</small></div><span class="tag '+(p.cerrada?'t-ok':'t-info')+'">'+esc(p.estado)+'</span></div>'; }).join(''):'<p style="color:var(--gris);margin:0">No tiene solicitudes.</p>')+'</div>';
+}
+function vEquipo(){
+  var E=S.equipo;
+  return titulo('Accesos de su equipo','Quién de su empresa entra al portal. Usted pide los accesos y las bajas; ECOVSA los aprueba.')+
+    '<div style="margin-bottom:12px"><button class="btn pri" onclick="pedirPersona()">Pedir un acceso</button></div><div class="card">'+(E.length?E.map(function(p){ return '<div class="fila"><div class="tx"><b>'+esc(p.nombre)+'</b><small>'+esc(p.cargo||'')+(p.sede?' · '+esc(p.sede):' · toda la cuenta')+(p.ultimoIngreso?' · entró el '+esc(p.ultimoIngreso.slice(0,10)):'')+'</small></div><span class="tag '+(p.estado==='activo'?'t-ok':'t-info')+'">'+(p.estado==='activo'?'Activo':'Invitado')+'</span>'+(p.nombre!==S.yo.nombre?'<button class="btn sm" onclick="pedirBaja(\''+esc(p.accesoId)+'\',\''+esc(p.nombre)+'\')">Quitar</button>':'')+'</div>'; }).join(''):'<p style="color:var(--gris);margin:0">Solo usted tiene acceso por ahora.</p>')+'</div>';
+}
+function pedirPersona(){
+  modal('<h2>Pedir un acceso</h2><p style="color:var(--gris);margin:0 0 12px">Para el encargado de una sede. ECOVSA le manda la invitación por WhatsApp.</p>'+selSede('pp-s')+
+    '<div class="campo"><label for="pp-n">Nombre</label><input id="pp-n"></div><div class="campo"><label for="pp-c">Cargo</label><input id="pp-c"></div><div class="campo"><label for="pp-t">Celular (WhatsApp)</label><input id="pp-t" inputmode="tel"></div>'+
+    '<div class="pie"><button class="btn" onclick="cerrarModal()">Cancelar</button><button class="btn pri" id="pp-b">Enviar pedido</button></div>');
+  $('pp-b').onclick=function(){ var b=this; ocupado(b,true); llamar('api_ptlPedirEquipo',SES,{tipo:'alta',clienteId:$('pp-s').value,nombre:$('pp-n').value,cargo:$('pp-c').value,telefono:$('pp-t').value}).then(function(r){ ocupado(b,false); if(!r||!r.ok){ toast((r&&r.error)||'No se pudo'); return; } cerrarModal(); toast('Pedido enviado: ECOVSA lo aprueba'); },function(){ ocupado(b,false); toast('Sin conexión'); }); };
+}
+function pedirBaja(id,nom){
+  modal('<h2>Quitar el acceso de '+esc(nom)+'</h2><p style="color:var(--gris)">ECOVSA lo quita al aprobar su pedido.</p><div class="pie"><button class="btn" onclick="cerrarModal()">Cancelar</button><button class="btn pri" id="pb-b">Pedir la baja</button></div>');
+  $('pb-b').onclick=function(){ var b=this; ocupado(b,true); llamar('api_ptlPedirEquipo',SES,{tipo:'baja',accesoId:id}).then(function(r){ ocupado(b,false); if(!r||!r.ok){ toast((r&&r.error)||'No se pudo'); return; } cerrarModal(); toast('Pedido de baja enviado'); },function(){ ocupado(b,false); toast('Sin conexión'); }); };
+}
+function comprobante(){
+  var abiertas=(S.facturas||[]).filter(function(x){ return x.saldo>0.009; });
+  modal('<h2>Subir comprobante de pago</h2><p style="color:var(--gris);margin:0 0 12px">Foto o PDF de la transferencia, el depósito o el cheque. Cobros lo confirma.</p>'+
+    '<div class="campo"><label for="cp-f">Comprobante</label><input id="cp-f" type="file" accept="image/*,application/pdf"></div>'+
+    '<div class="campo"><label for="cp-m">Monto pagado (B/.)</label><input id="cp-m" type="number" step="0.01" min="0" inputmode="decimal"></div>'+
+    '<div class="campo"><label for="cp-x">Facturas que paga</label><input id="cp-x" value="'+esc(abiertas.map(function(x){ return x.factura; }).join(', '))+'"></div>'+
+    '<div class="campo"><label for="cp-r">Referencia (opcional)</label><input id="cp-r"></div><div id="cp-t"></div>'+
+    '<div class="pie"><button class="btn" onclick="cerrarModal()">Cancelar</button><button class="btn pri" id="cp-b">Enviar</button></div>');
+  $('cp-b').onclick=function(){
+    var b=this, file=$('cp-f').files&&$('cp-f').files[0];
+    if(!file){ toast('Elija la foto o el PDF del comprobante'); return; }
+    if(!window.ARCH){ toast('No cargó el módulo de archivos. Recargue la página.'); return; }
+    ocupado(b,true,'Subiendo…'); var prep;
+    ARCH.preparar(file).then(function(p){ prep=p; return llamar('api_ptlSubirComprobante',SES,p.meta); })
+      .then(function(r){ if(!r||!r.ok) throw new Error((r&&r.error)||'No se pudo'); return ARCH.subir(r.subida,prep).then(function(){ return r.archivoId; }); })
+      .then(function(id){ return llamar('api_ptlComprobanteListo',SES,id,{monto:$('cp-m').value,facturas:$('cp-x').value,referencia:$('cp-r').value}); })
+      .then(function(r){ ocupado(b,false); if(!r||!r.ok){ toast((r&&r.error)||'No se pudo'); return; } cerrarModal(); toast('Comprobante enviado a Cobros · '+r.folio); cargar(); },
+        function(e){ ocupado(b,false); toast((e&&e.message)||'No se pudo subir'); });
+  };
+}
+function plan(){
+  modal('<h2>Proponer un plan de pago</h2><p style="color:var(--gris);margin:0 0 12px">Cobros revisa su propuesta y le contacta.</p>'+
+    '<div class="campo"><label for="pl-c">¿En cuántos pagos?</label><select id="pl-c">'+[2,3,4,5,6].map(function(n){ return '<option>'+n+'</option>'; }).join('')+'</select></div>'+
+    '<div class="campo"><label for="pl-p">Fecha del primer pago</label><input id="pl-p" type="date"></div><div class="campo"><label for="pl-n">Nota (opcional)</label><textarea id="pl-n" rows="2"></textarea></div>'+
+    '<div class="pie"><button class="btn" onclick="cerrarModal()">Cancelar</button><button class="btn pri" id="pl-b">Enviar propuesta</button></div>');
+  $('pl-b').onclick=function(){ var b=this; ocupado(b,true); llamar('api_ptlPlanPago',SES,{cuotas:$('pl-c').value,primero:$('pl-p').value,nota:$('pl-n').value}).then(function(r){ ocupado(b,false); if(!r||!r.ok){ toast((r&&r.error)||'No se pudo'); return; } cerrarModal(); toast('Propuesta enviada · '+r.folio); cargar(); },function(){ ocupado(b,false); toast('Sin conexión'); }); };
+}
+
+/* ═══ arranque ═══ */
+(function(){
+  CLI=q('cli'); COD=q('cod'); INV=q('inv'); SES=ls('ptl_ses');
+  var p=q('p');
+  if(INV){ invitacion(); return; }
+  if((p==='activar'||p==='olvide')&&CLI&&COD){ pedirAcceso(p); return; }
+  if(SES) cargar(); else entrar();
+})();
+</script>
+</body>
+</html>
