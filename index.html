@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<title>Portal de clientes · ECOVSA</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#0f2a57">
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="icon" href="favicon.ico">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;600;700;800&display=swap">
+<script>
+/* api 3.17 · clientes.ecovsaapp.com: portada del portal y reparto de los enlaces del cliente.
+   · ?inv=…  → la invitación (crear el PIN), aquí mismo en Portal.html
+   · ?p=…    → los documentos del cliente siguen en ecovsaapp.com: se reenvían con el mismo
+               enlace a un destino fijo (nunca a una dirección que venga en el enlace). */
+(function(){
+  var q = location.search || '';
+  if (/[?&]inv=/.test(q)) { location.replace('Portal.html' + q); return; }
+  var m = q.match(/[?&]p=([a-z]+)/i);
+  if (m) {
+    var DESTINO = { micliente:'MiCliente.html', recibo:'Recibo.html', vercert:'CertificadoVista.html', encuesta:'Encuesta.html', formulario:'FormularioCliente.html', propuesta:'Propuesta.html', contrato:'Contrato.html' };
+    var pag = DESTINO[m[1].toLowerCase()];
+    if (pag) { location.replace('https://ecovsaapp.com/' + pag + q); return; }
+  }
+})();
+</script>
+<script src="cargador.js" data-solo></script>
+<style>
+:root{--navy:#0f2a57;--marca:#14306b;--gris:#667489;--fondo:#f3f5f8;--linea:#e1e6ee}
+*{box-sizing:border-box}html,body{margin:0}
+body{font:15px/1.5 Archivo,system-ui,sans-serif;background:var(--fondo);color:#0f2140;min-height:100vh;display:flex;flex-direction:column}
+.cab{background:radial-gradient(circle at 50% 30%,#1a3f80 0,#0B2A5B 60%,#081f45 100%);color:#fff;text-align:center;padding:calc(34px + env(safe-area-inset-top,0px)) 16px 70px}
+.cab .eco-lg{margin:0 auto;box-shadow:0 0 0 8px rgba(255,255,255,.08),0 12px 30px rgba(0,0,0,.35)}
+.cab img.l{width:150px;margin-top:14px}.cab .tg{font-size:10px;letter-spacing:2.4px;color:#8fd46a;font-weight:700;margin-top:6px}
+.c{background:#fff;border:1px solid var(--linea);border-radius:18px;max-width:440px;margin:-44px auto 0;padding:24px 22px;text-align:center;box-shadow:0 10px 26px rgba(15,33,64,.12);width:calc(100% - 32px)}
+h1{font-size:22px;color:var(--marca);margin:0 0 6px;text-wrap:balance}p{color:var(--gris);margin:0 0 16px}
+.b{display:block;background:var(--marca);color:#fff;text-decoration:none;font-weight:700;border-radius:12px;padding:13px;margin-top:8px}
+.b.s{background:#fff;color:var(--marca);border:1px solid #cdd5e1}
+.pie{margin-top:auto;padding:22px 16px;text-align:center;font-size:12px;color:var(--gris)}
+</style>
+</head>
+<body>
+<div class="cab"><div id="emb"><img src="logo-ecovsa.png" alt="ECOVSA" style="width:110px;background:#fff;border-radius:50%;padding:8px"></div><img class="l" src="ecovsa-letras.png" alt="ECOVSA"><div class="tg">ECOLOGÍA · VIDA · SALUD</div></div>
+<div class="c">
+  <h1>Portal de clientes</h1>
+  <p>Su cuenta ECOVSA en el celular: recibos de cada visita, certificados, facturas y pedidos.</p>
+  <a class="b" href="Portal.html">Entrar a mi portal</a>
+  <p style="font-size:13px;margin:16px 0 0">¿Primera vez? Escanee el QR del distintivo de su establecimiento y toque «Primera vez: activar mi acceso», o escríbanos al WhatsApp <b>6264-1647</b>.</p>
+</div>
+<div class="pie">ECOVSA · Recolección, transporte, tratamiento y disposición final de desechos hospitalarios</div>
+<script>if(window.ECOCARGA) document.getElementById('emb').innerHTML=ECOCARGA.logo(110,{arma:true});</script>
+</body>
+</html>

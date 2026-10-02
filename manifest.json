@@ -1,0 +1,15 @@
+{
+  "name": "ECOVSA · Mi portal",
+  "short_name": "ECOVSA",
+  "description": "Su cuenta ECOVSA en el celular: recibos, certificados, facturas y pedidos.",
+  "start_url": "Portal.html",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#f3f5f8",
+  "theme_color": "#0f2a57",
+  "lang": "es",
+  "icons": [
+    { "src": "apple-touch-icon.png", "sizes": "180x180", "type": "image/png" },
+    { "src": "icono-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" }
+  ]
+}
