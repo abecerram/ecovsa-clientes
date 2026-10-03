@@ -11,7 +11,7 @@
 <link rel="icon" href="favicon.ico">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800;900&display=swap">
-<!-- api 3.18 · pantallas 3.18.2 (entrada con la cortina azul y el emblema que se arma; documentos dentro del portal con «Volver») · Portal de clientes: micro (una sede), sede de un macro y corporativo.
+<!-- api 3.18 · pantallas 3.18.3 (en la app instalada el emblema del arranque cobra vida; entrada con la cortina azul y el emblema que se arma; documentos dentro del portal con «Volver») · Portal de clientes: micro (una sede), sede de un macro y corporativo.
      Entra con un PIN de 6 números propio de cada persona; los accesos los da el administrador.
      3.18: diseño v11 aprobado (insignia, pestañas en celular, hoja para instalar, certificado,
      «Mi depósito está lleno», vitrina de servicios, facturas por mes, estado del comprobante,
@@ -117,6 +117,8 @@ td small{display:block;color:var(--gris)}
 .cg-a{min-height:100vh;min-height:100dvh;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;padding:0 24px;text-align:center}
 .cg-a p{margin:0;color:var(--gris);font-size:15px}.cg-a b{display:block;color:var(--marca);font-size:18px;margin-bottom:4px}
 .cg-a .eco-lg{margin:0 auto;box-shadow:0 0 0 1px var(--linea),0 10px 30px rgba(15,33,64,.12)}
+.eco-desp #eco-cortina .eco-lg{transition:width .7s cubic-bezier(.3,.8,.3,1),height .7s cubic-bezier(.3,.8,.3,1),transform .7s cubic-bezier(.3,.8,.3,1),box-shadow .7s}
+.eco-desp #eco-cortina .eco-lg.quieto{transition:none}
 .dv-f{position:fixed;inset:0;z-index:58;background:var(--fondo);display:flex;flex-direction:column;animation:fd .15s}
 .dv-h{background:var(--navy);color:#fff;display:flex;align-items:center;gap:10px;padding:calc(8px + var(--sa)) 12px 8px;min-height:56px;flex:none}
 .dv-h .vo{display:inline-flex;align-items:center;gap:6px;background:#fff;color:var(--marca);border:0;border-radius:10px;padding:8px 14px 8px 10px;font-weight:800;font-size:14px;cursor:pointer}
@@ -458,8 +460,27 @@ function espera(t){
    si los datos tardan más, las flechas siguen girando hasta que lleguen. */
 var ENTRADA_MIN=3600, ENTRADA_T=0;
 function entrada(){
-  if(window.ECOCARGA&&ECOCARGA.cortina){ ENTRADA_T=Date.now(); ECOCARGA.cortina({modulo:'Mi portal',mensaje:'Trayendo su información…'}); }
+  if(window.ECOCARGA&&ECOCARGA.cortina){ ENTRADA_T=Date.now(); ECOCARGA.cortina({modulo:'Mi portal',mensaje:'Trayendo su información…'}); if(instalada()) despierta(); }
   else espera('Trayendo su información…');
+}
+/* 3.18.3 · en la app instalada el teléfono muestra primero el emblema quieto (eso no se puede animar).
+   La cortina arranca con el emblema del MISMO tamaño y en el MISMO lugar, da una vuelta (cobra vida),
+   se achica a su puesto y aparecen las letras: se ve como una sola animación. */
+function despierta(){
+  var c=document.getElementById('eco-cortina'), l=c&&c.querySelector('.eco-lg'); if(!l) return;
+  try{ if(matchMedia('(prefers-reduced-motion: reduce)').matches) return; }catch(e){}
+  ENTRADA_MIN=4600; window.__desp=performance.now();
+  document.documentElement.classList.add('eco-desp');
+  var gr=Math.round(Math.min(innerWidth*0.5,innerHeight*0.32,300));
+  l.classList.remove('arma'); l.classList.add('quieto');
+  l.style.width=l.style.height=gr+'px';
+  var r=l.getBoundingClientRect(), dy=Math.round(innerHeight/2-(r.top+r.height/2));
+  l.style.transform='translateY('+dy+'px)'; l.style.boxShadow='none';
+  void l.offsetWidth; l.classList.remove('quieto');
+  setTimeout(function(){ if(l.isConnected){ l.classList.add('vuelta'); } },250);
+  setTimeout(function(){ if(l.isConnected){ l.classList.remove('vuelta'); void l.offsetWidth; l.classList.add('vuelta'); } },1150);
+  setTimeout(function(){ if(l.isConnected){ l.classList.remove('vuelta'); l.style.width=l.style.height=''; l.style.transform=''; l.style.boxShadow=''; } },2050);
+  setTimeout(function(){ if(l.isConnected){ l.classList.add('gira'); } },2700);
 }
 function finEntrada(ya){
   if(!ENTRADA_T||!window.ECOCARGA) return;
