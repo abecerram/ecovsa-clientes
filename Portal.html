@@ -11,7 +11,7 @@
 <link rel="icon" href="favicon.ico">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800;900&display=swap">
-<!-- api 3.18 · Portal de clientes: micro (una sede), sede de un macro y corporativo.
+<!-- api 3.18 · pantallas 3.18.1 (espera con el emblema al centro, emblema centrado en la entrada) · Portal de clientes: micro (una sede), sede de un macro y corporativo.
      Entra con un PIN de 6 números propio de cada persona; los accesos los da el administrador.
      3.18: diseño v11 aprobado (insignia, pestañas en celular, hoja para instalar, certificado,
      «Mi depósito está lleno», vitrina de servicios, facturas por mes, estado del comprobante,
@@ -112,6 +112,12 @@ td small{display:block;color:var(--gris)}
 .campo input,.campo select,.campo textarea{border:1px solid #cdd5e1;border-radius:var(--radio-b);padding:9px 11px;background:#fff;width:100%}
 .ent{max-width:420px;margin:0 auto;padding:34px 16px}
 .ent .card{text-align:center;padding:26px 22px}
+.ent .eco-lg{margin:0 auto;box-shadow:0 0 0 1px var(--linea),0 8px 24px rgba(15,33,64,.1)}
+/* 3.18.1 · espera mientras llegan los datos: el emblema en el centro, se arma y luego giran las flechas (igual que en los documentos) */
+.cg-a{min-height:100vh;min-height:100dvh;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;padding:0 24px;text-align:center}
+.cg-a p{margin:0;color:var(--gris);font-size:15px}.cg-a b{display:block;color:var(--marca);font-size:18px;margin-bottom:4px}
+.cg-a .eco-lg{margin:0 auto;box-shadow:0 0 0 1px var(--linea),0 10px 30px rgba(15,33,64,.12)}
+.cg-a .em-c{width:110px;height:110px;box-shadow:0 0 0 1px var(--linea),0 10px 30px rgba(15,33,64,.12)}
 .ent h2{margin:12px 0 4px;color:var(--marca);font-size:20px}
 .pts{display:flex;gap:9px;justify-content:center;margin:16px 0}
 .pts i{width:16px;height:16px;border-radius:50%;border:2px solid #b8c2d2}.pts i.on{background:var(--marca);border-color:var(--marca)}
@@ -271,7 +277,7 @@ td small{display:block;color:var(--gris)}
 </style>
 </head>
 <body>
-<div id="app"><div class="ent"><div class="card" id="espera">Abriendo su portal…</div></div></div>
+<div id="app"><div class="cg-a" id="espera"><span class="em-c"><img src="ecovsa-emblema.png" alt="ECOVSA"></span><div><b>Mi portal ECOVSA</b><p>Abriendo su portal…</p></div></div></div>
 <div id="toast"></div>
 <script>
 /* ═══ utilidades ═══ */
@@ -408,9 +414,15 @@ function cerrarHoja(){ var h=$('hojaI'); if(h) h.remove(); }
 function ahoraNo(){ ls('ptl_ins_no',String(Date.now())); cerrarHoja(); }
 
 /* ═══ portal ═══ */
+/* 3.18.1 · la espera: el emblema se arma y después las flechas siguen girando hasta que llegan los datos */
+function espera(t){
+  $('app').innerHTML='<div class="cg-a">'+logo(110,true)+'<div><b>Mi portal ECOVSA</b><p>'+esc(t)+'</p></div></div>';
+  var l=document.querySelector('#app .cg-a .eco-lg');
+  if(l) setTimeout(function(){ if(l.isConnected){ l.classList.remove('arma'); l.classList.add('gira'); } },1750);
+}
 function cargar(){
   if(!SES){ entrar(); return; }
-  if(!S) $('app').innerHTML='<div class="ent"><div class="card">'+logo(76,true)+'<p style="color:var(--gris);margin:14px 0 0">Trayendo su información…</p></div></div>';
+  if(!S) espera('Trayendo su información…');
   llamar('api_ptlInicio',SES).then(function(r){
     if(!r||!r.ok){ if(r&&r.salir){ SES=''; ls('ptl_ses',''); S=null; entrar(); setTimeout(function(){ var m=$('msg'); if(m) m.textContent=r.error||''; },60); return; } toast((r&&r.error)||'No se pudo'); return; }
     S=r; pintar();
