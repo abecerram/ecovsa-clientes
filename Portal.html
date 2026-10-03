@@ -11,14 +11,14 @@
 <link rel="icon" href="favicon.ico">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800;900&display=swap">
-<!-- api 3.18 · pantallas 3.18.1 (espera con el emblema al centro, emblema centrado en la entrada) · Portal de clientes: micro (una sede), sede de un macro y corporativo.
+<!-- api 3.18 · pantallas 3.18.2 (entrada con la cortina azul y el emblema que se arma; documentos dentro del portal con «Volver») · Portal de clientes: micro (una sede), sede de un macro y corporativo.
      Entra con un PIN de 6 números propio de cada persona; los accesos los da el administrador.
      3.18: diseño v11 aprobado (insignia, pestañas en celular, hoja para instalar, certificado,
      «Mi depósito está lleno», vitrina de servicios, facturas por mes, estado del comprobante,
      «Necesito ayuda con mi pago»). -->
 <script>window.PUENTE_CONFIG={sinCopia:/./, indicador:'oculto', enSupabase:/^api_(?!optimizarRuta$)/, escritura:/^api_ptl(?!Inicio$|Invitacion$|Constancia$)|^api_pedir/};</script>
 <script src="puente.js"></script>
-<script src="cargador.js" data-solo></script>
+<script src="cargador.js" data-solo data-manual></script>
 <script src="archivos.js"></script>
 <style>
 :root{
@@ -117,6 +117,13 @@ td small{display:block;color:var(--gris)}
 .cg-a{min-height:100vh;min-height:100dvh;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;padding:0 24px;text-align:center}
 .cg-a p{margin:0;color:var(--gris);font-size:15px}.cg-a b{display:block;color:var(--marca);font-size:18px;margin-bottom:4px}
 .cg-a .eco-lg{margin:0 auto;box-shadow:0 0 0 1px var(--linea),0 10px 30px rgba(15,33,64,.12)}
+.dv-f{position:fixed;inset:0;z-index:58;background:var(--fondo);display:flex;flex-direction:column;animation:fd .15s}
+.dv-h{background:var(--navy);color:#fff;display:flex;align-items:center;gap:10px;padding:calc(8px + var(--sa)) 12px 8px;min-height:56px;flex:none}
+.dv-h .vo{display:inline-flex;align-items:center;gap:6px;background:#fff;color:var(--marca);border:0;border-radius:10px;padding:8px 14px 8px 10px;font-weight:800;font-size:14px;cursor:pointer}
+.dv-h .t{flex:1;min-width:0;font-weight:700;font-size:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.dv-h .ab{background:transparent;border:1px solid rgba(255,255,255,.35);color:#fff;border-radius:9px;padding:6px 10px;font-size:12.5px;font-weight:600;cursor:pointer;white-space:nowrap}
+.dv-b{position:relative;flex:1}.dv-b iframe{position:absolute;inset:0;width:100%;height:100%;border:0;background:#fff}
+.dv-b .cg-a{position:absolute;inset:0;min-height:0}
 .cg-a .em-c{width:110px;height:110px;box-shadow:0 0 0 1px var(--linea),0 10px 30px rgba(15,33,64,.12)}
 .ent h2{margin:12px 0 4px;color:var(--marca);font-size:20px}
 .pts{display:flex;gap:9px;justify-content:center;margin:16px 0}
@@ -277,7 +284,7 @@ td small{display:block;color:var(--gris)}
 </style>
 </head>
 <body>
-<div id="app"><div class="cg-a" id="espera"><span class="em-c"><img src="ecovsa-emblema.png" alt="ECOVSA"></span><div><b>Mi portal ECOVSA</b><p>Abriendo su portal…</p></div></div></div>
+<div id="app"><div id="espera" style="position:fixed;inset:0;background:#0f2a57"></div></div>
 <div id="toast"></div>
 <script>
 /* ═══ utilidades ═══ */
@@ -322,6 +329,7 @@ var ICP = {
   basura:'<path d="M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13"/>',
   instalar:'<rect x="7" y="2.5" width="10" height="19" rx="2.5"/><path d="M12 7v7M9 11l3 3 3-3"/>',
   ok:'<path d="M5 12.5l4.5 4.5L19 7.5"/>',
+  flechaIzq:'<path d="M15 6l-6 6 6 6"/>',
   chat:'<path d="M4 5h16v11H9l-5 4z"/>',
   sedes:'<path d="M3 21V8l6-4 6 4v13"/><path d="M15 21V11h6v10M7 10h4M7 14h4M7 18h4"/>',
   equipo:'<circle cx="9" cy="8" r="3.2"/><path d="M3 20c0-3.5 2.7-6 6-6s6 2.5 6 6"/><circle cx="17" cy="9" r="2.4"/><path d="M15.5 14.2c3 .2 5.5 2.4 5.5 5.8"/>'
@@ -413,6 +421,31 @@ function hojaIns(){
 function cerrarHoja(){ var h=$('hojaI'); if(h) h.remove(); }
 function ahoraNo(){ ls('ptl_ins_no',String(Date.now())); cerrarHoja(); }
 
+/* ═══ documentos dentro del portal (3.18.1) ═══
+   El recibo y los certificados se abren encima del portal, con «Volver». El botón
+   «atrás» del celular también lo cierra. «Abrir aparte» lo saca al navegador. */
+var DOC_NOM={'recibo.html':'Recibo de visita','certificadoservicio.html':'Certificado de servicio','certificadovista.html':'Certificado de tratamiento','constancia.html':'Constancia'};
+function esDoc(u){ try{ var f=new URL(u,location.href).pathname.split('/').pop().toLowerCase(); return DOC_NOM[f]||''; }catch(e){ return ''; } }
+function verDoc(u,nom){
+  cerrarDoc(true);
+  var d=document.createElement('div'); d.className='dv-f'; d.id='dv'; d.setAttribute('role','dialog'); d.setAttribute('aria-modal','true');
+  d.innerHTML='<div class="dv-h"><button class="vo" type="button" id="dv-v">'+ic('flechaIzq',18)+'Volver</button><span class="t">'+esc(nom)+'</span><button class="ab" type="button" id="dv-a">Abrir aparte</button></div>'+
+    '<div class="dv-b"><div class="cg-a">'+(window.ECOCARGA?ECOCARGA.logo(84,{gira:true}):logo(84))+'<p>Abriendo el documento…</p></div><iframe title="'+esc(nom)+'"></iframe></div>';
+  document.body.appendChild(d); document.body.style.overflow='hidden';
+  var f=d.querySelector('iframe'); f.onload=function(){ var e=d.querySelector('.dv-b .cg-a'); if(e) e.remove(); }; f.src=u;
+  $('dv-v').onclick=function(){ history.back(); };
+  $('dv-a').onclick=function(){ window.open(u,'_blank','noopener'); };
+  try{ history.pushState({dv:1},''); }catch(e){}
+}
+function cerrarDoc(sinHistoria){ var d=$('dv'); if(!d) return; d.remove(); document.body.style.overflow=''; }
+window.addEventListener('popstate',function(){ cerrarDoc(); });
+document.addEventListener('click',function(e){
+  if(e.defaultPrevented||e.button!==0||e.ctrlKey||e.metaKey||e.shiftKey) return;
+  var a=e.target.closest('#app a[href]'); if(!a) return;
+  var nom=esDoc(a.getAttribute('href')); if(!nom) return;
+  e.preventDefault(); verDoc(a.href,nom);
+});
+
 /* ═══ portal ═══ */
 /* 3.18.1 · la espera: el emblema se arma y después las flechas siguen girando hasta que llegan los datos */
 function espera(t){
@@ -420,14 +453,28 @@ function espera(t){
   var l=document.querySelector('#app .cg-a .eco-lg');
   if(l) setTimeout(function(){ if(l.isConnected){ l.classList.remove('arma'); l.classList.add('gira'); } },1750);
 }
+/* 3.18.2 · la entrada: la cortina azul con el emblema que se arma, las letras ECOVSA y «Mi portal»
+   (la misma de los módulos del equipo). Dura al menos ENTRADA_MIN para que se vea completa;
+   si los datos tardan más, las flechas siguen girando hasta que lleguen. */
+var ENTRADA_MIN=3600, ENTRADA_T=0;
+function entrada(){
+  if(window.ECOCARGA&&ECOCARGA.cortina){ ENTRADA_T=Date.now(); ECOCARGA.cortina({modulo:'Mi portal',mensaje:'Trayendo su información…'}); }
+  else espera('Trayendo su información…');
+}
+function finEntrada(ya){
+  if(!ENTRADA_T||!window.ECOCARGA) return;
+  var falta=ya?0:Math.max(0,ENTRADA_MIN-(Date.now()-ENTRADA_T)); ENTRADA_T=0;
+  setTimeout(function(){ ECOCARGA.listo(); },falta);
+}
 function cargar(){
   if(!SES){ entrar(); return; }
-  if(!S) espera('Trayendo su información…');
+  if(!S) entrada();
   llamar('api_ptlInicio',SES).then(function(r){
-    if(!r||!r.ok){ if(r&&r.salir){ SES=''; ls('ptl_ses',''); S=null; entrar(); setTimeout(function(){ var m=$('msg'); if(m) m.textContent=r.error||''; },60); return; } toast((r&&r.error)||'No se pudo'); return; }
-    S=r; pintar();
-    if(tocaHoja()) setTimeout(hojaIns,350);
-  },function(){ toast('Sin conexión. Intente de nuevo en un momento.'); if(!S) $('app').innerHTML='<div class="ent"><div class="card">'+logo(76)+'<h2>Sin conexión</h2><p style="color:var(--gris)">No pudimos conectar. Revise su señal.</p><button class="btn pri" onclick="cargar()">Reintentar</button></div></div>'; });
+    if(!r||!r.ok){ finEntrada(!(r&&r.salir)); if(r&&r.salir){ SES=''; ls('ptl_ses',''); S=null; entrar(); setTimeout(function(){ var m=$('msg'); if(m) m.textContent=r.error||''; },60); return; } toast((r&&r.error)||'No se pudo'); return; }
+    var espHoja=ENTRADA_T?Math.max(0,ENTRADA_MIN-(Date.now()-ENTRADA_T))+1300:350;
+    S=r; pintar(); finEntrada(false);
+    if(tocaHoja()) setTimeout(hojaIns,espHoja);
+  },function(){ finEntrada(true); toast('Sin conexión. Intente de nuevo en un momento.'); if(!S) $('app').innerHTML='<div class="ent"><div class="card">'+logo(76)+'<h2>Sin conexión</h2><p style="color:var(--gris)">No pudimos conectar. Revise su señal.</p><button class="btn pri" onclick="cargar()">Reintentar</button></div></div>'; });
 }
 function salir(){ llamar('api_ptlSalir',SES).catch(function(){}); SES=''; S=null; ls('ptl_ses',''); entrar(); }
 function nivel(){ return S.yo.nivel; }
@@ -716,7 +763,8 @@ function pedirBaja(id,nom){
   var p=q('p');
   if(INV){ invitacion(); return; }
   if((p==='activar'||p==='olvide')&&CLI&&COD){ pedirAcceso(p); return; }
-  if(SES) cargar(); else entrar();
+  /* 3.18.2 · al abrir sin sesión también sale la entrada completa y debajo queda el PIN */
+  if(SES) cargar(); else { entrada(); entrar(); finEntrada(false); }
 })();
 </script>
 </body>
