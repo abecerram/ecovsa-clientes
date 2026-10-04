@@ -11,7 +11,7 @@
 <link rel="icon" href="favicon.ico">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800;900&display=swap">
-<!-- api 3.18 · pantallas 3.18.3 (en la app instalada el emblema del arranque cobra vida; entrada con la cortina azul y el emblema que se arma; documentos dentro del portal con «Volver») · Portal de clientes: micro (una sede), sede de un macro y corporativo.
+<!-- api 3.22 · portal corporativo nuevo, certificado visto por sucursal, motivo del rechazo solo para el cliente · antes: api 3.18 · pantallas 3.18.3 (en la app instalada el emblema del arranque cobra vida; entrada con la cortina azul y el emblema que se arma; documentos dentro del portal con «Volver») · Portal de clientes: micro (una sede), sede de un macro y corporativo.
      Entra con un PIN de 6 números propio de cada persona; los accesos los da el administrador.
      3.18: diseño v11 aprobado (insignia, pestañas en celular, hoja para instalar, certificado,
      «Mi depósito está lleno», vitrina de servicios, facturas por mes, estado del comprobante,
@@ -567,11 +567,13 @@ function certMini(c){
   var sede=S.sedes.find(function(x){ return x.nombre===c.establecimiento; })||S.sedes[0]||{};
   var vence=new Date(c.vence+'T12:00:00'), hoy=new Date(S.hoy+'T12:00:00'), res=Math.max(0,Math.round((vence-hoy)/864e5));
   var ini=sede.inicio&&sede.inicio<S.hoy?new Date(sede.inicio+'T12:00:00'):new Date(vence-365*864e5), tot=Math.max(1,Math.round((vence-ini)/864e5)), prog=Math.min(100,Math.max(0,Math.round((tot-res)/tot*100)));
-  var es=c.tipo==='cuenta'?(S.yo.razonSocial||c.establecimiento):c.establecimiento;
+  var nv=nivel(), sedeV=nv==='sede'&&c.tipo==='cuenta';   // api 3.22: la sucursal ve su propio nombre
+  var es=sedeV?((S.sedes[0]||{}).nombre||c.establecimiento):(c.tipo==='cuenta'?(S.yo.razonSocial||c.establecimiento):c.establecimiento);
   return '<div class="cm-a"><div class="fr"><i style="width:50%;background:#0C5395"></i><i style="width:28%;background:#00782E"></i><i style="width:22%;background:#86B62C"></i></div>'+
     '<div class="top">'+emC(38)+'<div class="t"><small>CERTIFICADO DE SERVICIO</small><b>N.° '+esc(c.numero||c.folio)+'</b></div><span class="vig">VIGENTE</span></div>'+
-    '<div class="bd"><div class="es">'+esc(es)+'</div><div class="sv">'+(c.tipo==='cuenta'?'Certificado de la cuenta · ':'')+'Recolección, transporte y disposición final de desechos peligrosos · ECOTERMO DE PANAMA S.A.</div>'+
-    '<div class="dat">'+(sede.inicio&&c.tipo!=='cuenta'?'<div><span>Desde</span><b>'+f(sede.inicio)+'</b></div>':'')+'<div><span>Vigente hasta</span><b>'+f(c.vence)+'</b></div>'+(sede.frecuencia&&c.tipo!=='cuenta'?'<div><span>Frecuencia</span><b>'+esc(cap(sede.frecuencia))+'</b></div>':'')+'</div>'+
+    '<div class="bd"><div class="es">'+esc(es)+'</div><div class="sv">'+(sedeV?'Incluida en el certificado de servicio de '+esc(S.yo.razonSocial||c.establecimiento)+' · ':c.tipo==='cuenta'?'Certificado de la cuenta'+(nv==='corp'?' · cubre '+S.sedes.length+' sucursales':'')+' · ':'')+'Recolección, transporte y disposición final de desechos peligrosos · ECOTERMO DE PANAMA S.A.</div>'+
+    '<div class="dat">'+(sede.inicio&&(c.tipo!=='cuenta'||sedeV)?'<div><span>Desde</span><b>'+f(sede.inicio)+'</b></div>':'')+'<div><span>Vigente hasta</span><b>'+f(c.vence)+'</b></div>'+(sede.frecuencia&&(c.tipo!=='cuenta'||sedeV)?'<div><span>Frecuencia</span><b>'+esc(cap(sede.frecuencia))+'</b></div>':'')+'</div>'+
+    (nv==='corp'&&c.tipo==='cuenta'&&S.sedes.length>1?'<details class="suc"><summary>Ver las '+S.sedes.length+' sucursales que cubre</summary><ul>'+S.sedes.map(function(x){ return '<li>'+esc(x.nombre)+'</li>'; }).join('')+'</ul></details>':'')+
     '<div class="bar"><div class="l"><i style="width:'+prog+'%"></i></div><small><span>Vigente · le quedan <b style="color:var(--ok)">'+res+' días</b></span><span>hasta el '+fl(c.vence)+'</span></small></div></div>'+
     '<div class="acc"><a class="btn sm pri" href="'+esc(doc(c.url))+'" target="_blank" rel="noopener">Ver</a><a class="btn sm" href="'+esc(doc(c.url))+'" target="_blank" rel="noopener">'+ic('descarga',15)+'Descargar</a></div></div>';
 }
@@ -670,7 +672,7 @@ function vFacturas(){
   }
   var comp=(S.comprobantes||[]).length?'<div class="card cp-l" style="margin-bottom:18px"><h3>Sus comprobantes</h3>'+S.comprobantes.map(function(c){ var e=EST_CP[c.estado]||EST_CP.recibido;
       var fs=String(c.facturas||'').split(/[,;\s]+/).filter(Boolean).map(function(n){ return 'N.º '+esc(nFac(n)); }).join(', ');
-      return '<div class="fila"><div class="tx"><b>'+B(c.monto)+(fs?' · Factura '+fs:'')+'</b><small>Enviado el '+f(c.fecha)+' · '+esc(c.folio)+'</small>'+(c.estado==='rechazado'&&c.motivo?'<small class="mot">'+esc(c.motivo)+'</small>':'')+'</div><span class="tag '+e[0]+'">'+e[1]+'</span></div>'; }).join('')+'</div>':'';
+      return '<div class="fila"><div class="tx"><b>'+B(c.monto)+(fs?' · Factura '+fs:'')+'</b><small>Enviado el '+f(c.fecha)+' · '+esc(c.folio)+'</small>'+(c.estado==='rechazado'?'<small class="mot">'+esc(c.motivo||'Nuestro equipo le contactará.')+'</small>':'')+'</div><span class="tag '+e[0]+'">'+e[1]+'</span></div>'; }).join('')+'</div>':'';
   if(!L.length) return titulo('Facturas y pagos','Sus facturas, lo pagado y lo pendiente')+cab+comp+'<div class="card"><p style="color:var(--gris);margin:0">No hay facturas registradas.</p></div>';
   var tarj='<div class="fx-lista">'+L.map(function(x){ var e=estFac(x), v=vencida(x);
     return '<div class="fx'+(v?' venc':'')+(x.saldo<=0.009?' pag':'')+'"><div class="fx-a"><b>'+mesDe(x.fecha)+'</b><span class="tag '+e[0]+'">'+e[1]+'</span></div>'+
@@ -787,6 +789,146 @@ function pedirBaja(id,nom){
   /* 3.18.2 · al abrir sin sesión también sale la entrada completa y debajo queda el PIN */
   if(SES) cargar(); else { entrada(); entrar(); finEntrada(false); }
 })();
+</script>
+<script>
+/* api 3.22 · PORTAL CORPORATIVO con el diseño nuevo (maqueta «Portal corporativo ECOVSA» v3, aprobada por Álvaro el 4 oct 2026).
+   Solo cambia lo que ve el encargado de toda la cuenta (nivel corp); el micro y la sede quedan igual. */
+(function(){
+var st=document.createElement('style');
+st.textContent=
+'.pb{height:6px;border-radius:9px;background:#e9edf3;overflow:hidden;margin-top:8px}.pb i{display:block;height:100%;background:var(--ok);border-radius:9px}'+
+'.pb.warn i{background:var(--acento)}'+
+'.hb{display:grid;grid-template-columns:minmax(120px,210px) 1fr 74px;gap:10px;align-items:center;padding:6px 0;font-size:13px}'+
+'.hb .n{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.hb .b{height:12px;border-radius:6px;background:#e9edf3;overflow:hidden}.hb .b i{display:block;height:100%;background:var(--marca);border-radius:6px}'+
+'.hb .k{text-align:right;font-variant-numeric:tabular-nums;font-weight:700}'+
+'.prx .fecha.hoy{border-color:var(--acento);background:#fff8e6}'+
+'.avs .fila .ico{width:34px;height:34px;border-radius:10px;display:grid;place-items:center;flex:none}'+
+'.avs .ico.i{background:var(--info-bg);color:var(--info)}.avs .ico.w{background:var(--warn-bg);color:var(--warn)}.avs .ico.o{background:var(--ok-bg);color:var(--ok)}'+
+'.flt{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:12px}.flt input{flex:1;min-width:180px;max-width:320px;border:1px solid var(--linea);border-radius:9px;padding:9px 12px;font:inherit;background:#fff}'+
+'.flt button{border:1px solid var(--linea);background:#fff;border-radius:999px;padding:7px 13px;font:inherit;font-size:13px;font-weight:700;color:var(--marca);cursor:pointer}.flt button.on{background:var(--marca);color:#fff;border-color:var(--marca)}'+
+'tr.clic{cursor:pointer}tr.clic:hover td{background:#f6f9ff}td .vm{font-variant-numeric:tabular-nums;font-weight:700}td .vm small{display:inline;color:var(--gris);font-weight:500}td .pb{margin-top:5px;max-width:110px}'+
+'.chev{color:#9aa5b5}'+
+'.sdc{display:none}.sdc .s{background:#fff;border:1px solid var(--linea);border-radius:14px;padding:14px;margin-bottom:10px;cursor:pointer}'+
+'.sdc .s .t{display:flex;gap:8px;align-items:flex-start}.sdc .s .t b{flex:1;font-size:15px;color:var(--tinta)}.sdc .s .t small{display:block;color:var(--gris);font-weight:500;font-size:12px;margin-top:2px}'+
+'.sdc .s .d{display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;margin-top:10px}.sdc .s .d span{display:block;font-size:10.5px;letter-spacing:.5px;text-transform:uppercase;color:var(--gris);font-weight:700}.sdc .s .d b{font-size:13.5px}'+
+'@media (max-width:820px){.tsd{display:none}.sdc{display:block}.hb{grid-template-columns:1fr 70px;gap:4px 10px;font-size:13px}.hb .n{grid-column:1/-1}.hb .b{grid-column:1}}'+
+'.tit-m{display:flex;gap:14px;align-items:flex-start;justify-content:space-between;flex-wrap:wrap}.selm{display:flex;flex-direction:column;gap:3px;font-size:11px;font-weight:800;letter-spacing:.8px;text-transform:uppercase;color:var(--gris)}.selm select{font:inherit;font-size:14px;font-weight:700;text-transform:none;letter-spacing:0;color:var(--marca);border:1px solid var(--linea);border-radius:9px;padding:8px 12px;background:#fff;min-width:170px}'+
+'.rc2{display:grid;grid-template-columns:minmax(0,1.6fr) minmax(0,1fr);gap:22px;align-items:center}.dnw h4{margin:0 0 8px;font-size:12px;color:var(--gris);font-weight:800;letter-spacing:.6px;text-transform:uppercase}'+
+'.dn{display:flex;gap:16px;align-items:center;flex-wrap:wrap}.dn .lg{display:grid;gap:10px;flex:1;min-width:150px}.dn .lg div{display:grid;grid-template-columns:12px 1fr auto;gap:2px 8px;align-items:center;font-size:13px}.dn .lg i{width:12px;height:12px;border-radius:3px}.dn .lg b{font-variant-numeric:tabular-nums}.dn .lg small{grid-column:2/-1;color:var(--gris)}'+
+'.msg{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:12px}.mi2{border:1px solid var(--linea);border-radius:14px;padding:12px;display:flex;flex-direction:column;gap:6px;background:#fff}.mi2 .im{height:86px;display:grid;place-items:center}.mi2 .im img{max-height:86px;max-width:100%;object-fit:contain}.mi2 b{font-size:14px;color:var(--tinta)}.mi2 small{color:var(--gris);font-size:12.5px;line-height:1.35;flex:1}.mi2 .btn{align-self:flex-start}.mi2.dest{border:2px dashed #8fd46a;background:#f6fbf2}'+
+'@media (max-width:1000px){.msg{grid-template-columns:repeat(2,minmax(0,1fr))}.rc2{grid-template-columns:1fr}}'+'@media (max-width:560px){.dn{flex-direction:column;align-items:stretch}.dn svg{align-self:center}.dn .lg div{grid-template-columns:12px 1fr auto}.hb .n{text-align:left}}'+
+'.suc{margin-top:8px;font-size:12.5px}.suc summary{cursor:pointer;color:var(--marca);font-weight:700}.suc ul{margin:6px 0 0;padding-left:18px;color:var(--tinta);columns:2;column-gap:18px}'+
+'.volver{display:inline-flex;gap:6px;align-items:center;border:0;background:none;color:var(--marca);font:inherit;font-weight:700;cursor:pointer;padding:0;margin-bottom:10px}';
+document.head.appendChild(st);
+
+var SEDE=null, FIL='todas', BUS='';
+window.ir=(function(o){ return function(v){ if(v!=='sedes') SEDE=null; o(v); }; })(window.ir);
+function semana(s){ var p=s.lleno&&s.lleno.proxima; if(!p||s.estado!=='activo') return false; var d=(new Date(p+'T12:00:00')-new Date(S.hoy+'T12:00:00'))/864e5; return d<=7; }   // incluye las que ya les toca
+function mesTxt(){ return MESL[Number(S.hoy.slice(5,7))-1]; }
+function kgMes(nom){ var m=S.hoy.slice(0,7); return S.recibos.filter(function(r){ return r.fecha.slice(0,7)===m&&(!nom||r.sede===nom); }).reduce(function(a,r){ return a+(r.kg||0); },0); }
+function vm(s){ var L=s.lleno||{}; var t=L.tocan||0, h=Math.min(s.visitasMes,t||s.visitasMes); return {h:h,t:t,p:t?Math.round(h/t*100):0}; }
+function estSede(s){ var t=s.estado==='activo'?'<span class="tag t-ok">Vigente</span>':s.estado==='apagado'?'<span class="tag t-warn">En pausa</span>':'<span class="tag t-gris">Fuera</span>';
+  if(s.lleno&&s.lleno.abierta) t+=' <span class="tag t-info">Aviso de lleno</span>'; return t; }
+function chip(fe,hoy){ var d=new Date(fe+'T12:00:00'); return '<div class="fecha'+(hoy?' hoy':'')+'"><b>'+d.getDate()+'</b><span>'+MES[d.getMonth()]+'</span></div>'; }
+function sigTxt(s){ var v=vm(s), p=s.lleno.proxima; if(p.slice(0,7)!==S.hoy.slice(0,7)) return 'primera visita de '+MESL[Number(p.slice(5,7))-1]; return 'visita '+Math.min(v.h+1,v.t)+' de '+v.t+' en '+mesTxt(); }
+
+var vI=window.vInicio;
+var MSEL='';
+function mesesDisp(){ var m={}; S.recibos.forEach(function(r){ m[r.fecha.slice(0,7)]=1; }); m[S.hoy.slice(0,7)]=1; return Object.keys(m).sort().reverse(); }
+function mesNom(ym){ var x=MESL[Number(ym.slice(5,7))-1]; return x.charAt(0).toUpperCase()+x.slice(1)+' '+ym.slice(0,4); }
+function recMes(ym,nom){ return S.recibos.filter(function(r){ return r.fecha.slice(0,7)===ym&&(!nom||r.sede===nom); }); }
+function sum(L,k){ return L.reduce(function(a,r){ return a+(Number(r[k])||0); },0); }
+/* el jefe no está en las sedes: solo ve el aviso cuando una sede lo pidió */
+window.avisoLleno=(function(o){ return function(){
+  if(nivel()!=='corp') return o();
+  var A=S.sedes.filter(function(s){ return s.lleno&&s.lleno.abierta; });
+  return A.map(function(s){ var a=s.lleno.abierta; return '<div class="ll-card ya" style="margin-bottom:12px"><span class="il">'+ilu('lleno')+'</span><span class="tx"><b>'+esc(s.nombre)+' avisó que su depósito está lleno</b><small>Aviso '+esc(a.folio)+' del '+f(a.fecha)+(a.quien?' · lo pidió '+esc(a.quien):'')+'. Logística lo está programando.</small></span><span class="tag t-info">En proceso</span></div>'; }).join('');
+}; })(window.avisoLleno);
+function dona(bio,pun,ana){
+  var T=bio+pun+ana||1, R=54, C=2*Math.PI*R, seg=[[bio,'var(--bad)','Bolsas rojas (biológico)'],[pun,'var(--marca)','Punzocortantes'],[ana,'var(--ok)','Anatomopatológicos']].filter(function(x){ return x[0]>0; }), off=0;
+  var arcs=seg.map(function(x){ var l=x[0]/T*C, s='<circle cx="70" cy="70" r="'+R+'" fill="none" stroke="'+x[1]+'" stroke-width="22" stroke-dasharray="'+l.toFixed(1)+' '+(C-l).toFixed(1)+'" stroke-dashoffset="'+(-off).toFixed(1)+'" transform="rotate(-90 70 70)"/>'; off+=l; return s; }).join('');
+  return '<div class="dn"><svg viewBox="0 0 140 140" width="150" height="150" role="img" aria-label="Reparto por tipo"><circle cx="70" cy="70" r="'+R+'" fill="none" stroke="#e9edf3" stroke-width="22"/>'+arcs+
+    '<text x="70" y="66" text-anchor="middle" font-size="17" font-weight="800" fill="var(--tinta)">'+kg(T)+'</text><text x="70" y="84" text-anchor="middle" font-size="10.5" fill="var(--gris)">kg en total</text></svg>'+
+    '<div class="lg">'+seg.map(function(x){ return '<div><i style="background:'+x[1]+'"></i><span>'+x[2]+'</span><b>'+kg(x[0])+' kg</b><small>'+Math.round(x[0]/T*100)+' %</small></div>'; }).join('')+'</div></div>';
+}
+function masServicios(){
+  var L=[['solidos','Desechos sólidos','Su basura común, en los días que elija. Un solo proveedor para todo.',true],['pedal','Contenedor rojo con pedal','30 galones, con ruedas, para el área de desechos.'],['punzo','Envases para punzocortantes','Rígidos, con tapa, del tamaño que necesite cada sede.'],['bolsas','Bolsas rojas','En rollo, con el símbolo de riesgo biológico.'],['fumiga','Fumigación','Control de plagas para sus sedes, con su constancia.']];
+  return '<div class="card ms"><h3>Más servicios para sus sedes</h3><div class="msg">'+L.map(function(x){ return '<div class="mi2'+(x[3]?' dest':'')+'"><span class="im">'+ilu(x[0])+'</span><b>'+x[1]+'</b><small>'+x[2]+'</small><button class="btn sm'+(x[3]?' verde':'')+'" type="button" onclick="pedir(\''+x[1]+'\')">'+(x[3]?'Agregarlo a mi servicio':'Solicitar')+'</button></div>'; }).join('')+'</div></div>';
+}
+window.vInicio=function(){
+  if(nivel()!=='corp'||S.cuenta.estado==='suspendida') return vI();
+  var sd=S.sedes, act=sd.filter(function(x){ return x.estado==='activo'; }).length, M=mesesDisp(); if(!MSEL||M.indexOf(MSEL)<0) MSEL=recMes(S.hoy.slice(0,7)).length?S.hoy.slice(0,7):(M[1]||S.hoy.slice(0,7));   // a inicio de mes, el mes anterior
+  var R=recMes(MSEL), conVis=sd.filter(function(s){ return recMes(MSEL,s.nombre).length; }).length;
+  var h='<div class="tit-m"><div>'+titulo('Resumen de '+esc(S.yo.razonSocial),sd.length+' sedes con servicio de ECOVSA')+'</div><label class="selm"><span>Mes</span><select id="r-mes">'+M.map(function(m){ return '<option value="'+m+'"'+(m===MSEL?' selected':'')+'>'+mesNom(m)+'</option>'; }).join('')+'</select></label></div>';
+  h+=avisoLleno();
+  var FA=(S.facturas||[]).filter(function(x){ return x.saldo>0.009; }).sort(function(a,b){ return String(a.vencimiento).localeCompare(String(b.vencimiento)); }), fp=FA[0], tot=FA.reduce(function(s,x){ return s+x.saldo; },0);
+  h+='<div class="grid g4">'+
+    '<div class="card kpi"><b>'+R.length+'</b><span>visitas realizadas · '+conVis+' de '+sd.length+' sedes</span></div>'+
+    '<div class="card kpi"><b>'+kg(sum(R,'kg'))+' kg</b><span>recolectados · '+sum(R,'bolsas')+' bolsas</span></div>'+
+    '<div class="card kpi"><b>'+act+' de '+sd.length+'</b><span>sedes con servicio vigente</span></div>'+
+    '<div class="card kpi"><b>'+(FA.length?B(tot):'Al día ✓')+'</b><span>'+(FA.length?'por pagar · '+FA.length+' factura'+(FA.length===1?'':'s')+' · '+(fp.vencimiento<S.hoy?'vencida desde el ':'la próxima vence el ')+f(fp.vencimiento):'su cuenta está al día')+'</span></div>'+
+    '</div>';
+  var P=sd.filter(semana).sort(function(a,b){ return a.lleno.proxima.localeCompare(b.lleno.proxima); });
+  h+='<div class="grid g-ini" style="margin-top:14px"><div class="card prx"><h3>Visitas de esta semana<span class="sp"></span><button class="btn sm" data-v="sedes">Ver sedes</button></h3>'+
+    (P.length?P.slice(0,esCel()?4:6).map(function(s){ var ya=s.lleno.proxima<=S.hoy; return '<div class="fila">'+chip(ya?S.hoy:s.lleno.proxima,ya)+'<div class="tx"><b>'+esc(s.nombre)+'</b><small>'+esc(cap(s.frecuencia))+(ya?' · ya le toca':'')+'</small></div>'+(ya?'<span class="tag t-warn">Le toca</span>':'')+'</div>'; }).join('')+(P.length>6&&!esCel()?'<p style="color:var(--gris);font-size:13px;margin:6px 0 0">y '+(P.length-6)+' sedes más esta semana</p>':''):'<p style="color:var(--gris)">No hay visitas programadas esta semana.</p>')+'</div>'+
+    '<div class="card"><h3>Su certificado de servicio</h3>'+certServicio()+'</div></div>';
+  var K=sd.map(function(s){ return [s, sum(recMes(MSEL,s.nombre),'kg')]; }).sort(function(a,b){ return b[1]-a[1]; }), mx=Math.max.apply(null,K.map(function(k){ return k[1]; }).concat([1]));
+  h+='<div class="card" style="margin-top:14px"><h3>Lo recolectado en '+mesNom(MSEL).toLowerCase()+'<span class="sp"></span><button class="btn sm" data-v="sedes">Ver las '+sd.length+' sedes</button></h3><div class="rc2"><div>'+
+    K.slice(0,8).map(function(k){ return '<div class="hb"><span class="n">'+esc(k[0].nombre)+'</span><span class="b"><i style="width:'+(k[1]?Math.max(2,Math.round(k[1]/mx*100)):0)+'%"></i></span><span class="k">'+kg(k[1])+' kg</span></div>'; }).join('')+'</div>'+
+    '<div class="dnw"><h4>Por tipo de desecho</h4>'+dona(sum(R,'kgBio'),sum(R,'kgPunzo'),sum(R,'kgAnatomo'))+'</div></div></div>';
+  h+='<div style="margin-top:14px">'+masServicios()+'</div>';
+  setTimeout(function(){ var s=$('r-mes'); if(s) s.onchange=function(){ MSEL=this.value; pintar(); }; },0);
+  return h;
+};
+
+var vS=window.vSedes;
+window.vSedes=function(){
+  if(nivel()!=='corp') return vS();
+  if(SEDE) return vSede(SEDE);
+  var L=S.sedes.filter(function(s){ return (FIL==='todas'||(FIL==='aviso'&&s.lleno&&s.lleno.abierta)||(FIL==='semana'&&semana(s)))&&(!BUS||s.nombre.toLowerCase().indexOf(BUS.toLowerCase())>=0); });
+  var h=titulo('Sus sedes',S.sedes.length+' sedes · toque una para ver su detalle');
+  h+='<div class="flt"><input id="sd-q" placeholder="Buscar sede…" value="'+esc(BUS)+'">'+[['todas','Todas'],['semana','Les toca esta semana'],['aviso','Con aviso']].map(function(o){ return '<button type="button" data-f="'+o[0]+'" class="'+(FIL===o[0]?'on':'')+'">'+o[1]+'</button>'; }).join('')+'</div>';
+  h+='<div class="card tabla tsd"><table><thead><tr><th>Sede</th><th>Frecuencia</th><th>Visitas de '+mesTxt()+'</th><th>Última visita</th><th>Próxima</th><th class="n">Kg en 90 días</th><th>Servicio</th><th></th></tr></thead><tbody>'+
+    L.map(function(s){ var v=vm(s); return '<tr class="clic" data-sd="'+esc(s.clienteId)+'"><td><b>'+esc(s.nombre)+'</b><small>'+esc(s.direccion)+'</small></td><td>'+esc(cap(s.frecuencia)||'—')+'</td><td><span class="vm">'+v.h+' <small>de '+v.t+'</small></span><div class="pb'+(v.h<v.t?' warn':'')+'"><i style="width:'+v.p+'%"></i></div></td><td>'+(s.ultimaVisita?f(s.ultimaVisita):'—')+'</td><td>'+(s.lleno&&s.lleno.proxima?(semana(s)?'<b>'+f(s.lleno.proxima)+'</b>':f(s.lleno.proxima)):'—')+'</td><td class="n">'+kg(s.kg90)+'</td><td>'+estSede(s)+'</td><td class="chev">'+ic('der',16)+'</td></tr>'; }).join('')+'</tbody></table></div>';
+  h+='<div class="sdc">'+L.map(function(s){ var v=vm(s); return '<div class="s" data-sd="'+esc(s.clienteId)+'"><div class="t"><b>'+esc(s.nombre)+'<small>'+esc(cap(s.frecuencia))+' · '+esc(s.direccion)+'</small></b>'+estSede(s)+'</div>'+
+    '<div class="d"><div><span>Visitas</span><b>'+v.h+' de '+v.t+'</b></div><div><span>Última</span><b>'+(s.ultimaVisita?f(s.ultimaVisita).replace(/ \d{4}$/,''):'—')+'</b></div><div><span>Próxima</span><b>'+(s.lleno&&s.lleno.proxima?f(s.lleno.proxima).replace(/ \d{4}$/,''):'—')+'</b></div></div><div class="pb'+(v.h<v.t?' warn':'')+'"><i style="width:'+v.p+'%"></i></div></div>'; }).join('')+'</div>';
+  if(!L.length) h+='<div class="card"><p style="color:var(--gris);margin:0">No hay sedes con ese filtro.</p></div>';
+  setTimeout(enganchar,0);
+  return h;
+};
+function enganchar(){
+  var q=$('sd-q'); if(q){ q.oninput=function(){ BUS=this.value; var p=this.selectionStart; pintar(); var n=$('sd-q'); if(n){ n.focus(); n.setSelectionRange(p,p); } }; }
+  document.querySelectorAll('.flt [data-f]').forEach(function(b){ b.onclick=function(){ FIL=this.getAttribute('data-f'); pintar(); }; });
+  document.querySelectorAll('[data-sd]').forEach(function(r){ r.onclick=function(){ SEDE=this.getAttribute('data-sd'); pintar(); window.scrollTo(0,0); }; });
+  var vb=$('sd-v'); if(vb) vb.onclick=function(){ SEDE=null; pintar(); window.scrollTo(0,0); };
+  var ll=$('sd-ll'); if(ll) ll.onclick=function(){ LL.id=SEDE; lleno(1); };
+}
+function vSede(id){
+  var s=S.sedes.find(function(x){ return x.clienteId===id; }); if(!s){ SEDE=null; return vSedes(); }
+  var v=vm(s), R=S.recibos.filter(function(r){ return r.sede===s.nombre; }), C=(S.certificados||[]).filter(function(c){ return c.sede===s.nombre; }), E=(S.equipo||[]).filter(function(p){ return p.sede===s.nombre; });
+  var h='<button class="volver" id="sd-v" type="button">‹ Sus sedes</button>'+titulo(esc(s.nombre),esc(s.direccion)+' · frecuencia '+esc(String(s.frecuencia).toLowerCase()));
+  h+='<div class="grid g4"><div class="card kpi"><b>'+v.h+' de '+v.t+'</b><span>visitas de '+mesTxt()+'</span><div class="pb'+(v.h<v.t?' warn':'')+'"><i style="width:'+v.p+'%"></i></div></div><div class="card kpi"><b>'+(s.ultimaVisita?f(s.ultimaVisita):'—')+'</b><span>última visita</span></div><div class="card kpi"><b>'+(s.lleno&&s.lleno.proxima?f(s.lleno.proxima):'—')+'</b><span>próxima en su plan</span></div><div class="card kpi"><b>'+kg(s.kg90)+' kg</b><span>recolectados en 90 días</span></div></div>';
+  h+=s.lleno&&s.lleno.abierta?'<div class="ll-card ya" style="margin-top:14px"><span class="il">'+ilu('lleno')+'</span><span class="tx"><b>Esta sede avisó que su depósito está lleno</b><small>Aviso '+esc(s.lleno.abierta.folio)+' del '+f(s.lleno.abierta.fecha)+'. Logística lo está programando.</small></span><span class="tag t-info">En proceso</span></div>':'';
+  h+='<div class="grid g-ini" style="margin-top:14px"><div class="card"><h3>Últimas visitas de la sede</h3>'+(R.length?R.slice(0,5).map(filaRec).join(''):'<p style="color:var(--gris)">Todavía no hay visitas registradas.</p>')+'</div>'+
+    '<div class="card"><h3>Certificados de tratamiento</h3>'+(C.length?C.slice(0,6).map(function(c){ return '<div class="fila"><div class="tx"><b>'+esc(c.folio)+'</b><small>Del '+f(c.desde)+' al '+f(c.hasta)+' · '+kg(c.kg)+' kg</small></div>'+(c.cerrado?'<span class="tag t-warn" title="Se libera al confirmar el pago del periodo">🔒 Se libera al pagar</span>':'<a class="btn sm" href="'+esc(doc(c.url))+'" target="_blank" rel="noopener">Descargar</a>')+'</div>'; }).join(''):'<p style="color:var(--gris);margin:0">Todavía no hay certificados de esta sede. Se emiten por periodo.</p>')+
+    '<h3 style="margin-top:18px">Quién de esta sede entra al portal</h3>'+(E.length?E.map(function(p){ return '<div class="fila"><div class="tx"><b>'+esc(p.nombre)+'</b><small>'+esc(p.cargo)+'</small></div>'+(p.estado==='activo'?'<span class="tag t-ok">Activo</span>':'<span class="tag t-warn">Invitado</span>')+'</div>'; }).join(''):'<p style="color:var(--gris);margin:0 0 8px">Nadie de esta sede tiene acceso todavía.</p>')+
+    '<button class="btn sm" style="margin-top:8px" onclick="pedirPersona()">Pedir un acceso para esta sede</button></div></div>';
+  setTimeout(enganchar,0);
+  return h;
+}
+
+var vE=window.vEquipo;
+window.vEquipo=function(){
+  if(nivel()!=='corp') return vE();
+  var E=S.equipo||[], C=E.filter(function(p){ return !p.sede; }), Sd=E.filter(function(p){ return p.sede; }), pe=S.pedidosEquipo||[];
+  var fila=function(p){ return '<div class="fila"><div class="tx"><b>'+esc(p.nombre)+(p.nombre===S.yo.nombre?' <span class="tag t-gris">Usted</span>':'')+'</b><small>'+esc(p.cargo||'')+(p.sede?' · '+esc(p.sede):'')+(p.ultimoIngreso?' · entró el '+f(p.ultimoIngreso.slice(0,10)):' · todavía no entra')+'</small></div>'+(p.estado==='activo'?'<span class="tag t-ok">Activo</span>':'<span class="tag t-warn">Invitado</span>')+(p.nombre===S.yo.nombre?'':'<button class="btn sm" onclick="pedirBaja(\''+p.accesoId+'\',\''+esc(p.nombre)+'\')">Quitar</button>')+'</div>'; };
+  return titulo('Accesos de su equipo','Quién de su empresa entra al portal. Usted pide los accesos y las bajas; ECOVSA los aprueba.')+
+    '<div style="margin-bottom:12px"><button class="btn pri" onclick="pedirPersona()">Pedir un acceso</button></div>'+
+    (pe.length?'<div class="card" style="margin-bottom:14px;border-color:#f3dfa6;background:#fffcf2"><h3>Pedidos esperando a ECOVSA</h3>'+pe.map(function(p){ return '<div class="fila"><div class="tx"><b>'+(p.tipo==='baja'?'Quitar el acceso de ':'')+esc(p.nombre)+(p.cargo?' · '+esc(p.cargo):'')+'</b><small>'+(p.sede?esc(p.sede)+' · ':'')+'pedido del '+f(p.fecha)+'</small></div><span class="tag t-gris">Esperando</span></div>'; }).join('')+'</div>':'')+
+    '<div class="grid g2"><div class="card"><h3>Toda la cuenta</h3>'+C.map(fila).join('')+'</div><div class="card"><h3>Por sede</h3>'+(Sd.length?Sd.map(fila).join(''):'<p style="color:var(--gris);margin:0">Ninguna sede tiene acceso propio.</p>')+'</div></div>';
+};
+})();
+
 </script>
 </body>
 </html>
