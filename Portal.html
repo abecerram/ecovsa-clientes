@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
+<script>/* api 3.23 · la dirección vieja del portal (ecovsaapp.com/Portal.html) lleva sola a la nueva, con el mismo enlace */
+(function(){ var h=location.hostname; if(h==="ecovsaapp.com"||h==="www.ecovsaapp.com"){ location.replace("https://clientes.ecovsaapp.com/Portal.html"+location.search+location.hash); } })();</script>
 <title>Mi portal · ECOVSA</title>
 <base target="_top">
 <meta charset="UTF-8">
@@ -366,7 +368,7 @@ function invitacion(){
   llamar('api_ptlInvitacion',INV).then(function(r){
     if(!r||!r.ok){ $('app').innerHTML='<div class="ent"><div class="card">'+logo(76)+'<h2>Invitación no válida</h2><p style="color:var(--gris)">'+esc((r&&r.error)||'')+'</p><a class="btn pri" href="Portal.html">Entrar con mi PIN</a></div></div>'; return; }
     var de=r.nivel==='corp'?'<b>'+esc(r.de)+'</b> (todas las sedes)':'<b>'+esc(r.de)+'</b>';
-    var crear=function(){ pantallaPin('Bienvenido, '+esc(String(r.nombre).split(' ')[0]),'ECOVSA le da acceso al portal de '+de+'.<br><b style="color:var(--tinta)">Cree su PIN de 6 números.</b>','<p class="pista" style="margin-top:14px">No use su fecha de nacimiento ni números seguidos. Es solo suyo: no lo comparta.</p>');
+    var crear=function(){ pantallaPin('Bienvenido, '+esc(String(r.nombre).split(' ')[0]),'ECOVSA le invita a su portal de '+de+'.<br><b style="color:var(--tinta)">Cree su PIN de 6 números.</b>','<p class="pista" style="margin-top:14px">No use su fecha de nacimiento ni números seguidos. Es solo suyo: no lo comparta.</p>');
       alPin=function(){ PIN1=PIN; pantallaPin('Repita su PIN','Escríbalo otra vez para confirmarlo.'); alPin=function(){
         var m=$('msg'); m.style.color='var(--gris)'; m.textContent='Guardando…';
         llamar('api_ptlCrearPin',INV,PIN1,PIN).then(function(x){ if(!x||!x.ok){ toast((x&&x.error)||'No se pudo'); crear(); setTimeout(function(){ var mm=$('msg'); if(mm) mm.textContent=(x&&x.error)||''; },50); return; }
