@@ -13,12 +13,12 @@
 <link rel="icon" href="favicon.ico">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800;900&display=swap">
-<!-- api 3.35 · Portal 2.0: inicio nuevo, solicitudes con respuesta de ECOVSA, calendario corporativo, seguimiento (apagado) · antes: api 3.22 · portal corporativo nuevo, certificado visto por sucursal, motivo del rechazo solo para el cliente · antes: api 3.18 · pantallas 3.18.3 (en la app instalada el emblema del arranque cobra vida; entrada con la cortina azul y el emblema que se arma; documentos dentro del portal con «Volver») · Portal de clientes: micro (una sede), sede de un macro y corporativo.
+<!-- api 3.37 · seguimiento del vehículo encendido («En camino» y la tarjeta del día de la visita) · antes: api 3.35 · Portal 2.0: inicio nuevo, solicitudes con respuesta de ECOVSA, calendario corporativo, seguimiento (apagado) · antes: api 3.22 · portal corporativo nuevo, certificado visto por sucursal, motivo del rechazo solo para el cliente · antes: api 3.18 · pantallas 3.18.3 (en la app instalada el emblema del arranque cobra vida; entrada con la cortina azul y el emblema que se arma; documentos dentro del portal con «Volver») · Portal de clientes: micro (una sede), sede de un macro y corporativo.
      Entra con un PIN de 6 números propio de cada persona; los accesos los da el administrador.
      3.18: diseño v11 aprobado (insignia, pestañas en celular, hoja para instalar, certificado,
      «Mi depósito está lleno», vitrina de servicios, facturas por mes, estado del comprobante,
      «Necesito ayuda con mi pago»). -->
-<script>window.PUENTE_CONFIG={sinCopia:/./, indicador:'oculto', enSupabase:/^api_(?!optimizarRuta$)/, escritura:/^api_ptl(?!Inicio$|Invitacion$|Constancia$)|^api_pedir/};</script>
+<script>window.PUENTE_CONFIG={sinCopia:/./, indicador:'oculto', enSupabase:/^api_(?!optimizarRuta$)/, escritura:/^api_ptl(?!Inicio$|Invitacion$|Constancia$|Seguimiento$)|^api_pedir/};</script>
 <script src="puente.js"></script>
 <script src="cargador.js" data-solo data-manual></script>
 <script src="archivos.js"></script>
@@ -306,7 +306,17 @@ body{min-width:320px}
 .cal-section{margin-bottom:20px;padding:22px}.cal-header{display:flex;justify-content:space-between;gap:16px;align-items:flex-start;flex-wrap:wrap}.cal-header h2{font-size:25px;color:var(--marca);margin:5px 0}.cal-header p{font-size:14px;color:var(--gris);margin:6px 0 12px}.cal-header label{display:grid;gap:6px;font-size:12px}.cal-header select{font:inherit;font-size:14px;padding:9px;border:1px solid var(--linea);border-radius:8px;background:white;max-width:100%}.cal-totals{display:flex;flex-wrap:wrap;gap:8px 18px;background:var(--azulclaro);padding:12px;border-radius:8px;font-size:13px;margin:10px 0 14px}.cal-legend{display:flex;flex-wrap:wrap;gap:15px;font-size:12px;font-weight:600}.cal-legend .realizada{color:#23653c}.cal-legend .estimada{color:#245793}.cal-legend .sinregistro{color:#80571c}.cal-disclaimer{font-size:12px;color:var(--gris);line-height:1.55;margin:12px 0 16px}.cal-scroll{overflow-x:auto}.cal-week,.cal-grid{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));min-width:650px}.cal-week{background:var(--marca);border-radius:8px 8px 0 0;color:white;font-size:12px;text-align:center}.cal-week span{padding:10px}.cal-grid{border-left:1px solid var(--linea);border-top:1px solid var(--linea)}.cal-day{min-height:115px;padding:7px;border-right:1px solid var(--linea);border-bottom:1px solid var(--linea);min-width:0;background:white}.cal-blank{background:#f6f8fa}.cal-daytop{display:flex;align-items:center;justify-content:space-between;gap:3px;margin-bottom:7px}.cal-daytop time{font-weight:700;font-size:13px}.cal-daytop>span{font-size:9px;color:var(--gris)}.cal-today{background:#f4f8ff;box-shadow:inset 0 0 0 2px #7e9bbf}.cal-event{display:block;width:100%;text-align:left;border:0;border-left:3px solid #6d8cb3;background:#edf4ff;color:#214b7b;border-radius:4px;padding:7px 5px;margin-bottom:6px;cursor:pointer;font-family:inherit;overflow-wrap:anywhere}.cal-event b{display:block;font-size:11px;line-height:1.35}.cal-event small{display:block;font-size:10px;line-height:1.4;margin-top:4px}.cal-event.realizada{background:#edf8ef;border-color:#4b9460;color:#23653c}.cal-event.sinregistro{background:#fff6e8;border-color:#c99a48;color:#80571c}.cal-tabletitle{margin-top:22px!important}.cal-tablewrap{overflow-x:auto}.cal-table{width:100%;border-collapse:collapse;font-size:13px}.cal-table th{text-align:left;background:#f3f6fa;color:var(--gris);font-size:12px;padding:10px}.cal-table td{padding:12px 10px;border-bottom:1px solid var(--linea);vertical-align:top}.cal-table small{display:block;color:var(--gris);font-size:12px;margin-top:5px}.cal-date{display:inline-block;margin:0 6px 6px 0;padding:5px 7px;background:#edf4ff;border-radius:5px;color:#214b7b;font-size:12px}.cal-date.realizada{background:#edf8ef;color:#23653c}.cal-date.sinregistro{background:#fff6e8;color:#80571c}
 @media(max-width:560px){.cal-section{padding:14px}.cal-header label{width:100%}.cal-header h2{font-size:22px}.cal-table{min-width:540px}.cal-totals{display:grid;gap:7px}}
 .cal-shortcut{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin:0 0 16px}.cal-shortcut>span{font-size:13px;color:var(--gris)}.corp-listwrap{overflow-x:auto;border:1px solid var(--linea);border-radius:12px;background:white}.corp-list{width:100%;min-width:900px;border-collapse:collapse;font-size:13px}.corp-list th{text-align:left;background:#f3f6fa;font-size:12px;padding:13px;color:var(--gris)}.corp-list td{padding:16px 13px;border-top:1px solid var(--linea);vertical-align:top}.corp-list tbody tr:hover{background:#f8fbff}.corp-list small{display:block;font-size:12px;color:var(--gris);margin-top:5px;line-height:1.5}.corp-listcount{font-size:21px;color:var(--marca);white-space:nowrap}.corp-list .pb{min-width:90px}.corp-list td:first-child{min-width:200px}.corp-list .r-act{gap:7px}
-.r-metrics .kpi>span{display:block}.r-metrics .lnk{display:block}.r-pronto{border:1px solid #c9d8f2}.r-apagado{opacity:.45;filter:grayscale(.6);pointer-events:none;user-select:none}
+.r-metrics .kpi>span{display:block}.r-metrics .lnk{display:block}.sg-camino{display:inline-flex;align-items:center;gap:7px;font-size:12px;font-weight:700;color:var(--ok);background:var(--ok-bg);border-radius:99px;padding:3px 10px}.sg-camino i{width:7px;height:7px;border-radius:50%;background:var(--ok);animation:sgp 1.6s infinite}@keyframes sgp{0%{box-shadow:0 0 0 0 rgba(47,158,68,.45)}100%{box-shadow:0 0 0 9px rgba(47,158,68,0)}}
+.r-next.sg-hoy .r-date{background:var(--marca);color:#fff}
+.sg-mapa{isolation:isolate;height:320px;border:1px solid #d6e0df;border-radius:12px;margin:18px 0 12px;position:relative;overflow:hidden;background-color:#eff3f0;background-image:linear-gradient(#e2e8e3 1px,transparent 1px),linear-gradient(90deg,#e2e8e3 1px,transparent 1px);background-size:50px 50px}
+#sg-mapa{position:absolute;inset:0}.sg-act{position:absolute;right:10px;top:10px;z-index:500;background:#fff;border-radius:8px;padding:5px 9px;font-size:11px;color:var(--gris);box-shadow:0 2px 8px rgba(15,33,64,.12)}
+.sg-sin{position:absolute;inset:0;display:grid;place-items:center;text-align:center;padding:24px;font-size:13.5px;color:#44516a}.sg-sin b{display:block;font-size:16px;color:var(--marca);margin-bottom:4px}
+.sg-priv{font-size:12px;color:var(--gris);background:#f3f5f8;border-radius:9px;padding:9px 11px;margin-top:4px}
+.sg-pin{width:34px;height:34px;border-radius:50%;background:#2f9e44;border:3px solid #fff;color:#fff;display:grid;place-items:center;box-shadow:0 3px 10px rgba(0,0,0,.25)}
+.sg-cam{width:38px;height:38px;border-radius:50%;background:var(--marca);border:3px solid #fff;color:#fff;display:grid;place-items:center;box-shadow:0 0 0 8px rgba(20,48,107,.15),0 3px 10px rgba(0,0,0,.25)}
+.r-trace li.ok .r-stepdot{background:var(--ok);color:#fff}.r-trace li.ya .r-stepdot{background:var(--marca);color:#fff;box-shadow:0 0 0 4px rgba(20,48,107,.13)}.r-trace li small{display:block}
+@media(max-width:820px){.sg-mapa{height:260px}}
+.r-pronto{border:1px solid #c9d8f2}.r-apagado{opacity:.45;filter:grayscale(.6);pointer-events:none;user-select:none}
 </style>
 </head>
 <body>
@@ -959,7 +969,7 @@ window.vEquipo=function(){
    · Todos: inicio nuevo (próxima recolección, indicadores, cliente nuevo), solicitudes con tipo, fecha preferida,
      historial y la respuesta que ECOVSA escribe para el cliente (Mercadeo › Inicio › «Responder al cliente").
    · Corporativo: resumen con avance del mes, sedes en tabla, detalle por sede y calendario de recolecciones.
-   · Seguimiento del vehículo: pantalla diseñada pero APAGADA («Próximamente») hasta tener la ubicación de los camiones.
+   · Seguimiento del vehículo: encendido en la api 3.37 con la ubicación de los camiones (antes, «Próximamente»).
    Se monta encima del portal y del corporativo 3.22: lo que no cambia sigue igual. */
 (function(){
 var P0={ inicio:window.vInicio, sedes:window.vSedes, equipo:window.vEquipo, recibos:window.vRecibos, servicios:window.vServicios, facturas:window.vFacturas,
@@ -1092,14 +1102,95 @@ function verSolicitud(fo){
     '<div class="pie"><button class="btn" type="button" onclick="cerrarModal()">Cerrar</button></div>');
 }
 
-/* ── Seguimiento de la visita: diseño listo, apagado hasta tener la ubicación de los camiones ── */
-function vSeguimiento(){
-  return titulo('Seguimiento de su visita','Desechos peligrosos')+
-    '<div class="aviso info r-pronto"><div class="tx"><b>Próximamente</b><br>El día de su visita, aquí verá la llegada estimada del vehículo de ECOVSA y en qué va su recolección. Le avisaremos cuando esté disponible.</div></div>'+
-    '<div class="r-grid-track r-apagado" aria-hidden="true"><section class="card"><div class="r-trackhead"><div><div class="r-eyebrow">Llegada estimada</div><strong>— minutos</strong><span style="color:var(--gris);font-size:13px">Se mostrará el día de su visita</span></div><span class="tag t-gris">Sin datos todavía</span></div>'+
-    '<div class="r-map"><div class="r-map-note">RECORRIDO ILUSTRATIVO</div><div class="r-map-line"></div><div class="r-map-node" style="--x:28%">'+ic('camion',22)+'<small>Vehículo de ECOVSA</small></div><div class="r-map-node end" style="--x:82%">'+ic('casa',20)+'<small>Su establecimiento</small></div><div class="r-map-caption">Aquí se verá el mapa con el vehículo y su recorrido.</div></div></section>'+
-    '<section class="card"><h3>Estado de su visita</h3><ol class="r-trace"><li><span class="r-stepdot">1</span><div><b>Visita confirmada</b><small>Recolección de desechos peligrosos</small></div></li><li><span class="r-stepdot">2</span><div><b>Vehículo en camino</b><small>Solo se muestra el seguimiento de su visita.</small></div></li><li><span class="r-stepdot">3</span><div><b>Llegada al establecimiento</b><small>Le avisaremos cuando estemos cerca.</small></div></li></ol></section></div>';
+/* ── api 3.37 · Seguimiento de la visita, ENCENDIDO (maqueta aprobada por Álvaro el 22 oct, todas las recomendadas) ──
+   · El día de su recolección: en qué va la ruta, cuántas paradas faltan y la llegada estimada en un rango de 20 minutos.
+   · El vehículo se ve en el mapa SOLO cuando su local es la siguiente parada (nunca se ven otros clientes).
+   · Se actualiza solo cada minuto mientras la pantalla está abierta. */
+var SG={ v:null, t:0, cargando:false, mapa:null, hoy:'' };
+function sgCargar(forzar){
+  if(!S||!SES||nivel()==='corp'||SG.cargando) return;
+  if(!forzar&&Date.now()-SG.t<55000) return;
+  SG.cargando=true;
+  llamar('api_ptlSeguimiento',SES).then(function(r){
+    SG.cargando=false; SG.t=Date.now();
+    if(!r||!r.ok) return;
+    var antes=JSON.stringify(SG.v); SG.v=r.visita||null; SG.hoy=r.hoy||'';
+    if(antes!==JSON.stringify(SG.v)&&(V==='inicio'||V==='seguimiento')) pintar();
+  },function(){ SG.cargando=false; });
 }
+window.sgActualizar=function(){ sgCargar(true); };
+setInterval(function(){ if(document.visibilityState==='visible'&&(V==='inicio'||V==='seguimiento')) sgCargar(); },20000);
+document.addEventListener('visibilitychange',function(){ if(document.visibilityState==='visible'&&(V==='inicio'||V==='seguimiento')) sgCargar(); });
+/* «18:40» → «6:40 p. m.» */
+function h12(t){ var m=/^(\d{1,2}):(\d{2})/.exec(String(t||'')); if(!m) return String(t||''); var h=Number(m[1]); return (h%12||12)+':'+m[2]+' '+(h<12?'a. m.':'p. m.'); }
+function sgRango(v){ return v&&v.rango?h12(v.rango.desde)+' – '+h12(v.rango.hasta):''; }
+function sgHace(s){ return s==null?'':s<60?'hace '+s+' s':'hace '+Math.round(s/60)+' min'; }
+function sgDia(){ var d=new Date((SG.hoy||S.hoy)+'T12:00:00'); return ['domingo','lunes','martes','miércoles','jueves','viernes','sábado'][d.getDay()]+' '+d.getDate()+' de '+MESL[d.getMonth()]; }
+/* la tarjeta del inicio el día de la visita */
+function sgTarjeta(){
+  var v=SG.v, d=new Date((SG.hoy||S.hoy)+'T12:00:00'), ey='Su recolección es hoy', h2, sm, btn, camino=true;
+  if(v.estado==='hecha'){ ey='Su recolección de hoy'; h2='Recolección hecha ✓'; sm=(v.desde?h12(v.desde)+' a '+h12(v.hasta)+' · ':'')+String(v.kg).replace('.',',')+' kg'+(v.recibo?' · recibo '+esc(v.recibo):''); btn=v.url?'<a class="btn" href="'+esc(v.url)+'" target="_blank" rel="noopener">Ver recibo</a>':''; camino=false; }
+  else if(v.estado==='norecolectada'){ h2='Hoy no se pudo hacer la recolección'; sm='Nuestro equipo se comunicará con usted para coordinar la visita.'; btn=accion('Escribir a ECOVSA',"solicitar('Programar visita','Desechos peligrosos')"); camino=false; }
+  else if(v.estado==='llego'){ h2='El vehículo llegó a su local'; sm='Llegó a las '+h12(v.llegada)+'.'; btn=accion('Ver en qué va',"ir('seguimiento')",'pri'); }
+  else if(v.estado==='programada'){ h2='Hoy pasamos por su local'; sm='El vehículo todavía no sale a la ruta'+(v.faltan?' · antes de su local hay '+v.faltan+(v.faltan===1?' parada':' paradas'):'')+'.'; btn=accion('Ver en qué va',"ir('seguimiento')",'pri'); camino=false; }
+  else if(v.estado==='siguiente'){ h2='Vamos en camino a su local'; sm='Su local es la siguiente parada · llegada estimada entre '+sgRango(v).replace(' – ',' y '); btn=accion('Ver en el mapa',"ir('seguimiento')",'pri'); }
+  else { h2='El vehículo ya salió a la ruta'; sm=(v.faltan===1?'Falta 1 parada':'Faltan '+v.faltan+' paradas')+' antes de su local · llegada estimada entre '+sgRango(v).replace(' – ',' y '); btn=accion('Ver en qué va',"ir('seguimiento')",'pri'); }
+  return '<section class="card r-next sg-hoy"><div class="r-date"><b>'+d.getDate()+'</b><span>'+MES[d.getMonth()]+'</span></div><div class="r-title"><div class="r-eyebrow">'+ey+'</div><h2>'+h2+'</h2><small>'+sm+'</small>'+
+    (camino?'<div style="margin-top:7px"><span class="sg-camino"><i></i>En camino</span></div>':'')+'</div><div class="r-act">'+btn+'</div></section>';
+}
+/* la pantalla «En camino» */
+function vSeguimiento(){
+  var v=SG.v, s=S.sedes[0]||{}, nx=s.lleno&&s.lleno.proxima;
+  if(!v){
+    if(!SG.t) sgCargar(true);
+    return titulo('Seguimiento de su visita','Desechos peligrosos')+
+      '<div class="card r-empty"><span class="r-spot">'+ic('camion',25)+'</span><h2>'+(SG.t?'Hoy no tiene una recolección programada':'Revisando su visita de hoy…')+'</h2><p>'+
+      (SG.t?'El día de su visita, aquí verá en qué va la ruta y la hora estimada de llegada.'+(nx&&nx>=S.hoy?' Su próxima recolección: <b>'+(nx===S.hoy?'hoy':fl(nx))+'</b>.':''):'Un momento.')+'</p></div>';
+  }
+  var e=v.estado, paso={programada:1,lejos:2,siguiente:3,llego:4,hecha:6,norecolectada:2}[e]||1;
+  var grande=e==='hecha'?'Hecha ✓':e==='llego'?'Ya llegó':e==='norecolectada'?'No se pudo hacer':e==='programada'?'Hoy':sgRango(v);
+  var bajo=e==='hecha'?(v.desde?h12(v.desde)+' a '+h12(v.hasta)+' · ':'')+String(v.kg).replace('.',',')+' kg recolectados':e==='llego'?'El vehículo está en su local desde las '+h12(v.llegada)
+    :e==='norecolectada'?'Nuestro equipo se comunicará con usted.':e==='programada'?'El vehículo todavía no sale a la ruta':e==='siguiente'?'Su local es la siguiente parada':(v.faltan===1?'Falta 1 parada':'Faltan '+v.faltan+' paradas')+' antes de su local';
+  var tag=e==='hecha'?'<span class="tag t-ok">Recolección hecha</span>':e==='llego'?'<span class="tag t-ok">En su local</span>':e==='norecolectada'?'<span class="tag t-warn">Por coordinar</span>':e==='programada'?'<span class="tag t-info">Programada</span>':'<span class="sg-camino"><i></i>En camino</span>';
+  var conMapa=e==='siguiente'&&v.camion&&v.local;
+  var tapa=conMapa?'':'<div class="sg-sin"><div><b>'+(e==='hecha'?'Recolección terminada':e==='llego'?'El vehículo ya está en su local':e==='siguiente'?'Esperando la ubicación del vehículo':'El mapa aparece cuando su local sea la siguiente parada')+'</b>'+
+    (e==='hecha'?'Gracias. Su recibo ya está en «Visitas».':e==='llego'?'Nuestro equipo está haciendo la recolección.':e==='siguiente'?'En cuanto el vehículo envíe su posición, lo verá aquí.':e==='programada'?'Cuando el vehículo salga a la ruta, aquí verá cuántas paradas faltan.':'Por ahora el vehículo atiende otras paradas.')+'</div></div>';
+  var li=function(n,t,x){ return '<li class="'+(n<paso?'ok':n===paso?'ya':'')+'"><span class="r-stepdot">'+(n<paso?'✓':n)+'</span><div><b>'+t+'</b><small>'+x+'</small></div></li>'; };
+  return titulo('Seguimiento de su visita','Desechos peligrosos · hoy, '+sgDia())+
+    '<div class="r-grid-track"><section class="card"><div class="r-trackhead"><div><div class="r-eyebrow">'+(e==='hecha'||e==='llego'?'Su recolección':'Llegada estimada')+'</div><strong>'+grande+'</strong><span style="color:var(--gris);font-size:13px">'+bajo+'</span></div>'+tag+'</div>'+
+    '<div class="sg-mapa">'+(conMapa?'<div id="sg-mapa"></div><div class="sg-act">Actualizado '+sgHace(v.camion.hace)+'</div>':'')+tapa+'</div>'+
+    '<div class="sg-priv">Por su privacidad y la de otros clientes, el vehículo solo se muestra cuando se dirige a su local. La hora es estimada y puede variar por el tráfico.</div></section>'+
+    '<section class="card"><h3>Estado de su visita</h3><ol class="r-trace">'+
+    li(1,'Visita confirmada','Recolección de desechos peligrosos · hoy')+
+    li(2,'Ruta iniciada',e==='programada'?'Pendiente':(v.salio?'El vehículo salió a las '+h12(v.salio):'El vehículo ya está en ruta')+(e==='lejos'?(v.faltan===1?' · falta 1 parada':' · faltan '+v.faltan+' paradas'):''))+
+    li(3,'En camino a su local',paso>=3?'Su local es la siguiente parada'+(e==='siguiente'?' · '+sgRango(v):''):'Le avisamos aquí cuando sea la siguiente')+
+    li(4,'Llegada a su local',e==='llego'?h12(v.llegada):e==='hecha'&&v.desde?h12(v.desde):'Pendiente')+
+    li(5,'Recolección hecha',e==='hecha'?(v.hasta?h12(v.hasta)+' · ':'')+String(v.kg).replace('.',',')+' kg'+(v.url?' · <a href="'+esc(v.url)+'" target="_blank" rel="noopener">recibo '+esc(v.recibo)+'</a>':''):'Pendiente')+
+    '</ol></section></div>';
+}
+/* el mapa: Leaflet se carga solo cuando hace falta */
+function sgLeaflet(ok){
+  if(window.L&&L.map) return ok();
+  if(!document.getElementById('sg-lf-css')){ var c=document.createElement('link'); c.id='sg-lf-css'; c.rel='stylesheet'; c.href='https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css'; document.head.appendChild(c); }
+  var s=document.getElementById('sg-lf-js');
+  if(!s){ s=document.createElement('script'); s.id='sg-lf-js'; s.src='https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js'; document.head.appendChild(s); }
+  s.addEventListener('load',ok);
+}
+function sgPintarMapa(){
+  var el=$('sg-mapa'), v=SG.v; if(!el||!v||!v.camion||!v.local) return;
+  sgLeaflet(function(){
+    if(!el.isConnected) return;
+    if(SG.mapa){ try{ SG.mapa.remove(); }catch(e){} SG.mapa=null; }
+    var m=L.map(el,{ zoomControl:false, attributionControl:true, scrollWheelZoom:false });
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{ maxZoom:19, attribution:'© OpenStreetMap' }).addTo(m);
+    var ca=[v.camion.lat,v.camion.lng], lo=[v.local.lat,v.local.lng];
+    L.marker(lo,{ icon:L.divIcon({ className:'', html:'<div class="sg-pin">'+ic('casa',16)+'</div>', iconSize:[34,34], iconAnchor:[17,34] }) }).addTo(m).bindTooltip('Su local');
+    L.marker(ca,{ zIndexOffset:1000, icon:L.divIcon({ className:'', html:'<div class="sg-cam">'+ic('camion',17)+'</div>', iconSize:[38,38], iconAnchor:[19,19] }) }).addTo(m).bindTooltip('Vehículo de ECOVSA');
+    m.fitBounds([ca,lo],{ padding:[46,46], maxZoom:16 });
+    SG.mapa=m;
+  });
+}
+proxima=(function(o){ return function(){ if(SG.v&&nivel()!=='corp') return sgTarjeta(); return o(); }; })(proxima);
 
 /* ── Corporativo ── */
 function corpTeam(s){ return (S.equipo||[]).filter(function(p){ return p.sede===s.nombre&&p.nivel!=='corp'&&p.estado==='activo'; }); }
@@ -1237,6 +1328,7 @@ window.pintar=function(){
   var m=$('main'); if(!m||!S) return;
   if(V==='calendario'&&nivel()==='corp') m.innerHTML=avisoCuenta()+titulo('Calendario de recolecciones','Fechas y cantidad de visitas por sede durante el mes.')+calView()+'<div class="pie-p">'+legal()+'</div>';
   if(V==='seguimiento'&&nivel()!=='corp') m.innerHTML=avisoCuenta()+vSeguimiento()+'<div class="pie-p">'+legal()+'</div>';
+  if(nivel()!=='corp'&&(V==='inicio'||V==='seguimiento')){ sgCargar(); if(V==='seguimiento') sgPintarMapa(); }   // api 3.37
   var fr=$('r-request'); if(fr){ fr.onsubmit=enviarSolicitud; var sd=$('r-sede'); if(sd&&SOL.sede){ sd.value=SOL.sede; SOL.sede=''; } }
   document.querySelectorAll('[data-request]').forEach(function(r){ var i=r.getAttribute('data-request');
     r.onclick=function(){ verSolicitud(i); }; r.onkeydown=function(e){ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); verSolicitud(i); } }; });
