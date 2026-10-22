@@ -964,8 +964,8 @@ window.vEquipo=function(){
 var P0={ inicio:window.vInicio, sedes:window.vSedes, equipo:window.vEquipo, recibos:window.vRecibos, servicios:window.vServicios, facturas:window.vFacturas,
   secciones:window.secciones, pintar:window.pintar, certMini:window.certMini, pedirPersona:window.pedirPersona, ir:window.ir };
 var SOL={ tipo:'', servicio:'', sede:'', exito:'' }, CORP={ query:'', filter:'todas', site:'', accessSite:'' }, CAL={ site:'' };
-var SERVICIOS=['Desechos peligrosos','Desechos sólidos','Fumigación y control de plagas','Bolsas rojas','Envase para punzocortantes','Contenedor con pedal','Asesoría','Otro servicio'];
-var TIPOS=['Primera recolección','Programar visita','Cambio de fecha','Cotización','Solicitar productos','Consulta','Consulta sobre certificado','Asesoría'];
+var SERVICIOS=['Desechos peligrosos','Desechos sólidos','Fumigación y control de plagas','Bolsas rojas','Envase para punzocortantes','Contenedor con pedal','Asesoría','Facturas y pagos','Otro servicio'];
+var TIPOS=['Primera recolección','Programar visita','Cambio de fecha','Cotización','Solicitar productos','Consulta','Consulta sobre certificado','Consulta sobre mi factura o pago','Asesoría'];
 
 function accion(t,on,k){ return '<button class="btn '+(k||'')+'" type="button" onclick="'+on+'">'+t+'</button>'; }
 function vacio(t,x,a){ return '<div class="card r-empty"><span class="r-spot">'+ic('lista',25)+'</span><h2>'+t+'</h2><p>'+x+'</p>'+(a||'')+'</div>'; }
@@ -1045,7 +1045,9 @@ window.pedir=function(nom){ solicitar(nom==='Asesoría'?'Asesoría':/bolsa|envas
 window.servicio=function(i){ var c=i>=0?S.catalogo[i]:null; solicitar(c?'Cotización':'Consulta',c?c.nombre:'Otro servicio'); };
 window.formServicio=function(nom){ solicitar('Cotización',nom); };
 window.ayudaPagoBase=window.ayudaPago;
-window.vFacturas=function(){ var h=P0.facturas(); h=h.replace('Sus comprobantes','Comprobantes de pago enviados'); if(!(S.facturas||[]).length) h=h.replace('No hay facturas registradas.','Aún no hay facturas emitidas para su cuenta. Cuando estén disponibles podrá consultarlas aquí.'); return h; };
+window.vFacturas=function(){ var h=P0.facturas(); h=h.replace('Sus comprobantes','Comprobantes de pago enviados'); if(!(S.facturas||[]).length) h=h.replace('No hay facturas registradas.','Aún no hay facturas emitidas para su cuenta. Cuando estén disponibles podrá consultarlas aquí.');
+  /* api 3.35 · una duda sobre una factura o un pago va directo a Cobros */
+  return h+'<div class="r-alert" style="margin-top:14px;background:#f6f9ff;border-color:#d6e2f5"><div class="tx"><b>¿Tiene una duda sobre una factura o un pago?</b><small style="color:var(--gris)">Escríbanos y nuestro equipo le responde aquí, en su portal.</small></div>'+accion('Hacer una consulta',"solicitar('Consulta sobre mi factura o pago','Facturas y pagos')",'sm')+'</div>'; };
 
 /* ── Solicitudes: nueva solicitud, historial y respuesta de ECOVSA ── */
 window.vSolicitudes=function(){
