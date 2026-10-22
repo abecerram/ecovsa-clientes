@@ -285,6 +285,7 @@ td small{display:block;color:var(--gris)}
   .fx-lista{display:grid}.fx-tabla{display:none}
   .fx-bot .btn{flex:1 1 100%;justify-content:center}
 }
+.r-alert.fum{background:#f1f8ec;border-color:#cfe6c0;margin-bottom:14px}.r-alert.fum.ok{background:#f6f8fa;border-color:#e1e6ee}.r-alert.fum>img,.r-alert.fum>.il{width:46px;height:46px;flex:none}.r-next.fum .r-date{background:#eaf6e4;color:#23653c}
 </style>
 <style>
 /* api 3.35 · Portal 2.0: estilos del rediseño (sobre los del portal) */
@@ -1199,6 +1200,36 @@ function calView(){
     '<h3 class="cal-tabletitle">Fechas y cantidad de visitas por sede</h3><div class="cal-tablewrap"><table class="cal-table"><thead><tr><th>Sede / frecuencia</th><th>Fechas del mes</th><th>Cantidad</th></tr></thead><tbody>'+S.sedes.filter(function(s){ return !CAL.site||s.clienteId===CAL.site; }).map(function(s){ var R=ev.filter(function(e){ return e.site===s.clienteId; });
       return '<tr><td><b>'+esc(s.nombre)+'</b><small>'+esc(cap(s.frecuencia)||'—')+'</small></td><td>'+(R.length?R.map(function(e){ return '<span class="cal-date '+e.status+'">'+f(e.date)+' · '+calStatus(e)+'</span>'; }).join(''):'<small>Sin fechas este mes</small>')+'</td><td><b>'+R.length+' visita'+(R.length===1?'':'s')+'</b><small>'+R.filter(function(e){ return e.status==='realizada'; }).length+' realizadas</small></td></tr>'; }).join('')+'</tbody></table></div></section>';
 }
+
+/* ── api 3.36 · Fumigación: la próxima fecha y «Agendar mi fumigación» si la tiene en su plan; si no, «Cotizar» (Mercadeo) ── */
+window.FUM_ITEM='Fumigación y control de plagas';
+function tieneFum(){ return S.sedes.some(function(x){ return !!x.fum; }); }
+function fumAbierta(id){ return S.pedidos.find(function(p){ return !p.cerrada&&/fumig/i.test((p.item||'')+' '+(p.resumen||''))&&(!id||!p.clienteId||String(p.clienteId)===String(id)); }); }
+function fumCard(s){
+  var F=s&&s.fum; if(!F) return '';
+  var pid="solicitar('Programar visita',FUM_ITEM"+(nivel()==='corp'?",'"+esc(s.clienteId)+"'":'')+")";
+  if(F.proxima){ var d=new Date(F.proxima.fecha+'T12:00:00');
+    return '<section class="card r-next fum"><div class="r-date"><b>'+d.getDate()+'</b><span>'+MES[d.getMonth()]+'</span></div><div class="r-title"><div class="r-eyebrow">Su próxima fumigación</div><h2>'+(F.proxima.fecha===S.hoy?'Hoy':fl(F.proxima.fecha))+', a las '+esc(F.proxima.hora)+'</h2><small>Fumigación y control de plagas · '+esc(String(F.frec||'').toLowerCase())+'</small><small>Fecha confirmada por logística.</small></div><div class="r-act">'+accion('Pedir otra fecha',"solicitar('Cambio de fecha',FUM_ITEM"+(nivel()==='corp'?",'"+esc(s.clienteId)+"'":'')+")")+'</div></section>'; }
+  var ab=fumAbierta(s.clienteId);
+  if(F.toca) return '<div class="r-alert fum">'+ilu('fumiga')+'<div class="tx"><b>'+(ab?'Ya recibimos su pedido de fumigación':'Le toca su fumigación')+'</b><small>'+(ab?'Solicitud '+esc(ab.folio)+'. Logística le confirma la fecha por aquí.':(F.ultima?'La última fue el '+f(F.ultima)+' · ':'')+esc(F.frec||'')+'. Elija el día que le conviene y logística se lo confirma.')+'</small></div>'+accion(ab?'Ver mi solicitud':'Agendar mi fumigación',ab?"ir('solicitudes')":pid,'sm pri')+'</div>';
+  return '<div class="r-alert fum ok">'+ilu('fumiga')+'<div class="tx"><b>Fumigación al día</b><small>'+(F.ultima?'Última el '+f(F.ultima)+' · ':'')+esc(F.frec||'')+'</small></div>'+accion('Agendar mi fumigación',pid,'sm')+'</div>';
+}
+window.vInicio=(function(o){ return function(){
+  var h=o(); if(nivel()==='corp'||!S.sedes[0]||!S.sedes[0].fum) return h;
+  var c=fumCard(S.sedes[0]), i=h.indexOf('<div class="grid g3 r-metrics">');
+  var k=h.indexOf('<div class="r-alert">'); if(k>=0&&k<i) i=k;
+  return i<0?h+c:h.slice(0,i)+c+h.slice(i);
+}; })(window.vInicio);
+window.vServicios=(function(o){ return function(){
+  var h=o(), si=tieneFum();
+  return h.replace('onclick="pedir(\''+FUM_ITEM+'\')">Solicitar<','onclick="pedir(\''+FUM_ITEM+'\')">'+(si?'Agendar mi fumigación':'Cotizar')+'<');
+}; })(window.vServicios);
+window.pedir=(function(o){ return function(nom){ if(/fumig/i.test(nom||'')) return solicitar(tieneFum()?'Programar visita':'Cotización',FUM_ITEM); return o(nom); }; })(window.pedir);
+window.vSedes=(function(o){ return function(){
+  var h=o(); if(nivel()!=='corp'||!CORP.site) return h;
+  var s=S.sedes.find(function(x){ return x.clienteId===CORP.site; }); if(!s||!s.fum) return h;
+  var i=h.indexOf('<div class="grid g2" style="margin-top:16px">'); return i<0?h:h.slice(0,i)+'<div style="margin-top:16px">'+fumCard(s)+'</div>'+h.slice(i);
+}; })(window.vSedes);
 
 /* ── pintar: las vistas nuevas y sus oyentes ── */
 window.pintar=function(){
