@@ -13,7 +13,7 @@
 <link rel="icon" href="favicon.ico">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800;900&display=swap">
-<!-- api 3.22 · portal corporativo nuevo, certificado visto por sucursal, motivo del rechazo solo para el cliente · antes: api 3.18 · pantallas 3.18.3 (en la app instalada el emblema del arranque cobra vida; entrada con la cortina azul y el emblema que se arma; documentos dentro del portal con «Volver») · Portal de clientes: micro (una sede), sede de un macro y corporativo.
+<!-- api 3.35 · Portal 2.0: inicio nuevo, solicitudes con respuesta de ECOVSA, calendario corporativo, seguimiento (apagado) · antes: api 3.22 · portal corporativo nuevo, certificado visto por sucursal, motivo del rechazo solo para el cliente · antes: api 3.18 · pantallas 3.18.3 (en la app instalada el emblema del arranque cobra vida; entrada con la cortina azul y el emblema que se arma; documentos dentro del portal con «Volver») · Portal de clientes: micro (una sede), sede de un macro y corporativo.
      Entra con un PIN de 6 números propio de cada persona; los accesos los da el administrador.
      3.18: diseño v11 aprobado (insignia, pestañas en celular, hoja para instalar, certificado,
      «Mi depósito está lleno», vitrina de servicios, facturas por mes, estado del comprobante,
@@ -285,6 +285,27 @@ td small{display:block;color:var(--gris)}
   .fx-lista{display:grid}.fx-tabla{display:none}
   .fx-bot .btn{flex:1 1 100%;justify-content:center}
 }
+</style>
+<style>
+/* api 3.35 · Portal 2.0: estilos del rediseño (sobre los del portal) */
+:root{--gris:#596a80}
+body{min-width:320px}
+.main{max-width:1180px}.g-ini{align-items:start}.main .bajada{font-size:14px}.main .r-top{display:flex;gap:14px;align-items:center;justify-content:space-between;margin-bottom:16px;flex-wrap:wrap}.main .r-top .bajada{margin-bottom:0}.r-next{display:flex;gap:18px;align-items:center;justify-content:space-between;border-left:4px solid var(--marca);margin-bottom:16px;padding:20px 22px}.r-next .r-date{width:66px;min-width:66px;min-height:70px;background:var(--azulclaro);color:var(--marca);display:flex;align-items:center;justify-content:center;flex-direction:column;border-radius:11px;line-height:1.2}.r-date b{font-size:27px}.r-date span{font-size:11px;letter-spacing:.8px;text-transform:uppercase;margin-top:3px}.r-next .r-title{flex:1}.r-next small{display:block;color:var(--gris);font-size:13px;margin-top:5px}.r-next h2{margin:3px 0 0;font-size:23px;color:var(--marca)}.r-eyebrow{font-size:11px;color:var(--gris);text-transform:uppercase;letter-spacing:.8px;font-weight:700}.r-act{display:flex;gap:8px;flex-wrap:wrap;align-items:center}.r-next .r-act{flex-direction:column;align-items:stretch}.r-next.nuevo{background:#f8fbff}.r-newimg{width:70px;min-width:70px;display:grid;place-items:center}.r-newimg img{max-width:56px;max-height:70px}.r-next.route{border-left-color:var(--ok);background:#fcfefb}.r-next.route h2{color:#176338}.r-next .r-caption{font-size:12px;color:var(--gris)}
+.r-metrics{margin-bottom:16px}.r-metrics .card{position:relative}.r-metrics .kpi b{font-size:22px;margin:4px 0}.r-metrics .r-label{font-size:12px;display:block;color:var(--gris)}.r-metrics .lnk{display:inline-block;margin-top:10px;font-size:12px}.r-shortcuts{margin:16px 0;display:flex;gap:8px;flex-wrap:wrap}.r-shortcuts .btn{font-size:13px}.r-alert{display:flex;align-items:center;gap:13px;background:#fffaf0;border:1px solid #eed9a6;padding:12px 16px;border-radius:12px;margin:0 0 16px}.r-alert img{width:38px;max-height:50px;object-fit:contain;mix-blend-mode:multiply}.r-alert .tx{flex:1}.r-alert small{display:block;color:#715d2d;font-size:12px;margin-top:3px}.r-empty{padding:23px;text-align:center}.r-empty p{color:var(--gris);font-size:14px;margin:8px auto 17px;max-width:510px}.r-empty h2{font-size:18px;margin:10px 0 4px}.r-empty .r-spot{display:inline-flex;background:var(--azulclaro);padding:12px;border-radius:12px;color:var(--marca)}.r-empty .btn{white-space:normal}.r-requestform .campo label{color:var(--tinta)}.r-requestform .campo input,.r-requestform .campo textarea,.r-requestform .campo select{font-size:14px}.r-requestform .campo textarea{resize:vertical}.r-form-two{display:grid;grid-template-columns:1fr 1fr;gap:12px}.r-formnote{font-size:12px;color:var(--gris);margin:0 0 14px}.r-success{border-left:4px solid var(--ok);margin-bottom:16px;background:#f8fcf6}.r-success h2{color:#27683b;margin:0 0 8px;font-size:18px}.r-requestrow{cursor:pointer}.r-requestrow:hover{background:var(--suave)}.r-requestrow b{font-size:14px}.r-requestrow .tag{font-size:11px}.r-pedido-note{font-size:13px;color:var(--gris);margin:8px 0 0}.r-trace{padding:0;list-style:none;margin:20px 0 0}.r-trace li{display:flex;gap:11px;position:relative;padding:0 0 20px}.r-trace li:not(:last-child):before{content:'';position:absolute;left:11px;top:25px;width:1px;height:calc(100% - 27px);background:var(--linea)}.r-trace .r-stepdot{width:24px;height:24px;min-width:24px;background:var(--azulclaro);color:var(--marca);border-radius:50%;display:grid;place-items:center;font-size:12px;font-weight:700}.r-trace .r-done{background:var(--ok-bg);color:#287a39}.r-trace small{display:block;color:var(--gris);margin-top:3px;font-size:12px}.r-cp{background:var(--suave);padding:11px 13px;border-radius:9px;margin-top:16px;font-size:12px;color:var(--gris)}
+.r-trackhead{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;flex-wrap:wrap}.r-trackhead strong{font-size:32px;display:block;line-height:1.25;color:var(--marca);margin:5px 0}.r-map{height:300px;border:1px solid #d6e0df;border-radius:12px;margin:18px 0 12px;position:relative;background-color:#eff3f0;background-image:linear-gradient(#e2e8e3 1px,transparent 1px),linear-gradient(90deg,#e2e8e3 1px,transparent 1px);background-size:50px 50px;overflow:hidden}.r-map-note{position:absolute;left:12px;top:12px;padding:5px 9px;background:#fff;border-radius:7px;font-size:10px;color:var(--gris);z-index:2}.r-map-caption{position:absolute;bottom:12px;right:12px;left:12px;text-align:center;background:#fffffff2;padding:8px;border-radius:8px;font-size:11px;color:var(--gris)}.r-map-line{position:absolute;left:18%;right:18%;top:46%;height:6px;background:var(--marca);border-radius:5px}.r-map-node{position:absolute;left:var(--x);top:calc(46% - 18px);transform:translateX(-50%);background:white;border:3px solid var(--marca);width:44px;height:44px;display:grid;place-items:center;border-radius:50%;color:var(--marca);box-shadow:0 4px 12px #14306b20}.r-map-node.end{background:var(--marca);color:white}.r-map-node small{position:absolute;top:45px;white-space:nowrap;font-size:12px;color:var(--tinta);background:white;padding:4px 7px;border-radius:5px}.r-map-pulse{position:absolute;left:calc(var(--x) - 29px);top:calc(46% - 25px);width:58px;height:58px;border-radius:50%;background:#14306b18}.r-track-controls{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;font-size:12px;color:var(--gris)}.r-track-controls select{font:inherit;padding:6px 8px;border:1px solid var(--linea);background:#fff;border-radius:7px;color:var(--tinta)}.r-grid-track{display:grid;grid-template-columns:minmax(0,1.65fr) minmax(230px,1fr);gap:14px;align-items:start}.r-detailgrid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:15px 0}.r-detailgrid span{font-size:12px;color:var(--gris);display:block}.r-detailgrid strong{font-size:14px}.r-actionbar{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin:16px 0}.r-formerror{color:var(--bad);font-size:13px;margin-bottom:12px}.r-modalnotes{font-size:12px;padding:10px 12px;background:var(--warn-bg);color:#735000;border-radius:9px;margin:12px 0}.r-doctitle{border-top:5px solid var(--marca);padding-top:16px}.r-document-view{padding:12px}.r-document-view h2{font-size:20px}.r-document-view .r-watermark{padding:8px;background:var(--warn-bg);color:#735000;font-weight:700;font-size:11px;letter-spacing:1px;margin:12px 0}.r-previewlogo{width:62px;float:right}.cm-a .sv{font-size:13px}.cm-a .dat span{font-size:11px}.cm-a .bar small{font-size:12px}.pie-p{line-height:1.65}.ll-card{width:100%}.r-service-active{margin-bottom:16px}.modal{max-height:90dvh;overflow-y:auto}.fondo{padding:20px}.modal h2{overflow-wrap:anywhere}.r-cancel{margin-top:14px}.r-checkrow{display:flex;gap:10px;align-items:flex-start}.r-checkrow svg{flex:none;margin-top:3px;color:var(--ok)}.r-checkrow small{display:block;color:var(--gris);font-size:12px;margin-top:3px}button,a{-webkit-tap-highlight-color:transparent}
+@media(max-width:820px){.r-grid-track{grid-template-columns:1fr}.r-next{flex-wrap:wrap}.r-next .r-act{flex-direction:row}.r-next .r-title{min-width:200px}.r-next .r-act .btn{white-space:normal}.r-map{height:260px}.r-metrics{grid-template-columns:repeat(3,minmax(0,1fr))}.r-metrics .kpi b{font-size:20px!important}.r-alert{flex-wrap:wrap}.r-alert .btn{margin-left:51px}.r-form-two{grid-template-columns:1fr}.modal .r-act .btn{white-space:normal}.r-requestrow{flex-wrap:wrap}}
+@media(max-width:560px){.r-metrics{grid-template-columns:1fr}.r-metrics .kpi{display:grid;grid-template-columns:1fr auto;align-items:center;gap:2px 10px}.r-metrics .kpi .lnk{grid-column:1/-1;margin-top:5px}.r-metrics .kpi .r-label{font-size:13px}.r-next{padding:16px;gap:12px}.r-next h2{font-size:20px}.r-next .r-title{min-width:160px}.r-next .r-date{width:50px;min-width:50px;min-height:60px}.r-next .r-date b{font-size:24px}.r-next .r-act{width:100%}.r-next .r-act .btn{flex:1}.r-alert .btn{margin-left:0;width:100%}.r-shortcuts .btn{flex:1;white-space:normal}.r-trackhead strong{font-size:28px}.r-map-caption{font-size:10px}.r-detailgrid{gap:10px}.r-top .btn{font-size:12px}.r-map-note{font-size:9px}.r-newimg{width:50px;min-width:50px}.main .fila .btn{white-space:normal}}
+@media print{.cuerpo{display:block}.main{padding:0;max-width:none}.card{break-inside:avoid}}
+
+.corp-overview{display:flex;align-items:center;justify-content:space-between;gap:20px;border-left:4px solid var(--marca);margin-bottom:16px;background:#f8fbff}.corp-overview h2{font-size:24px;color:var(--marca);margin:6px 0}.corp-overview p,.corp-accessnote p{font-size:14px;color:var(--gris);line-height:1.55;margin:6px 0}.corp-attention,.corp-accessnote{margin-bottom:16px}.corp-attention .fila{gap:12px}.corp-sitehead{display:flex;gap:10px;align-items:flex-start;justify-content:space-between}.corp-sitehead h3{font-size:17px;margin:0;display:block}.corp-sitehead .tag{flex:none}.corp-address{font-size:13px;color:var(--gris);margin:8px 0 14px}.corp-details{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:18px 0}.corp-details dt{font-size:12px;color:var(--gris);margin-bottom:5px}.corp-details dd{font-size:14px;font-weight:600;margin:0;line-height:1.45}.corp-note{padding:10px;border-radius:8px;background:var(--info-bg);font-size:13px}.corp-toolbar{display:flex;align-items:flex-end;gap:12px;flex-wrap:wrap;margin-bottom:16px}.corp-toolbar label{display:grid;gap:6px;font-size:12px;font-weight:600}.corp-toolbar input,.corp-toolbar select{font:inherit;font-size:14px;color:var(--tinta);padding:10px 12px;border:1px solid var(--linea);border-radius:8px;background:white;min-width:220px}.corp-toolbar>span{font-size:13px;color:var(--gris);padding-bottom:10px}.corp-accessnote small{display:block;color:var(--gris);margin-top:12px;font-size:12px}.corp-sites{align-items:stretch}.corp-site{min-width:0}.corp-site .r-act{margin-top:16px}button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid #7aa6d8;outline-offset:3px}
+@media(max-width:820px){.corp-overview{align-items:flex-start;flex-direction:column}.corp-sitehead{flex-wrap:wrap}}
+@media(max-width:560px){.corp-details{grid-template-columns:1fr}.corp-overview h2{font-size:21px}.corp-overview .r-act,.corp-toolbar,.corp-toolbar label{width:100%}.corp-toolbar input,.corp-toolbar select{min-width:0;width:100%}.corp-attention .fila{flex-wrap:wrap}.corp-site .r-act .btn{flex:1}}
+.corp-progress{padding:16px;background:#f5f8fc;border:1px solid var(--linea);border-radius:10px;margin:16px 0}.corp-progresshead{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}.corp-progresshead>div>span{display:block;color:var(--gris);font-size:12px}.corp-progresshead strong{font-size:30px;color:var(--marca);display:block;line-height:1.3;margin-top:3px}.corp-progress p{font-size:13px;color:var(--gris);line-height:1.5;margin:8px 0}.corp-monthrecords{border-top:1px solid var(--linea);padding-top:10px;margin-top:12px;font-size:12px;color:var(--gris)}.corp-monthrecords>div{display:flex;justify-content:space-between;gap:12px;padding:4px 0}.corp-monthrecords b{color:var(--tinta)}.corp-estimate{display:block;color:var(--gris);font-size:12px;line-height:1.5;font-weight:400;margin-top:5px}.corp-monthsummary{margin-bottom:16px}.corp-monthsummary strong{display:block;font-size:25px;color:var(--marca)}.corp-monthsummary .grid span{display:block;font-size:13px;color:var(--gris);margin-top:5px}.corp-monthsummary p{font-size:12px;color:var(--gris);line-height:1.6;margin:16px 0 0}
+
+.cal-section{margin-bottom:20px;padding:22px}.cal-header{display:flex;justify-content:space-between;gap:16px;align-items:flex-start;flex-wrap:wrap}.cal-header h2{font-size:25px;color:var(--marca);margin:5px 0}.cal-header p{font-size:14px;color:var(--gris);margin:6px 0 12px}.cal-header label{display:grid;gap:6px;font-size:12px}.cal-header select{font:inherit;font-size:14px;padding:9px;border:1px solid var(--linea);border-radius:8px;background:white;max-width:100%}.cal-totals{display:flex;flex-wrap:wrap;gap:8px 18px;background:var(--azulclaro);padding:12px;border-radius:8px;font-size:13px;margin:10px 0 14px}.cal-legend{display:flex;flex-wrap:wrap;gap:15px;font-size:12px;font-weight:600}.cal-legend .realizada{color:#23653c}.cal-legend .estimada{color:#245793}.cal-legend .sinregistro{color:#80571c}.cal-disclaimer{font-size:12px;color:var(--gris);line-height:1.55;margin:12px 0 16px}.cal-scroll{overflow-x:auto}.cal-week,.cal-grid{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));min-width:650px}.cal-week{background:var(--marca);border-radius:8px 8px 0 0;color:white;font-size:12px;text-align:center}.cal-week span{padding:10px}.cal-grid{border-left:1px solid var(--linea);border-top:1px solid var(--linea)}.cal-day{min-height:115px;padding:7px;border-right:1px solid var(--linea);border-bottom:1px solid var(--linea);min-width:0;background:white}.cal-blank{background:#f6f8fa}.cal-daytop{display:flex;align-items:center;justify-content:space-between;gap:3px;margin-bottom:7px}.cal-daytop time{font-weight:700;font-size:13px}.cal-daytop>span{font-size:9px;color:var(--gris)}.cal-today{background:#f4f8ff;box-shadow:inset 0 0 0 2px #7e9bbf}.cal-event{display:block;width:100%;text-align:left;border:0;border-left:3px solid #6d8cb3;background:#edf4ff;color:#214b7b;border-radius:4px;padding:7px 5px;margin-bottom:6px;cursor:pointer;font-family:inherit;overflow-wrap:anywhere}.cal-event b{display:block;font-size:11px;line-height:1.35}.cal-event small{display:block;font-size:10px;line-height:1.4;margin-top:4px}.cal-event.realizada{background:#edf8ef;border-color:#4b9460;color:#23653c}.cal-event.sinregistro{background:#fff6e8;border-color:#c99a48;color:#80571c}.cal-tabletitle{margin-top:22px!important}.cal-tablewrap{overflow-x:auto}.cal-table{width:100%;border-collapse:collapse;font-size:13px}.cal-table th{text-align:left;background:#f3f6fa;color:var(--gris);font-size:12px;padding:10px}.cal-table td{padding:12px 10px;border-bottom:1px solid var(--linea);vertical-align:top}.cal-table small{display:block;color:var(--gris);font-size:12px;margin-top:5px}.cal-date{display:inline-block;margin:0 6px 6px 0;padding:5px 7px;background:#edf4ff;border-radius:5px;color:#214b7b;font-size:12px}.cal-date.realizada{background:#edf8ef;color:#23653c}.cal-date.sinregistro{background:#fff6e8;color:#80571c}
+@media(max-width:560px){.cal-section{padding:14px}.cal-header label{width:100%}.cal-header h2{font-size:22px}.cal-table{min-width:540px}.cal-totals{display:grid;gap:7px}}
+.cal-shortcut{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin:0 0 16px}.cal-shortcut>span{font-size:13px;color:var(--gris)}.corp-listwrap{overflow-x:auto;border:1px solid var(--linea);border-radius:12px;background:white}.corp-list{width:100%;min-width:900px;border-collapse:collapse;font-size:13px}.corp-list th{text-align:left;background:#f3f6fa;font-size:12px;padding:13px;color:var(--gris)}.corp-list td{padding:16px 13px;border-top:1px solid var(--linea);vertical-align:top}.corp-list tbody tr:hover{background:#f8fbff}.corp-list small{display:block;font-size:12px;color:var(--gris);margin-top:5px;line-height:1.5}.corp-listcount{font-size:21px;color:var(--marca);white-space:nowrap}.corp-list .pb{min-width:90px}.corp-list td:first-child{min-width:200px}.corp-list .r-act{gap:7px}
+.r-metrics .kpi>span{display:block}.r-metrics .lnk{display:block}.r-pronto{border:1px solid #c9d8f2}.r-apagado{opacity:.45;filter:grayscale(.6);pointer-events:none;user-select:none}
 </style>
 </head>
 <body>
@@ -931,6 +952,270 @@ window.vEquipo=function(){
 };
 })();
 
+</script>
+<script>
+/* api 3.35 · PORTAL 2.0 (rediseño de Álvaro, «portal clientes 2.0», 22 oct 2026), conectado al servidor.
+   · Todos: inicio nuevo (próxima recolección, indicadores, cliente nuevo), solicitudes con tipo, fecha preferida,
+     historial y la respuesta que ECOVSA escribe para el cliente (Mercadeo › Inicio › «Responder al cliente").
+   · Corporativo: resumen con avance del mes, sedes en tabla, detalle por sede y calendario de recolecciones.
+   · Seguimiento del vehículo: pantalla diseñada pero APAGADA («Próximamente») hasta tener la ubicación de los camiones.
+   Se monta encima del portal y del corporativo 3.22: lo que no cambia sigue igual. */
+(function(){
+var P0={ inicio:window.vInicio, sedes:window.vSedes, equipo:window.vEquipo, recibos:window.vRecibos, servicios:window.vServicios, facturas:window.vFacturas,
+  secciones:window.secciones, pintar:window.pintar, certMini:window.certMini, pedirPersona:window.pedirPersona, ir:window.ir };
+var SOL={ tipo:'', servicio:'', sede:'', exito:'' }, CORP={ query:'', filter:'todas', site:'', accessSite:'' }, CAL={ site:'' };
+var SERVICIOS=['Desechos peligrosos','Desechos sólidos','Fumigación y control de plagas','Bolsas rojas','Envase para punzocortantes','Contenedor con pedal','Asesoría','Otro servicio'];
+var TIPOS=['Primera recolección','Programar visita','Cambio de fecha','Cotización','Solicitar productos','Consulta','Consulta sobre certificado','Asesoría'];
+
+function accion(t,on,k){ return '<button class="btn '+(k||'')+'" type="button" onclick="'+on+'">'+t+'</button>'; }
+function vacio(t,x,a){ return '<div class="card r-empty"><span class="r-spot">'+ic('lista',25)+'</span><h2>'+t+'</h2><p>'+x+'</p>'+(a||'')+'</div>'; }
+function esNuevo(){ return !S.recibos.length; }
+function mesTx(){ return MESL[Number(S.hoy.slice(5,7))-1]; }
+function kgMesDe(s){ if(s.kgMes!=null) return s.kgMes; var m=S.hoy.slice(0,7); return S.recibos.filter(function(r){ return r.sede===s.nombre&&r.fecha.slice(0,7)===m; }).reduce(function(a,r){ return a+(Number(r.kg)||0); },0); }
+function solAbierta(re){ return S.pedidos.find(function(p){ return !p.cerrada&&re.test(p.tipoSol||''); }); }
+
+/* ── ir: al cambiar de pantalla se cierra el detalle de la sede ── */
+window.ir=function(v){ CORP.site=''; if(v!=='solicitudes') SOL.exito=''; P0.ir(v); };
+window.corpOpen=function(id){ CORP.site=id; V='sedes'; pintar(); window.scrollTo(0,0); };
+window.corpAccess=function(id){ CORP.accessSite=id||''; pedirPersona(); };
+window.solicitar=function(tipo,serv,sede){ SOL.tipo=tipo||''; SOL.servicio=serv||''; SOL.sede=sede||''; SOL.exito=''; CORP.site=''; V='solicitudes'; pintar(); window.scrollTo(0,0); setTimeout(function(){ var m=$('r-message'); if(m) m.focus(); },60); };
+
+/* ── secciones: calendario para el corporativo; seguimiento (apagado) para la sede ── */
+window.secciones=function(){
+  var g=P0.secciones();
+  if(nivel()==='corp') g[0][1].push(['calendario','Calendario de recolecciones','Calendario','camion']);
+  else g[0][1].push(['seguimiento','Seguimiento de visita','En camino','camion']);
+  return g;
+};
+
+/* ── próxima visita y certificado ── */
+window.proximaTxt=function(L){ if(!L||!L.proxima) return esNuevo()?'Por coordinar':'Fecha por confirmar'; return L.proxima<S.hoy?'Fecha por confirmar':L.proxima===S.hoy?'Hoy':f(L.proxima); };
+window.certMini=function(c){
+  var h=P0.certMini(c), ve=new Date(c.vence+'T12:00:00'), hoy=new Date(S.hoy+'T12:00:00'), res=Math.max(0,Math.round((ve-hoy)/864e5));
+  var sd=S.sedes.find(function(x){ return x.nombre===c.establecimiento; })||S.sedes[0]||{}, ini=sd.inicio&&sd.inicio<S.hoy?new Date(sd.inicio+'T12:00:00'):new Date(ve-365*864e5);
+  var tot=Math.max(1,Math.round((ve-ini)/864e5)), pc=Math.min(100,Math.max(0,Math.round(res/tot*100)));
+  h=h.replace(/(<div class="bar"><div class="l"><i style="width:)\d+(%)/,'$1'+pc+'$2');
+  if(ve<hoy) h=h.replace('>VIGENTE<','>VENCIDO<').replace('Vigente · le quedan','Vencido · quedan');
+  return h;
+};
+window.certServicio=function(){
+  if(S.servicio.length) return S.servicio.map(certMini).join('');
+  return '<div class="r-empty" style="padding:8px 0"><h2>Su certificado está por emitirse</h2><p>Le avisaremos cuando esté disponible. Puede escribirnos si necesita información sobre su emisión.</p>'+accion('Consultar a ECOVSA',"solicitar('Consulta sobre certificado','Desechos peligrosos')",'sm')+'</div>';
+};
+
+/* ── Inicio de la sede (micro y sucursal) ── */
+function proxima(){
+  var s=S.sedes[0]||{}, nx=s.lleno&&s.lleno.proxima, ab=solAbierta(/Primera recolección/);
+  if(esNuevo()) return '<section class="card r-next nuevo"><div class="r-newimg">'+ilu('pedal')+'</div><div class="r-title"><div class="r-eyebrow">Comience aquí</div><h2>Coordinemos su primera recolección</h2><small>'+(ab?'Ya recibimos su solicitud '+esc(ab.folio)+'. Le confirmaremos la fecha por el portal.':'Su cuenta está lista. Díganos cuándo necesita la visita y le confirmaremos la fecha.')+'</small></div><div class="r-act">'+accion(ab?'Ver mi solicitud':'Solicitar primera visita',ab?"ir('solicitudes')":"solicitar('Primera recolección','Desechos peligrosos')",'pri')+'</div></section>';
+  if(!nx||nx<S.hoy) return '<section class="card r-next"><div class="r-date"><b>—</b><span>fecha</span></div><div class="r-title"><div class="r-eyebrow">Su próxima recolección</div><h2>Fecha por confirmar</h2><small>Desechos peligrosos'+(s.frecuencia?' · Frecuencia '+esc(String(s.frecuencia).toLowerCase()):'')+'</small><small>Logística le confirmará la fecha de su próxima visita.</small></div><div class="r-act">'+accion('Programar una visita',"solicitar('Programar visita','Desechos peligrosos')")+'</div></section>';
+  var d=new Date(nx+'T12:00:00');
+  return '<section class="card r-next"><div class="r-date"><b>'+d.getDate()+'</b><span>'+MES[d.getMonth()]+'</span></div><div class="r-title"><div class="r-eyebrow">Su próxima recolección</div><h2>'+(nx===S.hoy?'Hoy':fl(nx))+'</h2><small>Desechos peligrosos'+(s.frecuencia?' · Frecuencia '+esc(String(s.frecuencia).toLowerCase()):'')+'</small><small>Fecha según su plan; logística la confirma.</small></div><div class="r-act">'+accion('Solicitar cambio de fecha',"solicitar('Cambio de fecha','Desechos peligrosos')")+'</div></section>';
+}
+function resumenServicios(){
+  if(nivel()==='corp') return susServicios();
+  var nv=esNuevo(), s=S.sedes[0]||{};
+  return '<div class="card so-b"><h3>Sus servicios con ECOVSA</h3><div class="grid g2"><div class="srv"><div class="cab"><span class="ic">'+ilu('bolsas')+'</span><b>Desechos peligrosos</b><span class="tag '+(nv?'t-info':'t-ok')+'">'+(nv?'Por coordinar':'Activo')+'</span></div><div class="dd"><div><span>Frecuencia</span><b>'+esc(cap(s.frecuencia)||'—')+'</b></div><div><span>Próxima visita</span><b>'+proximaTxt(s.lleno)+'</b></div></div><div style="margin-top:10px">'+accion(nv?'Solicitar primera recolección':'Hacer una solicitud',nv?"solicitar('Primera recolección','Desechos peligrosos')":"solicitar('Programar visita','Desechos peligrosos')",'sm')+'</div></div>'+
+    '<div class="srv dis"><div class="cab"><span class="ic">'+ilu('solidos')+'</span><b>Desechos sólidos</b><span class="tag t-ok" style="background:#fff">Disponible</span></div><small style="color:#3b5a2a">Su basura común, en los días que elija. Un solo proveedor, todo en su portal.</small>'+accion('Solicitar cotización',"solicitar('Cotización','Desechos sólidos')",'verde sm')+'</div></div></div>';
+}
+window.vInicio=function(){
+  var n=nivel();
+  if(n==='corp') return inicioCorp();
+  if(S.cuenta.estado==='suspendida'&&n!=='sede') return P0.inicio();
+  var nv=esNuevo(), s=S.sedes[0]||{}, ult=S.recibos[0], cs=S.servicio[0];
+  var h=titulo((nv?'Bienvenido, ':'Hola, ')+esc(String(S.yo.nombre).split(' ')[0]),esc(s.nombre||'')+(nv?' · Su primera visita está por coordinar':(s.frecuencia?' · Frecuencia '+esc(String(s.frecuencia).toLowerCase()):'')));
+  h+=proxima();
+  if(!nv&&sedesConLleno().length){
+    if(s.lleno&&s.lleno.abierta) h+=avisoLleno();
+    else h+='<div class="r-alert">'+ilu('lleno')+'<div class="tx"><b>¿Su depósito está lleno antes de la visita?</b><small>Le decimos al momento si la recolección va dentro de su plan.</small></div>'+accion('Avisar que está lleno','lleno()','sm')+'</div>';
+  }
+  h+='<div class="grid g3 r-metrics">'+
+    '<div class="card kpi"><span class="r-label">'+(n==='sede'?'Certificados disponibles':'Saldo pendiente')+'</span><b>'+(n==='sede'?S.certificados.length:B(S.cuenta.saldo))+'</b><span>'+(n==='sede'?'Documentos de su establecimiento':S.cuenta.saldo>0.009?'Tiene facturas por pagar':'Su cuenta está al día')+'</span><button class="lnk" data-v="'+(n==='sede'?'certificados':'facturas')+'">'+(n==='sede'?'Ver certificados':'Ver facturas y pagos')+' →</button></div>'+
+    '<div class="card kpi"><span class="r-label">Certificado de servicio</span><b>'+(cs?'Vigente':'Por emitir')+'</b><span>'+(cs?'Vence el '+f(cs.vence):'Le avisaremos cuando esté disponible')+'</span><button class="lnk" data-v="certificados">Ver certificado →</button></div>'+
+    '<div class="card kpi"><span class="r-label">Última recolección</span><b>'+(ult?f(ult.fecha):'Aún sin visitas')+'</b><span>'+(ult?kg(ult.kg)+' kg recolectados':'Coordine su primera atención')+'</span><button class="lnk" data-v="recibos">Ver recibos →</button></div></div>';
+  h+='<div class="grid g-ini"><section class="card"><h3>Últimas visitas<span class="sp"></span><button class="btn sm" data-v="recibos">Ver todas</button></h3>'+(ult?S.recibos.slice(0,3).map(filaRec).join(''):'<p style="color:var(--gris)">Después de su primera recolección encontrará aquí el recibo y los kilos recolectados.</p>')+
+    '<div class="r-cp">'+(nv?'Su primer paso es solicitar una visita. ECOVSA le confirmará la fecha.':'¿Necesita otro servicio o tiene una consulta? Puede enviarla desde Solicitudes.')+'</div><div style="margin-top:14px">'+accion(nv?'Solicitar primera visita':'Crear una solicitud',nv?"solicitar('Primera recolección','Desechos peligrosos')":"solicitar('Consulta','Desechos peligrosos')",'sm')+'</div></section>'+
+    '<section class="card"><h3>Su certificado de servicio</h3>'+certServicio()+'</section></div><div style="margin-top:14px">'+resumenServicios()+'</div>';
+  return h;
+};
+
+/* ── documentos y servicios ── */
+window.vRecibos=function(){ if(!S.recibos.length) return titulo('Recibos de visita','El respaldo de cada recolección en su establecimiento')+vacio('Su primer recibo aparecerá aquí','Después de su primera visita podrá consultar el recibo y los kilos recolectados.',accion('Solicitar primera recolección',"solicitar('Primera recolección','Desechos peligrosos')",'pri')); return P0.recibos(); };
+window.vServicios=function(){ var h=P0.servicios(); h=h.replace(/<div class="sv-tiene">[\s\S]*?<\/span><\/div>/,''); var c=h.indexOf('<div class="sv-hero">'); return c<0?h:h.slice(0,c)+resumenServicios()+'<div style="height:16px"></div>'+h.slice(c); };
+window.pedir=function(nom){ solicitar(nom==='Asesoría'?'Asesoría':/bolsa|envase|contenedor/i.test(nom||'')?'Solicitar productos':'Cotización',nom); };
+window.servicio=function(i){ var c=i>=0?S.catalogo[i]:null; solicitar(c?'Cotización':'Consulta',c?c.nombre:'Otro servicio'); };
+window.formServicio=function(nom){ solicitar('Cotización',nom); };
+window.ayudaPagoBase=window.ayudaPago;
+window.vFacturas=function(){ var h=P0.facturas(); h=h.replace('Sus comprobantes','Comprobantes de pago enviados'); if(!(S.facturas||[]).length) h=h.replace('No hay facturas registradas.','Aún no hay facturas emitidas para su cuenta. Cuando estén disponibles podrá consultarlas aquí.'); return h; };
+
+/* ── Solicitudes: nueva solicitud, historial y respuesta de ECOVSA ── */
+window.vSolicitudes=function(){
+  var serv=SERVICIOS.slice(); (S.catalogo||[]).forEach(function(c){ if(c.nombre&&serv.indexOf(c.nombre)<0&&!YA_EN_VITRINA.test(c.nombre)) serv.splice(serv.length-1,0,c.nombre); });
+  var sv=SOL.servicio||'Desechos peligrosos'; if(serv.indexOf(sv)<0) serv.splice(serv.length-1,0,sv);
+  var tp=SOL.tipo||(esNuevo()?'Primera recolección':'Consulta'), Pd=S.pedidos.slice().sort(function(a,b){ return String(b.fecha).localeCompare(String(a.fecha))||String(b.folio).localeCompare(String(a.folio)); });
+  var h=titulo('Solicitudes','Pida una visita, productos o ayuda. Consulte aquí las respuestas de ECOVSA.');
+  if(SOL.exito) h+='<div class="card r-success" role="status"><h2>'+ic('ok',20)+' Solicitud recibida · '+esc(SOL.exito)+'</h2><p style="margin:0">ECOVSA la revisa y le responde por aquí. Si eligió una fecha, queda pendiente de confirmación.</p></div>';
+  h+='<div class="grid g-ini"><section class="card"><h3>Nueva solicitud</h3><form id="r-request" class="r-requestform" novalidate>'+
+    '<div class="campo"><label for="r-service">Servicio o producto</label><select id="r-service">'+serv.map(function(s){ return '<option'+(s===sv?' selected':'')+'>'+esc(s)+'</option>'; }).join('')+'</select></div>'+
+    '<div class="campo"><label for="r-type">¿Qué necesita?</label><select id="r-type">'+TIPOS.map(function(t){ return '<option'+(t===tp?' selected':'')+'>'+t+'</option>'; }).join('')+'</select></div>'+
+    selSede('r-sede')+
+    '<div class="r-form-two"><div class="campo"><label for="r-date">Fecha preferida · opcional</label><input id="r-date" type="date" min="'+S.hoy+'"></div><div class="campo"><label for="r-time">Horario de atención · opcional</label><input id="r-time" placeholder="Ej. 8:00 a. m. a 4:00 p. m." maxlength="100"></div></div>'+
+    '<div class="campo"><label for="r-message">Cuéntenos qué necesita</label><textarea id="r-message" rows="3" maxlength="500" placeholder="Ej. Necesito coordinar mi primera recolección. Tenemos dos bolsas listas."></textarea></div>'+
+    '<p class="r-formnote">ECOVSA revisará su solicitud y le confirmará la disponibilidad y las condiciones del servicio.</p><div id="r-error" role="alert" class="r-formerror"></div><button class="btn pri" type="submit" id="r-send">Enviar solicitud</button></form></section>'+
+    '<section class="card"><h3>Sus solicitudes <span class="sp"></span><span class="tag t-info">'+Pd.length+'</span></h3>'+
+    (Pd.length?Pd.map(function(p){ return '<div class="fila r-requestrow" role="button" tabindex="0" data-request="'+esc(p.folio)+'"><div class="tx"><b>'+esc(p.resumen||p.tipo)+'</b><small>'+esc(p.folio||'')+(p.fecha?' · '+f(p.fecha):'')+'</small>'+(p.sede?'<small>'+esc(p.sede)+'</small>':'')+'</div><span class="tag '+(p.cerrada?'t-ok':p.respuesta?'t-warn':'t-info')+'">'+esc(p.estado)+'</span><button class="btn sm" type="button">Ver</button></div>'; }).join(''):'<p style="color:var(--gris)">Aún no tiene solicitudes. Las que envíe aparecerán aquí con su estado.</p>')+
+    '<div class="r-cp">Las solicitudes no se convierten en visitas confirmadas hasta que ECOVSA las programe.</div><ol class="r-trace"><li><span class="r-stepdot">1</span><div><b>Envía su solicitud</b><small>Nos indica el servicio y lo que necesita.</small></div></li><li><span class="r-stepdot">2</span><div><b>ECOVSA responde</b><small>Recibe una respuesta aquí y, si corresponde, la fecha de atención.</small></div></li><li><span class="r-stepdot">3</span><div><b>Le avisamos cuando vamos</b><small>El día de su visita podrá consultar el seguimiento disponible.</small></div></li></ol></section></div>';
+  return h;
+};
+function enviarSolicitud(e){
+  e.preventDefault();
+  var m=$('r-message').value.trim(), fe=$('r-date').value, er=$('r-error'), b=$('r-send');
+  if(m.length<3){ er.textContent='Escriba un mensaje para que podamos ayudarle.'; $('r-message').focus(); return; }
+  if(fe&&fe<S.hoy){ er.textContent='Elija la fecha de hoy o una posterior.'; return; }
+  er.textContent=''; ocupado(b,true);
+  llamar('api_ptlPedirServicio',SES,{ item:$('r-service').value, tipo:$('r-type').value, clienteId:($('r-sede')||{}).value||'', fecha:fe, horario:$('r-time').value.trim(), nota:m }).then(function(r){
+    ocupado(b,false);
+    if(!r||!r.ok){ er.textContent=(r&&r.error)||'No se pudo enviar. Intente de nuevo.'; return; }
+    SOL.exito=r.folio; SOL.tipo=''; SOL.servicio=''; cargar(); window.scrollTo({top:0,behavior:'smooth'});
+  },function(){ ocupado(b,false); er.textContent='Sin conexión. Su mensaje no se envió: intente de nuevo en un momento.'; });
+}
+function verSolicitud(fo){
+  var p=S.pedidos.find(function(x){ return x.folio===fo; }); if(!p) return;
+  var rec=p.tipo==='recoleccion', resp=p.respuesta||(rec?p.nota:'');
+  modal('<h2>Solicitud '+esc(p.folio||'')+'</h2><span class="tag '+(p.cerrada?'t-ok':p.respuesta?'t-warn':'t-info')+'">'+esc(p.estado)+'</span>'+
+    '<div class="r-detailgrid"><div><span>Servicio</span><strong>'+esc(p.item||(rec?'Recolección de desechos peligrosos':p.resumen||''))+'</strong></div><div><span>Tipo</span><strong>'+esc(p.tipoSol||(rec?'Recolección adicional':p.tipo==='certificado'?'Certificado':'Solicitud'))+'</strong></div>'+
+    '<div><span>Fecha preferida</span><strong>'+(p.fechaPref?f(p.fechaPref):'Sin preferencia')+'</strong></div><div><span>Horario</span><strong>'+esc(p.horario||'Por coordinar')+'</strong></div>'+(p.sede?'<div><span>Sede</span><strong>'+esc(p.sede)+'</strong></div>':'')+'<div><span>Enviada</span><strong>'+(p.fecha?f(p.fecha):'—')+'</strong></div></div>'+
+    (!rec&&p.nota?'<p style="white-space:pre-wrap">'+esc(p.nota)+'</p>':'')+
+    (resp?'<div class="aviso info"><div class="tx"><b>Respuesta de ECOVSA'+(p.respondidaEn?' · '+f(p.respondidaEn):'')+'</b><p style="margin:6px 0 0;white-space:pre-wrap">'+esc(resp)+'</p></div></div>':'<div class="r-cp">'+(p.cerrada?'Esta solicitud ya fue atendida.':'Recibida. ECOVSA revisará su mensaje para coordinar la atención.')+'</div>')+
+    '<div class="pie"><button class="btn" type="button" onclick="cerrarModal()">Cerrar</button></div>');
+}
+
+/* ── Seguimiento de la visita: diseño listo, apagado hasta tener la ubicación de los camiones ── */
+function vSeguimiento(){
+  return titulo('Seguimiento de su visita','Desechos peligrosos')+
+    '<div class="aviso info r-pronto"><div class="tx"><b>Próximamente</b><br>El día de su visita, aquí verá la llegada estimada del vehículo de ECOVSA y en qué va su recolección. Le avisaremos cuando esté disponible.</div></div>'+
+    '<div class="r-grid-track r-apagado" aria-hidden="true"><section class="card"><div class="r-trackhead"><div><div class="r-eyebrow">Llegada estimada</div><strong>— minutos</strong><span style="color:var(--gris);font-size:13px">Se mostrará el día de su visita</span></div><span class="tag t-gris">Sin datos todavía</span></div>'+
+    '<div class="r-map"><div class="r-map-note">RECORRIDO ILUSTRATIVO</div><div class="r-map-line"></div><div class="r-map-node" style="--x:28%">'+ic('camion',22)+'<small>Vehículo de ECOVSA</small></div><div class="r-map-node end" style="--x:82%">'+ic('casa',20)+'<small>Su establecimiento</small></div><div class="r-map-caption">Aquí se verá el mapa con el vehículo y su recorrido.</div></div></section>'+
+    '<section class="card"><h3>Estado de su visita</h3><ol class="r-trace"><li><span class="r-stepdot">1</span><div><b>Visita confirmada</b><small>Recolección de desechos peligrosos</small></div></li><li><span class="r-stepdot">2</span><div><b>Vehículo en camino</b><small>Solo se muestra el seguimiento de su visita.</small></div></li><li><span class="r-stepdot">3</span><div><b>Llegada al establecimiento</b><small>Le avisaremos cuando estemos cerca.</small></div></li></ol></section></div>';
+}
+
+/* ── Corporativo ── */
+function corpTeam(s){ return (S.equipo||[]).filter(function(p){ return p.sede===s.nombre&&p.nivel!=='corp'&&p.estado==='activo'; }); }
+function corpNext(s){ return s.lleno&&s.lleno.proxima||''; }
+function corpProgress(s){ var d=Number(s.visitasMes)||0, t=Number(s.lleno&&s.lleno.tocan)||0; return { done:d, total:t, remaining:Math.max(0,t-d), percent:t?Math.min(100,Math.round(d/t*100)):0 }; }
+function corpMonth(){ return mesTx()+' '+S.hoy.slice(0,4); }
+function corpNeeds(s){ return !corpNext(s)||corpNext(s)<S.hoy||!corpTeam(s).length||!!(s.lleno&&s.lleno.abierta); }
+function corpProgressMarkup(s){
+  var p=corpProgress(s), R=S.recibos.filter(function(r){ return r.sede===s.nombre&&r.fecha.slice(0,7)===S.hoy.slice(0,7); });
+  return '<section class="corp-progress"><div class="corp-progresshead"><div><span>Visitas de '+esc(corpMonth())+'</span><strong>'+p.done+' de '+(p.total||'—')+'</strong></div><span class="tag '+(!p.total?'t-gris':p.remaining?'t-warn':'t-ok')+'">'+(!p.total?'Cantidad por confirmar':p.remaining?p.remaining+' pendiente'+(p.remaining===1?'':'s'):'Visitas completadas')+'</span></div>'+
+    '<p>Frecuencia: <b>'+esc(cap(s.frecuencia)||'Por confirmar')+'</b> · '+(p.total?p.total+' visita'+(p.total===1?'':'s')+' prevista'+(p.total===1?'':'s')+' este mes':'Visitas previstas por confirmar')+'</p>'+
+    (p.total?'<div class="pb '+(p.remaining?'warn':'')+'" role="progressbar" aria-label="Avance de visitas de '+esc(s.nombre)+'" aria-valuemin="0" aria-valuemax="'+Math.max(p.total,p.done)+'" aria-valuenow="'+p.done+'"><i style="width:'+p.percent+'%"></i></div>':'')+
+    '<div class="corp-monthrecords">'+(R.length?R.map(function(r){ return '<div><span>'+f(r.fecha)+'</span><b>'+kg(r.kg)+' kg</b></div>'; }).join(''):'Sin recolecciones registradas este mes.')+'</div></section>';
+}
+function corpMonthSummary(){
+  var t=S.sedes.reduce(function(a,s){ var p=corpProgress(s); a.done+=p.done; a.total+=p.total; if(p.done) a.att++; if(p.remaining) a.pen++; return a; },{done:0,total:0,att:0,pen:0});
+  return '<section class="card corp-monthsummary"><h3>Avance de recolección · '+esc(corpMonth())+'</h3><div class="grid g3"><div><strong>'+t.done+' de '+t.total+'</strong><span>visitas realizadas / previstas</span></div><div><strong>'+t.att+' de '+S.sedes.length+'</strong><span>sedes con recolección este mes</span></div><div><strong>'+t.pen+'</strong><span>sedes con visitas pendientes</span></div></div><p>Una sede atendida puede tener más visitas pendientes según su frecuencia. Las próximas fechas son estimadas; no confirman una visita programada.</p></section>';
+}
+function corpCard(s){
+  var nx=corpNext(s), tm=corpTeam(s), av=s.lleno&&s.lleno.abierta;
+  return '<article class="card corp-site"><div class="corp-sitehead"><h3>'+esc(s.nombre)+'</h3><span class="tag '+(s.estado==='activo'?'t-ok':'t-warn')+'">'+(s.estado==='activo'?'Servicio activo':'En pausa')+'</span></div><p class="corp-address">'+esc(s.direccion)+'</p>'+corpProgressMarkup(s)+
+    '<dl class="corp-details"><div><dt>Próxima visita estimada</dt><dd>'+(nx?fl(nx):'Primera visita por coordinar')+'<small class="corp-estimate">Según frecuencia y última visita. Pendiente de coordinación.</small></dd></div><div><dt>Encargado con acceso</dt><dd>'+(tm.length?esc(tm.map(function(p){ return p.nombre; }).join(', ')):'Sin encargado asignado')+'</dd></div>'+
+    '<div><dt>Última visita</dt><dd>'+(s.ultimaVisita?f(s.ultimaVisita):'Aún sin visitas')+'</dd></div><div><dt>Recolectado en '+esc(mesTx())+'</dt><dd>'+kg(kgMesDe(s))+' kg</dd></div></dl>'+
+    (av?'<p class="corp-note">Aviso de depósito lleno '+esc(av.folio)+' · Logística lo está programando</p>':'')+
+    '<div class="r-act">'+(CORP.site?'':accion('Ver detalle',"corpOpen('"+esc(s.clienteId)+"')",'sm pri'))+accion(tm.length?'Gestionar accesos':'Asignar encargado',tm.length?"ir('equipo')":"corpAccess('"+esc(s.clienteId)+"')",'sm')+'</div></article>';
+}
+function corpSiteList(L){
+  return '<div class="corp-sites corp-listwrap"><table class="corp-list"><thead><tr><th>Sede / encargado</th><th>Frecuencia</th><th>Visitas del mes</th><th>Última recolección</th><th>Próxima estimada</th><th>Acciones</th></tr></thead><tbody>'+L.map(function(s){
+    var p=corpProgress(s), tm=corpTeam(s), nx=corpNext(s);
+    return '<tr><td><b>'+esc(s.nombre)+'</b><small>'+esc(s.direccion)+'</small><small>'+esc(tm.length?tm.map(function(x){ return x.nombre; }).join(', '):'Sin encargado con acceso')+'</small></td><td>'+esc(cap(s.frecuencia)||'—')+'</td>'+
+      '<td><strong class="corp-listcount">'+p.done+' de '+(p.total||'—')+'</strong><small>'+(!p.total?'Cantidad por confirmar':p.remaining?p.remaining+' pendiente'+(p.remaining===1?'':'s'):'Completadas')+'</small>'+(p.total?'<div class="pb '+(p.remaining?'warn':'')+'"><i style="width:'+p.percent+'%"></i></div>':'')+'</td>'+
+      '<td>'+(s.ultimaVisita?f(s.ultimaVisita):'Aún sin visitas')+'</td><td>'+(nx?f(nx):'Por coordinar')+'<small>Fecha tentativa</small></td><td><div class="r-act">'+accion('Ver detalle',"corpOpen('"+esc(s.clienteId)+"')",'sm')+(!tm.length?accion('Asignar encargado',"corpAccess('"+esc(s.clienteId)+"')",'sm'):'')+'</div></td></tr>'; }).join('')+'</tbody></table></div>';
+}
+function inicioCorp(){
+  var h=P0.inicio(); if(S.cuenta.estado==='suspendida') return h;
+  h=h.replace('Visitas de esta semana','Próximas visitas estimadas').replace('No hay visitas programadas esta semana.','No hay visitas estimadas para los próximos siete días.');
+  var nd=S.sedes.filter(corpNeeds);
+  var b='<section class="card corp-overview"><div><div class="r-eyebrow">Administración corporativa</div><h2>Todas sus sedes, bajo control</h2><p>Supervise las recolecciones y gestione quién entra al portal de cada sucursal.</p></div><div class="r-act">'+accion('Ver todas las sedes',"ir('sedes')",'pri')+accion('Gestionar accesos',"ir('equipo')")+'</div></section>'+
+    '<div class="cal-shortcut">'+accion('Ver calendario de recolecciones',"ir('calendario')",'sm')+'<span>Consulte las fechas y la distribución de visitas del mes.</span></div>'+corpMonthSummary()+
+    '<section class="card corp-attention"><h3>'+(nd.length?'Necesita su atención':'Sin pendientes por sede')+'<span class="sp"></span><span class="tag '+(nd.length?'t-warn':'t-ok')+'">'+nd.length+' sede'+(nd.length===1?'':'s')+'</span></h3>'+
+    (nd.length?nd.map(function(s){ var sin=!corpTeam(s).length, r=sin?'No tiene encargado con acceso':!corpNext(s)?'Primera visita por coordinar':corpNext(s)<S.hoy?'Revisar fecha de recolección':'Aviso de depósito lleno · En coordinación';
+      return '<div class="fila"><div class="tx"><b>'+esc(s.nombre)+'</b><small>'+r+'</small></div>'+accion(sin?'Asignar encargado':'Ver sede',sin?"corpAccess('"+esc(s.clienteId)+"')":"corpOpen('"+esc(s.clienteId)+"')",'sm')+'</div>'; }).join(''):'<p class="corp-address">Todas las sedes tienen encargado y fecha de recolección disponible.</p>')+'</section>';
+  var i=h.indexOf('<div class="grid g4">'); return i<0?b+h:h.slice(0,i)+b+h.slice(i);
+}
+window.vSedes=function(){
+  if(nivel()!=='corp') return P0.sedes();
+  if(CORP.site){ var s=S.sedes.find(function(x){ return x.clienteId===CORP.site; });
+    if(s) return accion('‹ Volver a todas las sedes',"corpOpen('')",'sm')+titulo(esc(s.nombre),'Supervisión corporativa de la sucursal')+corpCard(s)+
+      '<div class="grid g2" style="margin-top:16px"><section class="card"><h3>Recibos de esta sede</h3>'+(S.recibos.filter(function(r){ return r.sede===s.nombre; }).slice(0,8).map(filaRec).join('')||'<p style="color:var(--gris);margin:0">Todavía no hay visitas registradas.</p>')+'</section>'+
+      '<section class="card"><h3>Coordinar con ECOVSA</h3><p style="color:var(--gris)">Solicite una visita para esta sede. ECOVSA confirmará la fecha.</p>'+accion('Solicitar visita',"solicitar('Programar visita','Desechos peligrosos','"+esc(s.clienteId)+"')",'pri')+'</section></div>'; }
+  var L=S.sedes.filter(function(s){ return s.nombre.toLowerCase().indexOf(CORP.query.toLowerCase())>=0&&(CORP.filter==='todas'||(CORP.filter==='atencion'&&corpNeeds(s))||(CORP.filter==='sinacceso'&&!corpTeam(s).length)); });
+  return titulo('Sus sedes','Frecuencia, avance del mes y fechas de recolección de cada sucursal.')+corpMonthSummary()+
+    '<div class="corp-toolbar"><label for="corp-search">Buscar sede<input id="corp-search" placeholder="Nombre de la sede" value="'+esc(CORP.query)+'"></label><label for="corp-filter">Mostrar<select id="corp-filter"><option value="todas"'+(CORP.filter==='todas'?' selected':'')+'>Todas las sedes</option><option value="atencion"'+(CORP.filter==='atencion'?' selected':'')+'>Necesitan atención</option><option value="sinacceso"'+(CORP.filter==='sinacceso'?' selected':'')+'>Sin encargado con acceso</option></select></label><span role="status">'+L.length+' de '+S.sedes.length+' sedes</span></div>'+
+    (L.length?corpSiteList(L):'<div class="corp-sites">'+vacio('No encontramos sedes','Pruebe otro nombre o cambie el filtro.')+'</div>');
+};
+window.vEquipo=function(){
+  var h=P0.equipo(); if(nivel()!=='corp') return h;
+  var i=h.indexOf('<div style="margin-bottom:12px">'), nota='<div class="card corp-accessnote"><h3>Un acceso para cada responsabilidad</h3><div class="grid g2"><div><b>Corporativo</b><p>Supervisa todas las sedes, la cuenta y los accesos del equipo.</p></div><div><b>Encargado de sucursal</b><p>Ve el portal de una sola sede, con sus visitas, documentos y solicitudes.</p></div></div><small>Usted pide los accesos y las bajas; ECOVSA los aprueba.</small></div>';
+  return i<0?h+nota:h.slice(0,i)+nota+h.slice(i);
+};
+window.pedirPersona=function(){ P0.pedirPersona(); var s=$('pp-s'); if(s&&CORP.accessSite) s.value=CORP.accessSite; CORP.accessSite=''; };
+
+/* ── Calendario de recolecciones (corporativo): realizadas = recibos; estimadas = según frecuencia ── */
+function calEvents(){
+  var ym=S.hoy.slice(0,7), y=Number(ym.slice(0,4)), mo=Number(ym.slice(5,7))-1, ult=new Date(y,mo+1,0).getDate(), ev=[];
+  var iso=function(d){ return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0'); };
+  S.sedes.forEach(function(s){
+    var R=S.recibos.filter(function(r){ return r.sede===s.nombre&&r.fecha.slice(0,7)===ym; });
+    R.forEach(function(r){ ev.push({ site:s.clienteId, name:s.nombre, date:r.fecha, status:'realizada', kg:r.kg }); });
+    if(s.estado!=='activo') return;
+    var nx=corpNext(s); if(!nx) return;
+    var dias=Number(s.lleno&&s.lleno.dias)||0, F=[];
+    if(dias>0&&dias<=31){
+      var a=new Date(nx+'T12:00:00'), ini=new Date(y,mo,1,12), fin=new Date(y,mo,ult,12), d=new Date(a);
+      while(d>ini) d.setDate(d.getDate()-dias);
+      for(;d<=fin;d.setDate(d.getDate()+dias)) if(d>=ini) F.push(iso(d));
+    } else if(nx.slice(0,7)===ym) F.push(nx);
+    var tol=Math.min(3,Math.floor((dias||30)/2));
+    F.forEach(function(fe){
+      var hecho=R.some(function(r){ return Math.abs((new Date(r.fecha+'T12:00:00')-new Date(fe+'T12:00:00'))/864e5)<=tol; });
+      if(!hecho) ev.push({ site:s.clienteId, name:s.nombre, date:fe, status:fe<S.hoy?'sinregistro':'estimada' });
+    });
+  });
+  return ev.sort(function(a,b){ return a.date.localeCompare(b.date)||a.name.localeCompare(b.name); });
+}
+function calStatus(e){ return e.status==='realizada'?'Realizada':e.status==='sinregistro'?'Estimada · sin registro':'Estimada'; }
+function calView(){
+  var ev=calEvents().filter(function(e){ return !CAL.site||e.site===CAL.site; }), ym=S.hoy.slice(0,7), pri=new Date(ym+'-01T12:00:00'), off=(pri.getDay()+6)%7, dias=new Date(pri.getFullYear(),pri.getMonth()+1,0).getDate(), c='';
+  for(var b=0;b<off;b++) c+='<div class="cal-day cal-blank" aria-hidden="true"></div>';
+  for(var d=1;d<=dias;d++){ var fe=ym+'-'+String(d).padStart(2,'0'), it=ev.filter(function(e){ return e.date===fe; });
+    c+='<div class="cal-day'+(fe===S.hoy?' cal-today':'')+'"><div class="cal-daytop"><time datetime="'+fe+'">'+d+'</time>'+(it.length?'<span>'+it.length+' visita'+(it.length===1?'':'s')+'</span>':'')+'</div>'+it.map(function(e){ return '<button type="button" class="cal-event '+e.status+'" onclick="corpOpen(\''+esc(e.site)+'\')"><b>'+esc(e.name)+'</b><small>'+calStatus(e)+(e.status==='realizada'?' · '+kg(e.kg)+' kg':'')+'</small></button>'; }).join('')+'</div>'; }
+  for(var n=dias;(off+n)%7;n++) c+='<div class="cal-day cal-blank" aria-hidden="true"></div>';
+  var re=ev.filter(function(e){ return e.status==='realizada'; }).length, es=ev.filter(function(e){ return e.status==='estimada'; }).length, sr=ev.length-re-es;
+  return '<section class="card cal-section"><div class="cal-header"><div><div class="r-eyebrow">Calendario mensual de recolección</div><h2>'+esc(cap(corpMonth()))+'</h2><p>Qué sede se atiende, qué día y cuántas visitas se contemplan este mes.</p></div><label for="cal-site">Ver sede<select id="cal-site"><option value="">Todas las sedes</option>'+S.sedes.map(function(s){ return '<option value="'+esc(s.clienteId)+'"'+(CAL.site===s.clienteId?' selected':'')+'>'+esc(s.nombre)+'</option>'; }).join('')+'</select></label></div>'+
+    '<div class="cal-totals"><b>'+ev.length+' visita'+(ev.length===1?'':'s')+' en el calendario</b><span>'+re+' realizadas</span><span>'+es+' estimadas por venir</span><span>'+sr+' estimadas pasadas sin registro</span></div><div class="cal-legend"><span class="realizada">● Realizada</span><span class="estimada">● Estimada</span><span class="sinregistro">● Estimada pasada sin registro</span></div>'+
+    '<p class="cal-disclaimer">Las fechas estimadas son tentativas según la frecuencia y la última visita; no confirman programación. Una fecha pasada sin registro requiere revisión y no acredita una recolección.</p>'+
+    '<div class="cal-scroll"><div class="cal-week">'+['Lun','Mar','Mié','Jue','Vie','Sáb','Dom'].map(function(x){ return '<span>'+x+'</span>'; }).join('')+'</div><div class="cal-grid">'+c+'</div></div>'+
+    '<h3 class="cal-tabletitle">Fechas y cantidad de visitas por sede</h3><div class="cal-tablewrap"><table class="cal-table"><thead><tr><th>Sede / frecuencia</th><th>Fechas del mes</th><th>Cantidad</th></tr></thead><tbody>'+S.sedes.filter(function(s){ return !CAL.site||s.clienteId===CAL.site; }).map(function(s){ var R=ev.filter(function(e){ return e.site===s.clienteId; });
+      return '<tr><td><b>'+esc(s.nombre)+'</b><small>'+esc(cap(s.frecuencia)||'—')+'</small></td><td>'+(R.length?R.map(function(e){ return '<span class="cal-date '+e.status+'">'+f(e.date)+' · '+calStatus(e)+'</span>'; }).join(''):'<small>Sin fechas este mes</small>')+'</td><td><b>'+R.length+' visita'+(R.length===1?'':'s')+'</b><small>'+R.filter(function(e){ return e.status==='realizada'; }).length+' realizadas</small></td></tr>'; }).join('')+'</tbody></table></div></section>';
+}
+
+/* ── pintar: las vistas nuevas y sus oyentes ── */
+window.pintar=function(){
+  P0.pintar();
+  var m=$('main'); if(!m||!S) return;
+  if(V==='calendario'&&nivel()==='corp') m.innerHTML=avisoCuenta()+titulo('Calendario de recolecciones','Fechas y cantidad de visitas por sede durante el mes.')+calView()+'<div class="pie-p">'+legal()+'</div>';
+  if(V==='seguimiento'&&nivel()!=='corp') m.innerHTML=avisoCuenta()+vSeguimiento()+'<div class="pie-p">'+legal()+'</div>';
+  var fr=$('r-request'); if(fr){ fr.onsubmit=enviarSolicitud; var sd=$('r-sede'); if(sd&&SOL.sede){ sd.value=SOL.sede; SOL.sede=''; } }
+  document.querySelectorAll('[data-request]').forEach(function(r){ var i=r.getAttribute('data-request');
+    r.onclick=function(){ verSolicitud(i); }; r.onkeydown=function(e){ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); verSolicitud(i); } }; });
+  var cs=$('cal-site'); if(cs) cs.onchange=function(){ CAL.site=this.value; pintar(); };
+  var q=$('corp-search'); if(q) q.oninput=function(){ CORP.query=this.value; var p=this.selectionStart; pintar(); var n=$('corp-search'); if(n){ n.focus(); n.setSelectionRange(p,p); } };
+  var fl2=$('corp-filter'); if(fl2) fl2.onchange=function(){ CORP.filter=this.value; pintar(); };
+};
+/* las secciones nuevas no existen en «abierto»: con la cuenta en pausa, solo lo de siempre */
+window.abierto=(function(o){ return function(v){ if(v==='calendario'||v==='seguimiento') return S.cuenta.estado!=='suspendida'; return o(v); }; })(window.abierto);
+document.addEventListener('keydown',function(e){ if(e.key==='Escape') cerrarModal(); });
+if(S) pintar();
+})();
 </script>
 </body>
 </html>
