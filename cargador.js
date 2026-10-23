@@ -99,8 +99,10 @@
     if (C && C.parentNode) C.parentNode.removeChild(C);
     cerrando = false;
     C = document.createElement('div'); C.id = 'eco-cortina'; C.setAttribute('role', 'status'); C.setAttribute('aria-live', 'polite');
+    /* api 3.39 · claro: la cortina del portal de clientes («Mañana clara»), con las letras en azul marino */
+    if (op.claro) C.className = 'claro';
     C.innerHTML = logo(0, { arma: true }) +
-      '<img class="wm" src="' + BASE + 'ecovsa-letras.png" alt="ECOVSA">' +
+      '<img class="wm" src="' + BASE + (op.claro ? 'ecovsa-letras-azul.png' : 'ecovsa-letras.png') + '" alt="ECOVSA">' +
       (mod ? '<div class="md">' + esc(mod) + '</div>' : '') +
       '<div class="ms">' + esc(op.mensaje || 'Trayendo los datos…') + '</div><div class="ln"><i></i></div>';
     (document.body || document.documentElement).appendChild(C);

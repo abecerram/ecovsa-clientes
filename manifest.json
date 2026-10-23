@@ -5,7 +5,7 @@
   "start_url": "Portal.html",
   "scope": "./",
   "display": "standalone",
-  "background_color": "#0f2a57",
+  "background_color": "#f7fafc",
   "theme_color": "#0f2a57",
   "lang": "es",
   "icons": [

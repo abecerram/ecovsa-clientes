@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#f7fafc">
+<meta name="robots" content="noindex">
+<title>Guía de su portal · ECOVSA</title>
+<link rel="icon" href="ecovsa-emblema.png">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700;800&display=swap">
+<style>
+/* api 3.39 · la guía del portal en historias, para ver, guardar o compartir (la abre el botón «?» del portal) */
+:root{--marca:#0f2a57;--tinta:#1d2939;--gris:#5b6880;--verde:#2f9e44}
+*{box-sizing:border-box}
+body{margin:0;font-family:Archivo,system-ui,sans-serif;color:var(--tinta);background:radial-gradient(ellipse at 15% 0%,#e3f1ff 0,rgba(227,241,255,0) 55%),radial-gradient(ellipse at 90% 100%,#dcf3e2 0,rgba(220,243,226,0) 55%),#f7fafc;background-attachment:fixed;min-height:100vh}
+.cab{max-width:560px;margin:0 auto;padding:28px 16px 8px;text-align:center}
+.em{width:84px;height:84px;border-radius:50%;background:#fff;display:grid;place-items:center;margin:0 auto 14px;box-shadow:0 0 0 7px #fff,0 0 0 8px #e6ebf2,0 14px 30px rgba(15,42,87,.12)}
+.em img{width:78%;height:78%;object-fit:contain}
+h1{margin:0 0 6px;font-size:26px;color:var(--marca);letter-spacing:-.3px}
+.cab p{margin:0;color:var(--gris);font-size:15px;line-height:1.5}
+.acc{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin:18px 0 6px}
+.btn{display:inline-flex;align-items:center;gap:8px;text-decoration:none;font-weight:800;font-size:15px;border-radius:14px;padding:12px 18px;border:1px solid #d6dee9;background:#fff;color:var(--marca)}
+.btn.pri{background:var(--marca);border-color:var(--marca);color:#fff}
+.btn svg{flex:none}
+.lista{max-width:560px;margin:0 auto;padding:10px 16px 30px;display:grid;gap:18px}
+figure{margin:0;background:#fff;border:1px solid #e6ebf2;border-radius:22px;overflow:hidden;box-shadow:0 14px 34px rgba(15,42,87,.08)}
+figure img{display:block;width:100%;height:auto;aspect-ratio:9/16}
+figcaption{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px 14px;font-size:13.5px;color:var(--gris)}
+figcaption a{color:var(--marca);font-weight:800;text-decoration:none;display:inline-flex;align-items:center;gap:6px}
+.pie{text-align:center;color:var(--gris);font-size:13px;padding:0 16px 34px;line-height:1.6}
+.pie a{color:var(--marca);font-weight:700}
+@media(min-width:900px){.lista{max-width:1100px;grid-template-columns:repeat(3,1fr)}}
+</style>
+</head>
+<body>
+<header class="cab">
+  <div class="em"><img src="ecovsa-emblema.png" alt="ECOVSA"></div>
+  <h1>Guía de su portal</h1>
+  <p>Cómo entrar, agendar, seguir su visita y encontrar sus papeles. Guárdela o compártala con su equipo.</p>
+  <div class="acc">
+    <a class="btn pri" href="guia/Guia_portal_ECOVSA.pdf" download><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4v11M7 10l5 5 5-5M5 20h14"/></svg>Descargar en PDF</a>
+    <a class="btn" href="Portal.html"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5M11 6l-6 6 6 6"/></svg>Volver al portal</a>
+  </div>
+</header>
+<main class="lista" id="lista"></main>
+<footer class="pie">¿Le ayudamos? WhatsApp <a href="https://wa.me/50762641647">6264-1647</a> · Tel. 310-2268<br>Las imágenes son de ejemplo.</footer>
+<script>
+(function(){
+  var h='', ic='<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4v11M7 10l5 5 5-5M5 20h14"/></svg>';
+  for (var i = 1; i <= 11; i++) {
+    var n = (i < 10 ? '0' : '') + i, f = 'guia/historia_' + n + '.jpg';
+    h += '<figure><img src="' + f + '" alt="Guía del portal ECOVSA, imagen ' + i + ' de 11" loading="' + (i < 3 ? 'eager' : 'lazy') + '" width="1080" height="1920">' +
+      '<figcaption><span>' + i + ' de 11</span><a href="' + f + '" download="Guia_ECOVSA_' + n + '.jpg">' + ic + 'Guardar</a></figcaption></figure>';
+  }
+  document.getElementById('lista').innerHTML = h;
+})();
+</script>
+</body>
+</html>
