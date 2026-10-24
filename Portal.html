@@ -488,6 +488,7 @@ body{min-width:320px}
 /* en clientes.ecovsaapp.com los documentos (recibo, certificados) se abren desde ecovsaapp.com */
 var DOCS = /^clientes\./.test(location.hostname) ? 'https://ecovsaapp.com/' : '';
 function doc(u){ return /^https?:/.test(u||'') ? u : DOCS + (u||''); }
+var VISTA = '';   // api 3.45 · «Ver su portal»: la vista de ECOVSA (solo para mirar)
 var S = null, SES = '', V = 'inicio', PIN = '', PIN1 = '', ESTADO = '', INV = '', CLI = '', COD = '', HOJA_YA = false, RECIEN = false;
 var MES = ['ene','feb','mar','abr','may','jun','jul','ago','sep','oct','nov','dic'], MESL = ['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'];
 var EMB = 'ecovsa-emblema.png';
@@ -588,6 +589,11 @@ function pts(){ var p=$('pts'); if(p){ var h=''; for(var i=0;i<6;i++) h+='<i cla
 function e2Mal(t){ var m=$('msg'), p=$('pts'); if(m){ m.className='msg'; m.textContent=t; } if(p){ p.classList.remove('mal'); void p.offsetWidth; p.classList.add('mal'); } }
 function e2Bien(t){ var m=$('msg'); if(m){ m.className='msg ok'; m.textContent=t; } }
 var alPin=function(){};
+/* api 3.45 · fin de la vista de ECOVSA: no se pide PIN; se cierra la pestaña o se vuelve a abrir desde Configuración */
+function vistaFin(msg){
+  try{ sessionStorage.removeItem('ptl_vista'); }catch(e){} SES=''; S=null; VISTA=''; var f=document.getElementById('vx'); if(f) f.remove();
+  escena('<h2>La vista terminó</h2><p class="sub">'+esc(msg||'')+'</p><div style="height:14px"></div><button type="button" class="btn pri ancho" onclick="window.close()">Cerrar esta pestaña</button><div class="links">Para mirar otra vez, ábrala desde Configuración › Portal de clientes.</div>');
+}
 function entrar(){
   ESTADO='entrar';
   pantallaPin('Entrar a su portal','Escriba su PIN de 6 números.',
@@ -730,13 +736,13 @@ function cargar(){
   if(!SES){ entrar(); return; }
   if(!S) entrada();
   llamar('api_ptlInicio',SES).then(function(r){
-    if(!r||!r.ok){ finEntrada(!(r&&r.salir)); if(r&&r.salir){ SES=''; ls('ptl_ses',''); S=null; entrar(); setTimeout(function(){ var m=$('msg'); if(m) m.textContent=r.error||''; },60); return; } toast((r&&r.error)||'No se pudo'); return; }
+    if(!r||!r.ok){ finEntrada(!(r&&r.salir)); if(r&&r.salir&&VISTA){ vistaFin(r.error); return; } if(r&&r.salir){ SES=''; ls('ptl_ses',''); S=null; entrar(); setTimeout(function(){ var m=$('msg'); if(m) m.textContent=r.error||''; },60); return; } toast((r&&r.error)||'No se pudo'); return; }
     var espHoja=ENTRADA_T?Math.max(0,ENTRADA_MIN-(Date.now()-ENTRADA_T))+1300:350;
     S=r; pintar(); finEntrada(false);
     if(tocaHoja()) setTimeout(hojaIns,espHoja);
   },function(){ finEntrada(true); toast('Sin conexión. Intente de nuevo en un momento.'); if(!S) escena('<h2>Sin conexión</h2><p class="sub">No pudimos conectar. Revise su señal e intente de nuevo.</p><div style="height:16px"></div><button class="btn pri ancho" onclick="cargar()">Reintentar</button>'); });
 }
-function salir(){ llamar('api_ptlSalir',SES).catch(function(){}); SES=''; S=null; ls('ptl_ses',''); entrar(); }
+function salir(){ if(VISTA){ llamar('api_ptlSalir',SES).catch(function(){}); vistaFin('Salió de la vista. El cliente no recibió nada.'); return; } llamar('api_ptlSalir',SES).catch(function(){}); SES=''; S=null; ls('ptl_ses',''); entrar(); }
 function nivel(){ return S.yo.nivel; }
 function abierto(v){
   var c=S.cuenta.estado, n=nivel();
@@ -1021,7 +1027,11 @@ function pedirBaja(id,nom){
 
 /* ═══ arranque ═══ */
 (function(){
-  CLI=q('cli'); COD=q('cod'); INV=q('inv'); SES=ls('ptl_ses');
+  /* api 3.45 · la vista de ECOVSA llega con #vista=…, vive solo en esta pestaña y no toca la sesión guardada del cliente */
+  var vh=String(location.hash||'').match(/^#vista=(vista\.[a-f0-9]+)$/);
+  if(vh){ try{ sessionStorage.setItem('ptl_vista',vh[1]); }catch(e){} try{ history.replaceState(null,'',location.pathname); }catch(e){} }
+  try{ VISTA=sessionStorage.getItem('ptl_vista')||''; }catch(e){ VISTA=vh?vh[1]:''; }
+  CLI=q('cli'); COD=q('cod'); INV=q('inv'); SES=VISTA||ls('ptl_ses');
   var p=q('p');
   if(INV){ invitacion(); return; }
   if((p==='activar'||p==='olvide')&&CLI&&COD){ pedirAcceso(p); return; }
@@ -1809,6 +1819,35 @@ function pxArranque(){
   (function espera(n){ if(document.getElementById('eco-cortina')&&n<60) setTimeout(function(){ espera(n+1); },200); else arranca(); })(0);
 }
 
+/* ── api 3.45 · la vista de ECOVSA (franja ámbar, solo para mirar) y el uso del portal (Maqueta_uso_del_portal, todas A) ── */
+var vxSt=document.createElement('style');
+vxSt.textContent='#vx{position:fixed;left:0;right:0;top:0;z-index:9800;display:flex;align-items:center;gap:10px;padding:8px 12px;padding-top:calc(8px + env(safe-area-inset-top,0px));background:#F5B301;color:#0f2140;font:600 13px var(--letra);box-shadow:0 2px 10px rgba(15,33,64,.18)}'+
+  '#vx svg{flex:none}#vx .t{flex:1;min-width:0;line-height:1.3}#vx .t b{font-weight:800}#vx .t small{display:block;font-weight:600;opacity:.85;font-size:11.5px}'+
+  '#vx button{flex:none;border:0;border-radius:99px;padding:7px 12px;font:800 12.5px var(--letra);background:#0f2140;color:#fff;cursor:pointer}'+
+  'html.vista .px-ay{display:none!important}';
+document.head.appendChild(vxSt);
+function vxFranja(){
+  if(!VISTA||!S||document.getElementById('vx')) return;
+  document.documentElement.classList.add('vista');
+  var v=S.vista||{}, cuenta=S.yo.nivel==='corp'?S.yo.razonSocial:(S.sedes[0]||{}).nombre, f=document.createElement('div'); f.id='vx'; f.setAttribute('role','status');
+  f.innerHTML='<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg>'+
+    '<div class="t"><b>Vista de ECOVSA · '+esc(cuenta||'')+'</b><small>Así lo ve '+esc(S.yo.nombre)+' · solo para mirar'+(v.vence?' · hasta las '+esc(v.vence):'')+'</small></div><button type="button" id="vx-salir">Salir de la vista</button>';
+  document.body.appendChild(f); $('vx-salir').onclick=salir;
+  var alto=function(){ document.documentElement.style.setProperty('--sa','calc(env(safe-area-inset-top,0px) + '+f.offsetHeight+'px)'); }; alto(); addEventListener('resize',alto);
+}
+var tocaHoja2=tocaHoja; tocaHoja=function(){ return !VISTA&&tocaHoja2(); };   // en la vista no sale la hoja para instalar
+/* cada sección que abre, una vez al día por persona (la vista no cuenta) */
+function usoMarca(sec){
+  if(VISTA||!SES||!S||!sec) return;
+  var o={}; try{ o=JSON.parse(ls('ptl_uso')||'{}')||{}; }catch(e){ o={}; }
+  if(o.d!==S.hoy||o.u!==S.yo.nombre) o={ d:S.hoy, u:S.yo.nombre, s:[] };
+  if(o.s.indexOf(sec)>=0) return;
+  o.s.push(sec); ls('ptl_uso',JSON.stringify(o));
+  llamar('api_ptlUso',SES,sec,{ cel:esCel(), inst:instalada() }).then(function(r){ if(!r||!r.ok) usoQuita(sec); },function(){ usoQuita(sec); });
+}
+function usoQuita(sec){ try{ var o=JSON.parse(ls('ptl_uso')||'{}'); o.s=(o.s||[]).filter(function(x){ return x!==sec; }); ls('ptl_uso',JSON.stringify(o)); }catch(e){} }
+document.addEventListener('click',function(e){ if(e.target.closest&&e.target.closest('.px-ay')) usoMarca('ayuda'); });
+
 /* ── pintar: las vistas nuevas y sus oyentes ── */
 window.pintar=function(){
   P0.pintar();
@@ -1823,6 +1862,7 @@ window.pintar=function(){
   var q=$('corp-search'); if(q) q.oninput=function(){ CORP.query=this.value; var p=this.selectionStart; pintar(); var n=$('corp-search'); if(n){ n.focus(); n.setSelectionRange(p,p); } };
   var fl2=$('corp-filter'); if(fl2) fl2.onchange=function(){ CORP.filter=this.value; pintar(); };
   pxAyuda(); pxArranque();   // api 3.39 · el botón «?», los Términos y el paseo
+  vxFranja(); usoMarca(V);   // api 3.45
 };
 /* las secciones nuevas no existen en «abierto»: con la cuenta en pausa, solo lo de siempre */
 window.abierto=(function(o){ return function(v){ if(v==='calendario'||v==='seguimiento') return S.cuenta.estado!=='suspendida'; return o(v); }; })(window.abierto);
