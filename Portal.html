@@ -2111,5 +2111,40 @@ G47.pedirClave = function(cb){
 };
 G47.iniciar();
 </script>
+<script id="js-ptl348">
+/* api 3.48 · el permiso para los avisos por WhatsApp (lo pide WhatsApp Business para mandarlos solos).
+   Se pregunta una vez en el inicio de la sede; después queda una línea para cambiarlo. */
+(function(){
+  if(typeof window.vInicio !== 'function') return;
+  var orig = window.vInicio;
+  var tarjeta = function(){
+    try{
+      if(VISTA || !S || !S.sedes || S.sedes.length !== 1) return '';
+      var s = S.sedes[0]; if(!s.tieneWhats) return '';
+      var a = s.aceptaWhats || '';
+      if(!a) return '<section class="card w48"><div class="w48-t"><b>¿Le avisamos por WhatsApp?</b><span>Cuando su recolección quede confirmada le escribimos el día y la hora aproximada. Puede cambiarlo cuando quiera.</span></div>' +
+        '<div class="w48-b"><button class="btn sm" type="button" onclick="w48(true)">Sí, avíseme</button><button class="btn sm gh" type="button" onclick="w48(false)">No, gracias</button></div></section>';
+      return '<div class="w48-l">' + (a === 'si' ? 'Le avisamos por WhatsApp cuando se confirma su recolección. <button type="button" onclick="w48(false)">No quiero avisos</button>' : 'No le enviamos avisos por WhatsApp. <button type="button" onclick="w48(true)">Quiero avisos</button>') + '</div>';
+    }catch(e){ return ''; }
+  };
+  window.vInicio = function(){
+    var h = orig.apply(this, arguments), t = tarjeta(); if(!t) return h;
+    var k = h.indexOf('r-next'), e = k >= 0 ? h.indexOf('</section>', k) : -1;
+    return e >= 0 ? h.slice(0, e + 10) + t + h.slice(e + 10) : t + h;
+  };
+  window.w48 = function(si){
+    var s = S.sedes[0];
+    llamar('api_ptlAvisosWhats', SES, s.clienteId, !!si).then(function(r){
+      if(!r || !r.ok){ toast((r && r.error) || 'No se pudo guardar. Intente de nuevo.'); return; }
+      s.aceptaWhats = r.acepta; toast(si ? 'Listo: le avisaremos por WhatsApp.' : 'Listo: no le enviaremos avisos por WhatsApp.');
+      if(typeof pintar === 'function') pintar(); else location.reload();
+    }, function(){ toast('Sin conexión. Intente de nuevo.'); });
+  };
+  var st = document.createElement('style');
+  st.textContent = '.w48{display:flex;gap:14px;align-items:center;flex-wrap:wrap;margin-top:14px;border-left:4px solid #25a244}.w48-t{flex:1;min-width:220px}.w48-t b{display:block;font-size:15px;color:var(--marca,#14306b)}.w48-t span{font-size:13px;color:#5e6b7e}.w48-b{display:flex;gap:8px}' +
+    '.w48-l{font-size:12.5px;color:#667489;margin:10px 4px 0}.w48-l button{border:0;background:none;color:var(--marca,#14306b);font:inherit;font-weight:700;text-decoration:underline;cursor:pointer;padding:0 0 0 4px}';
+  document.head.appendChild(st);
+})();
+</script>
 </body>
 </html>
