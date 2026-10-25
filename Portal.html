@@ -2146,5 +2146,177 @@ G47.iniciar();
   document.head.appendChild(st);
 })();
 </script>
+
+
+<style id="estilo-349">
+.qn h2{margin:0 0 6px;font-size:20px;display:flex;gap:8px;align-items:center}
+.qn-pasos{display:flex;gap:6px;flex-wrap:wrap;margin:0 0 12px}.qn-pasos span{font-size:12px;font-weight:700;padding:4px 10px;border-radius:999px;background:#eef2f6;color:#64748b}
+.qn-pasos span.on{background:#2d6a0b;color:#fff}.qn-pasos span.ok{background:#e6f4ea;color:#1e6b34}
+.qn-n{font-size:13.5px;color:var(--gris,#64748b);margin:4px 0 10px;line-height:1.45}
+.qn-op{display:flex;gap:10px;align-items:flex-start;padding:12px 14px;border:1.5px solid #dfe5ec;border-radius:12px;margin:0 0 8px;cursor:pointer;background:#fff}
+.qn-op.on{border-color:#2d6a0b;background:#f3f9ef}.qn-op input{width:20px;height:20px;margin-top:2px;flex:none;accent-color:#2d6a0b}
+.qn-op span{display:flex;flex-direction:column}.qn-op b{font-size:15px}.qn-op small{font-size:12.5px;color:#64748b}
+.qn-op.sm{padding:9px 12px;margin:0;flex:1;min-width:150px}
+.qn-suc{margin:0 0 14px}.qn-suc>b{display:block;font-size:14px;margin:0 0 6px}
+.qn-sv{display:flex;gap:8px;flex-wrap:wrap}
+.qn-no{margin:8px 0 0;padding:12px 14px;border-radius:12px;background:#fff7e8;border:1px solid #f3d9a4}
+.qn-no b{display:block;font-size:14px;color:#7a4b00}.qn-no p{margin:4px 0 10px;font-size:13.5px;color:#5c4100}
+.qn-no .row{display:flex;gap:8px;flex-wrap:wrap}
+.qn-si{display:flex;gap:6px;align-items:center;font-size:13px;color:#1e6b34;font-weight:600}
+.qn-res{margin:10px 0;padding:10px 12px;border-radius:12px;background:#f6f9fc;font-size:13.5px}.qn-res div{display:flex;gap:6px;align-items:center;margin:3px 0;flex-wrap:wrap}
+.qn-res em{color:#8a5a00;font-style:normal;font-size:12.5px}
+.qn-l{display:block;font-weight:700;font-size:14px;margin:4px 0 6px}
+.qn-in{display:flex;gap:10px;align-items:center;justify-content:space-between;padding:8px 0;border-bottom:1px solid #eef2f6}
+.qn-in span{font-size:14.5px;font-weight:600}.qn-in input{width:84px;font:inherit;font-size:15px;padding:8px 10px;border:1.5px solid #dfe5ec;border-radius:10px;text-align:center}
+.qn-ini{display:flex;gap:10px;align-items:center;flex-wrap:wrap}.qn-ini .tx{flex:1;min-width:200px;display:flex;flex-direction:column}.qn-ini small{color:#64748b}
+</style>
+<script id="js-349">
+/* ── api 3.49 · «¿QUÉ NECESITA?» (maqueta del flujo de sucursales y servicios, aprobada por Álvaro el 25 oct)
+   · Paso 1: para qué sucursal o sucursales (quien entra por una sola sede no ve este paso).
+   · Paso 2: recolección o fumigación en cada una. Lo que no tiene contratado no entra como visita:
+     «Usted no cuenta actualmente con este servicio contratado. ¿Desea contratarlo?» → Mercadeo.
+   · Paso 3: cuándo. Un solo envío; ECOVSA lo recibe ordenado por sucursal y servicio.
+   · Insumos aparte (bolsas, envases): van con la próxima visita de esa sucursal. ── */
+function qnBtn(t,on,k){ return '<button class="btn '+(k||'')+'" type="button" onclick="'+on+'">'+t+'</button>'; }
+var QN={}, QN_SRV=[['recoleccion','Recolección','Desechos peligrosos','peligrosos'],['fumigacion','Fumigación','Control de plagas','fumigacion']];
+function qnSuc(s){ return s.sucursal||s.nombre; }
+function qnSede(id){ return S.sedes.find(function(s){ return String(s.clienteId)===String(id); })||{}; }
+function qnTiene(id,sv){ var s=qnSede(id), k=sv==='fumigacion'?'fumigacion':'peligrosos'; return !s.contratado||!!s.contratado[k]; }
+window.queNecesita=function(serv,sede){
+  var una=S.sedes.length===1;
+  QN={ paso:una?2:1, sel:{}, srv:{}, contratar:{}, otraOn:false, otra:'', fecha:'', otraFecha:false, horario:'', nota:'' };
+  var pre=sede||(una?S.sedes[0].clienteId:'');
+  if(pre){ QN.sel[pre]=true; if(serv){ QN.srv[pre]={}; QN.srv[pre][/fumig/i.test(serv)?'fumigacion':'recoleccion']=true; } }
+  qnPintar();
+};
+function qnSel(){ return S.sedes.filter(function(s){ return QN.sel[s.clienteId]; }); }
+function qnPintar(){
+  var h='<div class="qn"><div class="qn-pasos">'+(S.sedes.length>1?'<span class="'+(QN.paso===1?'on':'ok')+'">1 · ¿Para dónde?</span>':'')+'<span class="'+(QN.paso===2?'on':QN.paso>2?'ok':'')+'">'+(S.sedes.length>1?'2':'1')+' · ¿Qué necesita?</span><span class="'+(QN.paso===3?'on':'')+'">'+(S.sedes.length>1?'3':'2')+' · ¿Cuándo?</span></div>';
+  if(QN.paso===1){
+    h+='<h2>¿Para qué sucursal es?</h2><p class="qn-n">Puede marcar varias. ECOVSA recibe un pedido por cada una.</p>'+S.sedes.map(function(s){
+      return '<label class="qn-op'+(QN.sel[s.clienteId]?' on':'')+'"><input type="checkbox"'+(QN.sel[s.clienteId]?' checked':'')+' onchange="QN.sel[\''+esc(s.clienteId)+'\']=this.checked;qnPintar()"><span><b>'+esc(qnSuc(s))+'</b><small>'+esc(s.direccion||'')+'</small></span></label>'; }).join('')+
+      '<label class="qn-op'+(QN.otraOn?' on':'')+'"><input type="checkbox"'+(QN.otraOn?' checked':'')+' onchange="QN.otraOn=this.checked;qnPintar()"><span><b>Otra sucursal</b><small>No está en la lista</small></span></label>'+
+      (QN.otraOn?'<div class="campo"><label for="qn-otra">¿Cuál es y dónde queda?</label><input id="qn-otra" maxlength="300" value="'+esc(QN.otra)+'" oninput="QN.otra=this.value" placeholder="Ej. Sucursal Albrook, local 20"></div><p class="qn-n">Una sucursal nueva se da de alta con su contrato: le escribe nuestro equipo comercial.</p>':'')+
+      '<div class="pie"><button class="btn" type="button" onclick="cerrarModal()">Cancelar</button><button class="btn pri" type="button" onclick="qnSig()">Siguiente</button></div>';
+  } else if(QN.paso===2){
+    var L=qnSel();
+    h+='<h2>¿Qué necesita en '+(L.length>1?'cada una':esc(qnSuc(L[0]||{})))+'?</h2>'+L.map(function(s){
+      var id=s.clienteId, o=QN.srv[id]=QN.srv[id]||{};
+      return '<div class="qn-suc">'+(L.length>1||S.sedes.length>1?'<b>'+esc(qnSuc(s))+'</b>':'')+'<div class="qn-sv">'+QN_SRV.map(function(v){
+        return '<label class="qn-op sm'+(o[v[0]]?' on':'')+'"><input type="checkbox"'+(o[v[0]]?' checked':'')+' onchange="qnMarca(\''+esc(id)+'\',\''+v[0]+'\',this.checked)"><span><b>'+v[1]+'</b><small>'+v[2]+'</small></span></label>'; }).join('')+'</div>'+
+        QN_SRV.filter(function(v){ return o[v[0]]&&!qnTiene(id,v[0]); }).map(function(v){ var k=id+'|'+v[0], c=QN.contratar[k];
+          return '<div class="qn-no"><b>'+esc(qnSuc(s))+' no tiene '+v[1].toLowerCase()+' contratada</b><p>Usted no cuenta actualmente con este servicio contratado en esta sucursal. ¿Desea contratarlo?</p>'+
+            (c===true?'<div class="qn-si">'+ic('ok',15)+' Se lo pasamos a nuestro equipo comercial para cotizarlo. No es una visita todavía.</div>':'<div class="row"><button class="btn pri sm" type="button" onclick="QN.contratar[\''+esc(k)+'\']=true;qnPintar()">Sí, quiero contratarlo</button><button class="btn sm" type="button" onclick="qnMarca(\''+esc(id)+'\',\''+v[0]+'\',false)">No, gracias</button></div>')+'</div>'; }).join('')+'</div>';
+    }).join('')+
+    (L.length>1?'<button class="btn sm" type="button" onclick="qnTodas()">Lo mismo para todas</button>':'')+
+    '<div id="qn-err" class="r-formerror" role="alert"></div><div class="pie">'+(S.sedes.length>1?'<button class="btn" type="button" onclick="QN.paso=1;qnPintar()">Atrás</button>':'<button class="btn" type="button" onclick="cerrarModal()">Cancelar</button>')+'<button class="btn pri" type="button" onclick="qnSig()">Siguiente</button></div>';
+  } else {
+    var visitas=qnPedidos().filter(function(p){ return qnTiene(p.clienteId,p.servicio); });
+    h+='<h2>¿Cuándo le queda bien?</h2>'+(visitas.length?'<div id="qn-dias"><p class="qn-n">Buscando los días en que pasamos por su zona…</p></div>'+
+      '<div class="campo"><label for="qn-h">Horario de atención · opcional</label><input id="qn-h" maxlength="100" value="'+esc(QN.horario)+'" oninput="QN.horario=this.value" placeholder="Ej. 8:00 a. m. a 4:00 p. m."></div>':'<p class="qn-n">Lo que pidió va a nuestro equipo comercial: le escriben para cotizarlo.</p>')+
+      '<div class="campo"><label for="qn-nota">Nota · opcional</label><textarea id="qn-nota" rows="2" maxlength="500" oninput="QN.nota=this.value" placeholder="Ej. El depósito está lleno.">'+esc(QN.nota)+'</textarea></div>'+
+      '<div class="qn-res">'+qnResumen()+'</div><div id="qn-err" class="r-formerror" role="alert"></div>'+
+      '<div class="pie"><button class="btn" type="button" onclick="QN.paso=2;qnPintar()">Atrás</button><button class="btn pri" type="button" id="qn-env" onclick="qnEnviar()">Enviar</button></div>';
+  }
+  modal(h+'</div>');
+  if(QN.paso===3) qnDias();
+}
+function qnMarca(id,sv,v){ QN.srv[id]=QN.srv[id]||{}; QN.srv[id][sv]=v; if(!v) delete QN.contratar[id+'|'+sv]; qnPintar(); }
+function qnTodas(){ var L=qnSel(), o=QN.srv[L[0].clienteId]||{}; L.forEach(function(s){ QN.srv[s.clienteId]={ recoleccion:!!o.recoleccion, fumigacion:!!o.fumigacion }; }); qnPintar(); }
+function qnPedidos(){
+  var out=[]; qnSel().forEach(function(s){ var o=QN.srv[s.clienteId]||{}; QN_SRV.forEach(function(v){ if(!o[v[0]]) return;
+    var tiene=qnTiene(s.clienteId,v[0]), k=s.clienteId+'|'+v[0]; if(!tiene&&QN.contratar[k]!==true) return;
+    out.push({ clienteId:s.clienteId, servicio:v[0], contratar:!tiene }); }); });
+  return out;
+}
+function qnResumen(){
+  var P=qnPedidos(), h=P.map(function(p){ var s=qnSede(p.clienteId), v=p.servicio==='fumigacion'?'Fumigación':'Recolección';
+    return '<div>'+ic(p.contratar?'chat':'ok',14)+' <b>'+v+'</b> · '+esc(qnSuc(s))+(p.contratar?' <em>· quiere contratarlo (va a Mercadeo)</em>':'')+'</div>'; }).join('');
+  if(QN.otraOn&&QN.otra.trim()) h+='<div>'+ic('chat',14)+' <b>Sucursal nueva</b> · '+esc(QN.otra)+' <em>· va a Mercadeo</em></div>';
+  return h;
+}
+function qnSig(){
+  if(QN.paso===1){ if(!qnSel().length&&!(QN.otraOn&&QN.otra.trim().length>2)){ toast('Marque una sucursal'+(QN.otraOn?' o escriba cuál es la otra':'')); return; }
+    QN.paso=qnSel().length?2:3; qnPintar(); return; }
+  var P=qnPedidos(), pend=qnSel().some(function(s){ var o=QN.srv[s.clienteId]||{}; return QN_SRV.some(function(v){ return o[v[0]]&&!qnTiene(s.clienteId,v[0])&&QN.contratar[s.clienteId+'|'+v[0]]===undefined; }); });
+  var e=$('qn-err');
+  if(pend){ if(e) e.textContent='Responda si desea contratar el servicio que no tiene, o desmárquelo.'; return; }
+  if(!P.length&&!(QN.otraOn&&QN.otra.trim())){ if(e) e.textContent='Elija qué necesita en cada sucursal.'; return; }
+  QN.paso=3; qnPintar();
+}
+function qnDias(){
+  var box=$('qn-dias'); if(!box) return;
+  var v=qnPedidos().filter(function(p){ return !p.contratar&&p.servicio==='recoleccion'; })[0];
+  var pinta=function(r){
+    if(!r||!r.ok||!r.dias){ box.innerHTML='<div class="campo"><label for="qn-f">Fecha preferida · opcional</label><input id="qn-f" type="date" min="'+S.hoy+'" value="'+esc(QN.fecha)+'" onchange="QN.fecha=this.value"></div>'; return; }
+    box.innerHTML='<label class="qn-l">¿Qué día le queda bien?</label><div class="p44-g">'+r.dias.map(function(x){ var d=new Date(x.fecha+'T12:00:00');
+      return '<button type="button" class="p44-d'+(QN.fecha===x.fecha&&!QN.otraFecha?' on':'')+'" onclick="QN.fecha=\''+x.fecha+'\';QN.otraFecha=false;qnDias()"><b>'+['dom','lun','mar','mié','jue','vie','sáb'][d.getDay()]+' '+d.getDate()+' '+MES[d.getMonth()]+'</b>'+(x.recomendado?'<em>recomendado</em>':'')+'<small>'+esc(x.ya?'ya tiene visita ese día':x.franja||'')+'</small></button>'; }).join('')+'</div>'+
+      '<button type="button" class="p44-otra'+(QN.otraFecha?' on':'')+'" onclick="QN.otraFecha=true;QN.fecha=\'\';qnDias()">Otra fecha <small>queda por confirmar</small></button>'+
+      (QN.otraFecha?'<input type="date" min="'+esc(r.primer||S.hoy)+'" value="'+esc(QN.fecha)+'" onchange="QN.fecha=this.value">':'')+
+      '<p class="qn-n">La fecha la confirma Logística. '+(r.dias.some(function(x){ return x.recomendado; })?'«Recomendado»: ese día ya pasamos por su zona.':'')+'</p>';
+  };
+  if(!v){ pinta(null); return; }
+  if(QN.dias) return pinta(QN.dias);
+  llamar('api_ptlDiasDisponibles',SES,nivel()==='corp'?v.clienteId:'').then(function(r){ QN.dias=r; pinta(r); },function(){ pinta(null); });
+}
+function qnEnviar(){
+  var b=$('qn-env'), e=$('qn-err'); ocupado(b,true);
+  llamar('api_ptlQueNecesita',SES,{ pedidos:qnPedidos(), otra:QN.otraOn?QN.otra.trim():'', fecha:QN.fecha, horario:QN.horario.trim(), nota:QN.nota.trim() }).then(function(r){
+    ocupado(b,false);
+    if(!r||!r.ok){ if(e) e.textContent=(r&&r.error)||'No se pudo enviar. Intente de nuevo.'; return; }
+    modal('<div class="qn"><h2>'+ic('ok',20)+' Recibimos su pedido</h2><p class="qn-n">Folio '+esc(r.folio)+(r.folios.length>1?' (y '+(r.folios.length-1)+' más, uno por sucursal y servicio)':'')+'.</p><div class="qn-res">'+
+      (r.visitas?'<div>'+ic('camion',14)+' '+r.visitas+(r.visitas===1?' visita':' visitas')+' de recolección: Logística le confirma la fecha.</div>':'')+
+      (r.fumigacion?'<div>'+ic('calendario',14)+' '+r.fumigacion+(r.fumigacion===1?' fumigación':' fumigaciones')+': el equipo de fumigación le confirma el día.</div>':'')+
+      (r.mercadeo?'<div>'+ic('chat',14)+' '+r.mercadeo+(r.mercadeo===1?' pedido':' pedidos')+' para contratar: nuestro equipo comercial le escribe.</div>':'')+
+      '</div><p class="qn-n">Puede seguirlo en Solicitudes.</p><div class="pie"><button class="btn pri" type="button" onclick="cerrarModal();cargar()">Listo</button></div></div>');
+  },function(){ ocupado(b,false); if(e) e.textContent='Sin conexión. Su pedido no se envió: intente de nuevo en un momento.'; });
+}
+/* insumos aparte */
+window.pedirInsumos=function(sede){
+  var C=S.insumosCat||[];
+  if(!C.length){ return solicitar('Solicitar productos','Bolsas o envases'); }
+  QN.ins={ sede:sede||(S.sedes.length===1?S.sedes[0].clienteId:''), q:{} };
+  qnInsPintar();
+};
+function qnInsPintar(){
+  var o=QN.ins, C=S.insumosCat||[];
+  modal('<div class="qn"><h2>Pedir bolsas o envases</h2><p class="qn-n">Se los llevamos en su próxima visita. No hace falta pedir una visita.</p>'+
+    (S.sedes.length>1?'<div class="campo"><label for="qi-s">Sucursal</label><select id="qi-s" onchange="QN.ins.sede=this.value"><option value="">Elija</option>'+S.sedes.map(function(s){ return '<option value="'+esc(s.clienteId)+'"'+(o.sede===s.clienteId?' selected':'')+'>'+esc(qnSuc(s))+'</option>'; }).join('')+'</select></div>':'')+
+    C.map(function(c){ return '<div class="qn-in"><span>'+esc(c.nombre)+'</span><input type="number" min="0" max="200" inputmode="numeric" value="'+(o.q[c.id]||'')+'" placeholder="0" oninput="QN.ins.q[\''+esc(c.id)+'\']=Number(this.value)||0"></div>'; }).join('')+
+    '<div class="campo"><label for="qi-n">Nota · opcional</label><input id="qi-n" maxlength="300"></div><p class="qn-n">Si es más de lo incluido en su plan, se lo avisamos antes de cobrarlo.</p>'+
+    '<div id="qi-err" class="r-formerror" role="alert"></div><div class="pie"><button class="btn" type="button" onclick="cerrarModal()">Cancelar</button><button class="btn pri" type="button" id="qi-env" onclick="qnInsEnviar()">Pedir</button></div></div>');
+}
+function qnInsEnviar(){
+  var o=QN.ins, e=$('qi-err'), b=$('qi-env'), L=Object.keys(o.q).filter(function(k){ return o.q[k]>0; }).map(function(k){ return { catId:k, cantidad:o.q[k] }; });
+  if(!o.sede){ e.textContent='Elija la sucursal.'; return; }
+  if(!L.length){ e.textContent='Escriba cuántos necesita.'; return; }
+  ocupado(b,true);
+  llamar('api_ptlPedirInsumos',SES,{ clienteId:o.sede, items:L, nota:($('qi-n')||{}).value||'' }).then(function(r){
+    ocupado(b,false);
+    if(!r||!r.ok){ e.textContent=(r&&r.error)||'No se pudo enviar.'; return; }
+    modal('<div class="qn"><h2>'+ic('ok',20)+' Pedido recibido · '+esc(r.folio)+'</h2><p class="qn-n">'+(r.proxima?'Se los llevamos en su próxima visita, el '+esc(f(r.proxima))+'.':'Se los llevamos en su próxima visita.')+' El conductor los entrega y quedan en su recibo.</p><div class="pie"><button class="btn pri" type="button" onclick="cerrarModal();cargar()">Listo</button></div></div>');
+  },function(){ ocupado(b,false); e.textContent='Sin conexión. Intente de nuevo.'; });
+}
+/* las visitas y la fumigación entran por «¿Qué necesita?»; los productos, por insumos; lo demás sigue igual */
+window.solicitar=(function(o){ return function(tipo,serv,sede){
+  if((tipo==='Primera recolección'||tipo==='Programar visita')&&(!serv||/peligros|fumig/i.test(serv))) return queNecesita(serv,sede);
+  if(tipo==='Cotización'&&/fumig/i.test(serv||'')) return queNecesita(serv,sede);
+  return o.apply(this,arguments);
+}; })(window.solicitar);
+window.pedir=(function(o){ return function(nom){ if(/bolsa|envase|contenedor|punzo|recipiente/i.test(nom||'')&&(S.insumosCat||[]).length) return pedirInsumos(); return o.apply(this,arguments); }; })(window.pedir);
+document.addEventListener('submit',function(e){
+  if(!e.target||e.target.id!=='r-request') return;
+  var t=($('r-type')||{}).value, sv=($('r-service')||{}).value||'', sd=($('r-sede')||{}).value||'';
+  if((t==='Primera recolección'||t==='Programar visita')&&/peligros|fumig/i.test(sv)){ e.preventDefault(); e.stopPropagation(); queNecesita(sv,sd); }
+  else if(t==='Solicitar productos'&&/bolsa|envase|contenedor|punzo|recipiente/i.test(sv)&&(S.insumosCat||[]).length){ e.preventDefault(); e.stopPropagation(); pedirInsumos(sd); }
+},true);
+/* en el Inicio: los dos caminos a la vista */
+window.vInicio=(function(o){ return function(){
+  var h=o.apply(this,arguments); if(S.cuenta&&S.cuenta.estado==='suspendida') return h;
+  var c='<section class="card qn-ini"><div class="tx"><b>¿Qué necesita?</b><small>Una visita de recolección o una fumigación'+(S.sedes.length>1?', para una o varias sucursales':'')+'.</small></div>'+qnBtn('Pedir una visita','queNecesita()','pri sm')+
+    ((S.insumosCat||[]).length?qnBtn('Pedir bolsas o envases','pedirInsumos()','sm'):'')+'</section>';
+  var i=h.indexOf('<section'); return i>=0?h.slice(0,i)+c+h.slice(i):h+c;
+}; })(window.vInicio);
+</script>
 </body>
 </html>
