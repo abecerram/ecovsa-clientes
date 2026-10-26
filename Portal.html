@@ -2318,5 +2318,460 @@ window.vInicio=(function(o){ return function(){
   var i=h.indexOf('<section'); return i>=0?h.slice(0,i)+c+h.slice(i):h+c;
 }; })(window.vInicio);
 </script>
+<style id="estilo-352">
+.nq-sv{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px;margin-bottom:8px}.nq-sv .qn-op{margin:0;padding:16px}.nq-sv .qn-op b{font-size:16px}
+.nq-blq{border:1px solid #e3e8ef;border-radius:14px;padding:12px 14px;margin-bottom:10px}.nq-blq h4{margin:0 0 8px;font-size:14.5px;display:flex;align-items:center;gap:8px}.nq-blq h4 .sp{flex:1}.nq-blq h4 button{font-size:12px}
+.nq-blq .qn-op.sm{margin:0 0 8px}
+.nq-dup{background:#fff8e6;border:1px solid #f1d58a;border-radius:12px;padding:10px 12px;font-size:13px;margin:4px 0 8px;color:#5c4300}.nq-dup .row{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px;align-items:center}
+.nq-dup.az{background:#eef6ff;border-color:#c6dcf7;color:#14306b}
+.nq-mod{display:flex;gap:6px;background:#eef2f6;border-radius:999px;padding:4px;margin:0 0 12px;width:max-content;max-width:100%;flex-wrap:wrap}.nq-mod button{border:0;background:none;border-radius:999px;padding:7px 12px;font:700 13px var(--letra);color:#475569;cursor:pointer}.nq-mod button.on{background:#fff;color:var(--marca);box-shadow:0 1px 3px rgba(0,0,0,.12)}
+.nq-lin{display:flex;align-items:center;gap:10px;border:1px solid #e3e8ef;border-radius:12px;padding:10px 12px;margin-bottom:8px;background:#fff}.nq-lin .tx{flex:1;min-width:0}.nq-lin .tx small{display:block;color:var(--gris)}.nq-lin .x{border:0;background:#f1f4f8;border-radius:50%;width:30px;height:30px;cursor:pointer;color:#64748b;font-size:16px;flex:none}
+.nq-lin.fuera{opacity:.45}.nq-lin.fuera .tx b{text-decoration:line-through}
+.nq-peds h3{margin:0 0 4px}.nq-ped{border:1px solid #e3e8ef;border-radius:14px;padding:12px 14px;margin-top:10px;background:#fff}.nq-ped .cab{display:flex;align-items:center;gap:8px;flex-wrap:wrap}.nq-ped .cab b{flex:1;white-space:nowrap}
+.nq-ped .l{display:flex;gap:8px;align-items:center;font-size:13.5px;padding:5px 0;border-top:1px solid #f1f4f8;flex-wrap:wrap}.nq-ped .l:first-of-type{border-top:0}
+.nq-ped .acc{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}.nq-ped small.n{display:block;color:var(--gris);font-size:12px;margin-top:6px;white-space:normal;overflow-wrap:anywhere}
+.qn .p44-d{position:relative}.qn .p44-d em{position:static!important;display:block;margin:3px 0 0;width:max-content}
+.nq-unir{background:#eef6ff;border:1px solid #c6dcf7;border-radius:14px;padding:12px 14px;margin-top:10px;font-size:13.5px;color:#14306b}.nq-unir .row{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}
+.sa-g{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:10px}
+.sa-t{display:flex;gap:12px;align-items:flex-start;text-align:left;border:1.5px solid var(--linea);background:#fff;border-radius:16px;padding:14px;cursor:pointer;font:inherit;color:inherit;transition:border-color .15s,background .15s}.sa-t:hover{border-color:var(--marca);background:#f7f9fd}
+.sa-t i{flex:none;width:44px;height:44px;border-radius:12px;background:#eef3fb;color:var(--marca);display:grid;place-items:center}.sa-t b{display:block;font-size:15.5px}.sa-t small{display:block;color:var(--gris);font-size:12.5px;margin-top:2px;line-height:1.35}
+.sa-h{display:flex;gap:10px;align-items:center;margin-bottom:6px}.sa-h i{width:38px;height:38px;border-radius:10px;background:#eef3fb;color:var(--marca);display:grid;place-items:center;flex:none}.sa-h h2{margin:0}
+.sa-o{display:flex;gap:10px;align-items:center;border:1.5px solid var(--linea);border-radius:12px;padding:12px 14px;margin-bottom:8px;cursor:pointer;background:#fff}.sa-o.on{border-color:var(--marca);background:#f2f6fd}.sa-o input{width:18px;height:18px;accent-color:var(--marca)}.sa-o span{flex:1}.sa-o small{display:block;color:var(--gris);font-size:12.5px}
+.sa-who{font-size:12.5px;color:var(--gris);background:#f3f6fb;border-radius:10px;padding:8px 10px;margin:4px 0 10px}
+.sa-cs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px}.sa-cs button{border:1.5px solid var(--linea);background:#fff;border-radius:99px;padding:7px 12px;font:700 13px var(--letra);cursor:pointer;color:var(--marca)}.sa-cs button.on{background:var(--marca);color:#fff;border-color:var(--marca)}
+.sa-card .sub{color:var(--gris);font-size:13.5px;margin:-2px 0 12px}
+.in-top{display:flex;align-items:flex-start;justify-content:space-between;gap:12px}.in-top h1{margin-bottom:2px}.in-top .btn{flex:none;margin-top:4px}
+.in-prox{padding:14px 16px}.in-prox h3{margin:0 0 6px;display:flex;align-items:center}.in-prox h3 .sp{flex:1}.in-prox h3 a{font-size:12.5px;font-weight:700;letter-spacing:0;text-transform:none}
+.in-prox+.in-prox{margin-top:14px}
+.in-l{display:flex;align-items:center;gap:12px;padding:9px 0;border-top:1px solid #eef1f5}.in-l:first-of-type{border-top:0}.in-l .d{flex:none;width:46px;text-align:center;border-radius:10px;background:#eef3fb;padding:5px 0}.in-l .d b{display:block;font-size:17px;color:var(--marca);line-height:1.1}.in-l .d span{font-size:10.5px;text-transform:uppercase;color:var(--gris);letter-spacing:.5px}
+.in-l .tx{flex:1;min-width:0}.in-l .tx b{font-size:14.5px}.in-l .tx small{display:block;color:var(--gris);font-size:12.5px}.in-l .tag{flex:none}
+.sg-pv{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin:12px 0 4px}.sg-pv div{text-align:center;font-size:11.5px;color:var(--gris)}.sg-pv i{display:grid;place-items:center;width:38px;height:38px;border-radius:50%;margin:0 auto 6px;background:#eef2f6;color:#94a3b8}
+.sg-ul{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:10px 0}.sg-ul div{background:#f3f6fb;border-radius:10px;padding:8px 10px}.sg-ul span{display:block;font-size:11.5px;color:var(--gris)}.sg-ul b{font-size:15px}
+@media(max-width:560px){.in-top{flex-direction:column;gap:4px}.in-top .btn{margin:0 0 6px}}
+</style>
+<script id="js-352">
+/* ═══════════════════════════════════════════════════════════════════
+   api 3.52 · SOLICITUDES POR TEMA · PEDIR, CAMBIAR, CANCELAR Y UNIR
+   (Maqueta_solicitudes_por_tema, aprobada por Álvaro el 26 oct · DISENO_pedir_cambiar_cancelar.md)
+   · Nueva solicitud: primero el tema (un servicio, bolsas o envases, facturas y pagos, certificados y
+     documentos, asesoría, otra cosa) y después solo las opciones de ese tema.
+   · Un servicio: qué → para qué sucursales → cuándo (el mismo día o uno para cada servicio) → revisar con ✕.
+     Si ya tiene uno igual abierto, se ofrece «Pasarla a este pedido» (no se duplica).
+   · Sus pedidos: mientras Logística no los confirme, «Cambiar» y «Cancelar». Confirmado: «Pedir un cambio»
+     abre el mismo formulario y llega a la Bandeja para reagendar. Varias recolecciones en días distintos:
+     «Unirlos en un solo día».
+   · Inicio: «Pedir una visita» arriba a la derecha y «Lo próximo» en una tarjeta compacta.
+   · En camino, en un día sin visita: la próxima visita, lo que verá ese día y cómo fue la última.
+   ═══════════════════════════════════════════════════════════════════ */
+(function(){
+var SV51={ recoleccion:['Recolección','Desechos peligrosos','camion'], fumigacion:['Fumigación','Control de plagas','calendario'] };
+var DS=['dom','lun','mar','mié','jue','vie','sáb'];
+var IC51={
+  servicio:'<path d="M2 6.5h11v9.5H2z"/><path d="M13 9.5h4.2l2.8 3.2V16h-7"/><circle cx="6" cy="17.5" r="1.9"/><circle cx="16.5" cy="17.5" r="1.9"/>',
+  insumos:'<path d="M4 8l8-4 8 4-8 4z"/><path d="M4 8v8l8 4 8-4V8"/><path d="M12 12v8"/>',
+  pagos:'<rect x="3" y="5.5" width="18" height="13" rx="2"/><path d="M3 10h18M7 14.5h4"/>',
+  docs:'<path d="M7 3h7l5 5v13H7z"/><path d="M14 3v5h5M10 13h6M10 17h6"/>',
+  asesoria:'<path d="M4 5h16v11H9.5L5 20v-4H4z"/><path d="M8.5 9.5h7M8.5 12.5h4.5"/>',
+  pin:'<path d="M12 21s7-6.5 7-11a7 7 0 1 0-14 0c0 4.5 7 11 7 11z"/><circle cx="12" cy="10" r="2.6"/>',
+  reloj:'<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>',
+  otro:'<circle cx="12" cy="12" r="9"/><path d="M9.6 9.4a2.5 2.5 0 1 1 3.4 2.4c-.7.3-1 .9-1 1.7"/><path d="M12 16.8h.01"/>'
+};
+function svg51(k,n){ return '<svg width="'+(n||24)+'" height="'+(n||24)+'" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'+IC51[k]+'</svg>'; }
+function fd(x){ if(!x) return 'fecha por confirmar'; var d=new Date(x+'T12:00:00'); return DS[d.getDay()]+' '+d.getDate()+' '+MES[d.getMonth()]; }
+function sucDe(id){ var s=qnSede(id); return s.clienteId?qnSuc(s):''; }
+function tiene(id,sv){ return qnTiene(id,sv); }
+function peds(){ return (S&&S.pedidos)||[]; }
+function visitas(){ return peds().filter(function(p){ return p.visita&&(p.servicio==='recoleccion'||p.servicio==='fumigacion'); }); }
+function fechaDe(p){ return p.fechaConf||p.fechaPref||''; }
+
+/* ═════ 1 · UN SERVICIO: qué → sucursales → cuándo → revisar ═════ */
+var NQ={};
+Object.defineProperty(window,'NQ',{ get:function(){ return NQ; }, configurable:true });   /* los botones del formulario lo usan */
+function nuevo(){ return { paso:1, srv:{}, suc:{}, contratar:{}, modo:'una', fecha:'', fechas:{}, otra:{}, nota:'', horario:'', fuera:{}, unir:{}, edita:null, pide:false, dias:null }; }
+function svSel(){ return Object.keys(SV51).filter(function(k){ return NQ.srv[k]; }); }
+function abiertoDe(sv,id){ var ed=NQ.edita||[]; return visitas().find(function(p){ return p.puede&&p.servicio===sv&&String(p.clienteId)===String(id)&&ed.indexOf(p.folio)<0; }); }
+function lineas(){
+  var out=[]; svSel().forEach(function(sv){ S.sedes.forEach(function(s){ if(!(NQ.suc[sv]||{})[s.clienteId]) return;
+    var k=sv+'|'+s.clienteId, con=!tiene(s.clienteId,sv); if(con&&NQ.contratar[k]!==true) return;
+    out.push({ sv:sv, suc:s.clienteId, contratar:con, fecha:con?'':(NQ.modo==='cada'?NQ.fechas[sv]:NQ.fecha)||'', k:k, unir:NQ.unir[k] }); }); });
+  return out;
+}
+function pasos(){
+  var L=[['¿Qué necesita?',1],['¿Para qué sucursales?',2],['¿Cuándo?',3],['Revise y envíe',4]];
+  if(S.sedes.length===1) L.splice(1,1);
+  var ed=(NQ.edita||[]).join(', ');
+  return (NQ.pide?'<div class="nq-dup" style="margin:0 0 10px"><b>Pedir un cambio · '+esc(ed)+'</b><br>Ya está confirmado. Elija lo que quiere cambiar: Logística lo revisa y le confirma la nueva fecha. Mientras tanto, sigue en pie lo confirmado.</div>':NQ.edita?'<div class="nq-dup az" style="margin:0 0 10px"><b>Cambiar · '+esc(ed)+'</b></div>':'')+
+    '<div class="qn-pasos">'+L.map(function(x,i){ return '<span class="'+(NQ.paso===x[1]?'on':NQ.paso>x[1]?'ok':'')+'">'+(i+1)+' · '+x[0]+'</span>'; }).join('')+'</div>';
+}
+function chipsDias(sel,on,otraK){
+  var r=NQ.dias, otra=!!NQ.otra[otraK];
+  if(r==='cargando') return '<p class="qn-n">Buscando los días en que pasamos por su zona…</p>';
+  if(!r||!r.ok||!r.dias||!r.dias.length) return '<input type="date" min="'+S.hoy+'" value="'+esc(sel||'')+'" onchange="'+on+'(this.value)">';
+  return '<div class="p44-g">'+r.dias.map(function(x){ return '<button type="button" class="p44-d'+(sel===x.fecha&&!otra?' on':'')+'" onclick="NQ.otra[\''+otraK+'\']=false;'+on+'(\''+x.fecha+'\')"><b>'+fd(x.fecha)+'</b>'+(x.recomendado?'<em>recomendado</em>':'')+(x.ya?'<small>ya tiene visita ese día</small>':'')+'</button>'; }).join('')+'</div>'+
+    '<button type="button" class="p44-otra'+(otra?' on':'')+'" onclick="NQ.otra[\''+otraK+'\']=true;'+on+'(\'\')">Otra fecha <small>queda por confirmar</small></button>'+
+    (otra?'<input type="date" min="'+esc(r.primer||S.hoy)+'" value="'+esc(sel||'')+'" onchange="'+on+'(this.value)">':'');
+}
+function nqDias(){
+  if(NQ.dias) return;
+  var v=lineas().filter(function(l){ return !l.contratar; })[0]; if(!v){ NQ.dias={ ok:false }; return; }
+  NQ.dias='cargando';
+  llamar('api_ptlDiasDisponibles',SES,nivel()==='corp'?v.suc:'').then(function(r){ NQ.dias=r||{ ok:false }; if(NQ.paso===3) nqPintar(); },function(){ NQ.dias={ ok:false }; if(NQ.paso===3) nqPintar(); });
+}
+function nqPintar(){
+  var h='<div class="qn">'+pasos();
+  if(NQ.paso===1){
+    h+='<h2>¿Qué necesita?</h2><p class="qn-n">Puede marcar los dos'+(S.sedes.length>1?': después elige en qué sucursales y qué días.':'.')+'</p><div class="nq-sv">'+
+      Object.keys(SV51).map(function(k){ return '<label class="qn-op'+(NQ.srv[k]?' on':'')+'"><input type="checkbox"'+(NQ.srv[k]?' checked':'')+' onchange="nqSrv(\''+k+'\',this.checked)"><span><b>'+SV51[k][0]+'</b><small>'+SV51[k][1]+'</small></span></label>'; }).join('')+'</div>'+
+      (S.sedes.length===1?nqAvisos():'')+
+      (!NQ.edita&&(S.insumosCat||[]).length?'<p class="qn-n">¿Bolsas o envases? <a href="#" onclick="cerrarModal();pedirInsumos();return false">Pídalos aparte</a>: van con su próxima visita.</p>':'')+
+      '<div id="qn-err" class="r-formerror" role="alert"></div><div class="pie"><button class="btn" type="button" onclick="cerrarModal()">Cancelar</button><button class="btn pri" type="button" onclick="nqSig()">Siguiente</button></div>';
+  } else if(NQ.paso===2){
+    h+='<h2>¿Para qué sucursales?</h2>'+svSel().map(function(sv){
+      var o=NQ.suc[sv]=NQ.suc[sv]||{};
+      return '<div class="nq-blq"><h4>'+ic(SV51[sv][2],17)+SV51[sv][0]+'<span class="sp"></span><button class="btn sm" type="button" onclick="nqTodas(\''+sv+'\')">Todas</button></h4>'+
+        S.sedes.map(function(s){ var id=s.clienteId; return '<label class="qn-op sm'+(o[id]?' on':'')+'"><input type="checkbox"'+(o[id]?' checked':'')+' onchange="nqSuc(\''+sv+'\',\''+esc(id)+'\',this.checked)"><span><b>'+esc(qnSuc(s))+'</b><small>'+esc(s.direccion||'')+'</small></span></label>'+(o[id]?nqAviso(sv,id):''); }).join('')+'</div>';
+    }).join('')+'<div id="qn-err" class="r-formerror" role="alert"></div><div class="pie"><button class="btn" type="button" onclick="NQ.paso=1;nqPintar()">Atrás</button><button class="btn pri" type="button" onclick="nqSig()">Siguiente</button></div>';
+  } else if(NQ.paso===3){
+    var vis=svSel().filter(function(sv){ return lineas().some(function(l){ return l.sv===sv&&!l.contratar; }); });
+    var quien=function(sv){ return lineas().filter(function(l){ return l.sv===sv&&!l.contratar; }).map(function(l){ return esc(sucDe(l.suc)); }).join(' y '); };
+    h+='<h2>¿Cuándo le queda bien?</h2>';
+    if(!vis.length) h+='<p class="qn-n">Lo que pidió va a nuestro equipo comercial: le escriben para cotizarlo.</p>';
+    else {
+      nqDias();
+      if(vis.length>1) h+='<div class="nq-mod"><button type="button" class="'+(NQ.modo==='una'?'on':'')+'" onclick="NQ.modo=\'una\';nqPintar()">El mismo día para todo</button><button type="button" class="'+(NQ.modo==='cada'?'on':'')+'" onclick="NQ.modo=\'cada\';nqPintar()">Un día para cada servicio</button></div>';
+      if(NQ.modo==='cada'&&vis.length>1) h+=vis.map(function(sv){ return '<label class="qn-l">'+SV51[sv][0]+' · '+quien(sv)+'</label>'+chipsDias(NQ.fechas[sv],'nqF_'+sv,sv); }).join('');
+      else { NQ.modo='una'; h+='<label class="qn-l">'+vis.map(function(sv){ return SV51[sv][0]+(S.sedes.length>1?': '+quien(sv):''); }).join(' · ')+'</label>'+chipsDias(NQ.fecha,'nqF','una'); }
+      h+='<p class="qn-n">'+(NQ.dias&&NQ.dias.dias&&NQ.dias.dias.some(function(x){ return x.recomendado; })?'«Recomendado»: ese día ya pasamos por su zona. ':'')+'La fecha la confirma Logística.</p>'+
+        '<div class="campo"><label for="nq-h">Horario de atención · opcional</label><input id="nq-h" maxlength="100" value="'+esc(NQ.horario)+'" oninput="NQ.horario=this.value" placeholder="Ej. 8:00 a. m. a 4:00 p. m."></div>';
+    }
+    h+='<div id="qn-err" class="r-formerror" role="alert"></div><div class="pie"><button class="btn" type="button" onclick="NQ.paso='+(S.sedes.length>1?2:1)+';nqPintar()">Atrás</button><button class="btn pri" type="button" onclick="nqSig()">Revisar</button></div>';
+  } else {
+    var L=lineas();
+    h+='<h2>Revise su pedido</h2><p class="qn-n">Toque la ✕ para quitar algo antes de enviar.</p>'+L.map(function(l){ var fu=NQ.fuera[l.k];
+      return '<div class="nq-lin'+(fu?' fuera':'')+'">'+ic(SV51[l.sv][2],18)+'<div class="tx"><b>'+SV51[l.sv][0]+' · '+esc(sucDe(l.suc))+'</b><small>'+(l.contratar?'Quiere contratarlo · va a nuestro equipo comercial':fd(l.fecha)+(l.unir?' · reemplaza '+esc(l.unir):''))+'</small></div>'+
+        '<button class="x" type="button" aria-label="'+(fu?'Volver a poner':'Quitar')+'" onclick="NQ.fuera[\''+l.k+'\']='+(fu?'false':'true')+';nqPintar()">'+(fu?'↺':'✕')+'</button></div>'; }).join('')+
+      '<div class="campo"><label for="nq-n">Nota · opcional</label><textarea id="nq-n" rows="2" maxlength="500" oninput="NQ.nota=this.value" placeholder="Ej. El depósito está lleno.">'+esc(NQ.nota)+'</textarea></div>'+
+      '<div id="qn-err" class="r-formerror" role="alert"></div><div class="pie"><button class="btn" type="button" onclick="NQ.paso=3;nqPintar()">Atrás</button><button class="btn pri" type="button" id="nq-env" onclick="nqEnviar()">'+(NQ.pide?'Enviar el pedido de cambio':NQ.edita?'Guardar cambios':'Enviar')+'</button></div>';
+  }
+  modal(h+'</div>');
+}
+/* los avisos de una sucursal: no lo tiene contratado / ya lo tiene pedido */
+function nqAviso(sv,id){
+  var k=sv+'|'+id, s=qnSede(id), h='', ab=abiertoDe(sv,id);
+  if(!tiene(id,sv)) h+='<div class="qn-no"><b>'+esc(qnSuc(s))+' no tiene '+SV51[sv][0].toLowerCase()+' contratada</b><p>Usted no cuenta actualmente con este servicio contratado en esta sucursal. ¿Desea contratarlo?</p>'+
+    (NQ.contratar[k]===true?'<div class="qn-si">'+ic('ok',15)+' Se lo pasamos a nuestro equipo comercial para cotizarlo.</div>':'<div class="row"><button class="btn pri sm" type="button" onclick="NQC(\''+esc(k)+'\',true)">Sí, quiero contratarlo</button><button class="btn sm" type="button" onclick="nqSuc(\''+sv+'\',\''+esc(id)+'\',false)">No, quitarla</button></div>')+'</div>';
+  else if(ab) h+='<div class="nq-dup"><b>Ya tiene '+SV51[sv][0].toLowerCase()+' pedida'+(S.sedes.length>1?' para '+esc(qnSuc(s)):'')+'</b> · '+esc(ab.folio)+' · '+fd(ab.fechaPref)+
+    (NQ.unir[k]?'<div class="row">'+ic('ok',15)+' La sumamos a este pedido y se quita la de '+esc(ab.folio)+'.</div>':'<div class="row"><button class="btn pri sm" type="button" onclick="NQU(\''+esc(k)+'\',\''+esc(ab.folio)+'\')">Pasarla a este pedido</button><button class="btn sm" type="button" onclick="nqSuc(\''+sv+'\',\''+esc(id)+'\',false)">Dejar la que tengo</button></div>')+'</div>';
+  return h;
+}
+function nqAvisos(){ var id=S.sedes[0].clienteId; return svSel().map(function(sv){ return nqAviso(sv,id); }).join(''); }
+window.nqPintar=nqPintar;
+window.nqSrv=function(k,v){ NQ.srv[k]=v; if(v&&S.sedes.length===1){ NQ.suc[k]={}; NQ.suc[k][S.sedes[0].clienteId]=true; } NQ.dias=null; nqPintar(); };
+window.nqSuc=function(sv,id,v){ NQ.suc[sv]=NQ.suc[sv]||{}; NQ.suc[sv][id]=v; if(!v){ delete NQ.contratar[sv+'|'+id]; delete NQ.unir[sv+'|'+id]; if(S.sedes.length===1) NQ.srv[sv]=false; } NQ.dias=null; nqPintar(); };
+window.nqTodas=function(sv){ NQ.suc[sv]=NQ.suc[sv]||{}; S.sedes.forEach(function(s){ NQ.suc[sv][s.clienteId]=true; }); NQ.dias=null; nqPintar(); };
+window.NQC=function(k,v){ NQ.contratar[k]=v; nqPintar(); };
+window.NQU=function(k,f){ NQ.unir[k]=f; nqPintar(); };
+window.nqF=function(x){ NQ.fecha=x; nqPintar(); };
+Object.keys(SV51).forEach(function(sv){ window['nqF_'+sv]=function(x){ NQ.fechas[sv]=x; nqPintar(); }; });
+window.nqSig=function(){
+  var e=function(t){ var x=$('qn-err'); if(x) x.textContent=t; else toast(t); };
+  var pend=function(){ return svSel().some(function(sv){ return S.sedes.some(function(s){ var k=sv+'|'+s.clienteId; return (NQ.suc[sv]||{})[s.clienteId]&&!tiene(s.clienteId,sv)&&NQ.contratar[k]===undefined; }); }); };
+  var dup=function(){ return svSel().some(function(sv){ return S.sedes.some(function(s){ var k=sv+'|'+s.clienteId; return (NQ.suc[sv]||{})[s.clienteId]&&tiene(s.clienteId,sv)&&abiertoDe(sv,s.clienteId)&&!NQ.unir[k]; }); }); };
+  if(NQ.paso===1){ if(!svSel().length) return e('Marque al menos un servicio.');
+    if(S.sedes.length===1){ if(pend()) return e('Responda si desea contratar el servicio que no tiene, o desmárquelo.'); if(dup()) return e('Ya tiene un pedido igual abierto: páselo a este pedido o déjelo como está.'); NQ.paso=3; }
+    else NQ.paso=2;
+    return nqPintar(); }
+  if(NQ.paso===2){
+    if(svSel().some(function(sv){ return !Object.keys(NQ.suc[sv]||{}).some(function(id){ return NQ.suc[sv][id]; }); })) return e('Elija al menos una sucursal para cada servicio.');
+    if(pend()) return e('Responda si desea contratar el servicio que no tiene, o quite esa sucursal.');
+    if(dup()) return e('Ya tiene un pedido igual abierto: páselo a este pedido o déjelo como está.');
+    NQ.paso=3; return nqPintar();
+  }
+  if(NQ.paso===3){
+    var L=lineas().filter(function(l){ return !l.contratar; });
+    if(L.some(function(l){ return !l.fecha; })) return e(NQ.modo==='cada'?'Elija un día para cada servicio.':'Elija el día.');
+    if(L.some(function(l){ return l.fecha<S.hoy; })) return e('Elija la fecha de hoy o una posterior.');
+    NQ.paso=4; return nqPintar();
+  }
+};
+function hecho(t,folio,L,txt){
+  modal('<div class="qn"><h2>'+ic('ok',20)+' '+t+'</h2>'+(folio?'<p class="qn-n">Folio '+esc(folio)+'.</p>':'')+'<div class="qn-res">'+
+    L.map(function(l){ return '<div>'+ic(l.contratar?'chat':SV51[l.sv][2],14)+' <b>'+SV51[l.sv][0]+'</b> · '+esc(sucDe(l.suc))+(l.contratar?' <em>· nuestro equipo comercial le escribe</em>':' · '+fd(l.fecha))+'</div>'; }).join('')+'</div>'+
+    '<p class="qn-n">'+txt+'</p><div class="pie"><button class="btn" type="button" onclick="cerrarModal()">Cerrar</button><button class="btn pri" type="button" onclick="cerrarModal();ir(\'solicitudes\')">Ver mis pedidos</button></div></div>');
+  cargar();
+}
+window.nqEnviar=function(){
+  var L=lineas().filter(function(l){ return !NQ.fuera[l.k]; }), e=$('qn-err'), b=$('nq-env');
+  if(!L.length){ if(e) e.textContent=NQ.edita&&!NQ.pide?'Su pedido quedó vacío: si ya no lo necesita, use «Cancelar».':'Su pedido quedó vacío.'; return; }
+  var lin=L.map(function(l){ return { clienteId:l.suc, servicio:l.sv, fecha:l.fecha, contratar:l.contratar }; });
+  var unir=L.filter(function(l){ return l.unir; }).map(function(l){ return l.unir; });
+  var falla=function(r){ ocupado(b,false); if(e) e.textContent=(r&&r.error)||'No se pudo enviar. Intente de nuevo.'; };
+  var sinRed=function(){ ocupado(b,false); if(e) e.textContent='Sin conexión. No se envió: intente de nuevo en un momento.'; };
+  /* lo que el cliente pasó a este pedido se cierra como «pasó al pedido …» */
+  var pasar=function(a,fin){ if(!unir.length) return fin(); llamar('api_ptlPedidoCancelar',SES,unir,'Lo pasó al pedido '+a,a).then(fin,fin); };
+  ocupado(b,true);
+  if(NQ.edita){
+    llamar('api_ptlPedidoCambiar',SES,{ folios:NQ.edita, lineas:lin, horario:NQ.horario.trim(), nota:NQ.nota.trim() }).then(function(r){
+      if(!r||!r.ok) return falla(r);
+      pasar(NQ.edita[0],function(){ ocupado(b,false);
+        if(r.confirmado) hecho('Enviamos su pedido de cambio',(r.pedidos||[]).join(', '),L,'Logística lo revisa y le confirma la nueva fecha aquí. Mientras tanto, sigue en pie lo que ya estaba confirmado.');
+        else hecho('Guardamos los cambios',NQ.edita.join(', '),L,'Mientras Logística no lo confirme, puede cambiarlo o cancelarlo desde Solicitudes.'); });
+    },sinRed);
+    return;
+  }
+  llamar('api_ptlQueNecesita',SES,{ pedidos:lin, fecha:NQ.modo==='una'?NQ.fecha:'', horario:NQ.horario.trim(), nota:NQ.nota.trim() }).then(function(r){
+    if(!r||!r.ok) return falla(r);
+    pasar(r.folio,function(){ ocupado(b,false); hecho('Recibimos su pedido',r.folio,L,'Mientras Logística no lo confirme, puede cambiarlo o cancelarlo desde Solicitudes.'); });
+  },sinRed);
+};
+var q49=window.queNecesita;
+window.queNecesita=function(serv,sede){
+  NQ=nuevo();
+  if(serv) NQ.srv[/fumig/i.test(serv)?'fumigacion':'recoleccion']=true;
+  var pre=sede||(S.sedes.length===1?S.sedes[0].clienteId:'');
+  if(pre) Object.keys(SV51).forEach(function(k){ NQ.suc[k]={}; NQ.suc[k][pre]=true; });
+  if(sede&&serv&&S.sedes.length>1) NQ.paso=2;
+  nqPintar();
+};
+
+/* ═════ 2 · SUS PEDIDOS: cambiar, cancelar, pedir un cambio y unir ═════ */
+function grupoDe(g){ return visitas().filter(function(p){ return p.grupo===g&&!p.ocultar; }); }
+function seVe(p){
+  if(p.ocultar) return false;
+  if(p.unidoA) return false;   /* ya se ve en el pedido al que pasó */
+  if(p.cancelada) return String(p.fecha||'')>=ini7();
+  if(p.confirmada) return fechaDe(p)>=S.hoy;
+  return !p.cerrada;
+}
+function ini7(){ var d=new Date(S.hoy+'T12:00:00'); d.setDate(d.getDate()-7); return d.toISOString().slice(0,10); }
+function estadoL(p){
+  if(p.cancelada) return ['Cancelado por usted','t-gris'];
+  if(p.unidoA) return ['Pasó al pedido '+p.unidoA,'t-gris'];
+  if(p.confirmada&&p.pideCambio&&p.pideCambio.estado==='pendiente') return ['Confirmado · pidió un cambio','t-warn'];
+  if(p.confirmada) return [p.reagendada?'Reagendado · confirmado':'Confirmado','t-ok'];
+  if(p.cambiada) return ['Cambiado por usted · por confirmar','t-info'];
+  return ['Recibido · por confirmar','t-info'];
+}
+function vPedidos(){
+  var V0=visitas().filter(seVe), G=[], porG={};
+  V0.forEach(function(p){ if(!porG[p.grupo]){ porG[p.grupo]=[]; G.push(p.grupo); } porG[p.grupo].push(p); });
+  if(!G.length) return '';
+  var rec=V0.filter(function(p){ return p.puede&&p.servicio==='recoleccion'; }), gr=rec.map(function(p){ return p.grupo; }).filter(function(x,i,a){ return a.indexOf(x)===i; });
+  var dist=gr.length>1&&rec.map(function(p){ return p.fechaPref; }).filter(function(x,i,a){ return a.indexOf(x)===i; }).length>1;
+  return '<section class="card nq-peds" style="margin-bottom:16px"><h3>Sus pedidos de visita</h3><p class="qn-n" style="margin:0">Mientras Logística no los confirme, puede cambiarlos o cancelarlos usted.</p>'+
+    (dist?'<div class="nq-unir"><b>Tiene '+gr.length+' pedidos de recolección para días distintos.</b> ¿Prefiere que pasemos el mismo día?<div class="row"><button class="btn pri sm" type="button" onclick="nqUnir()">Unirlos en un solo día</button></div></div>':'')+
+    G.map(function(g){ var P=porG[g], e0=estadoL(P[0]), igual=P.every(function(p){ return estadoL(p)[0]===e0[0]; });
+      var puede=P.filter(function(p){ return p.puede; }), conf=P.filter(function(p){ return p.confirmada&&!(p.pideCambio&&p.pideCambio.estado==='pendiente'); });
+      var pc=P.filter(function(p){ return p.pideCambio&&p.pideCambio.estado; });
+      return '<div class="nq-ped" data-grupo="'+esc(g)+'"><div class="cab"><b>'+esc(g)+'</b>'+(igual?'<span class="tag '+e0[1]+'">'+esc(e0[0])+'</span>':'')+'</div>'+
+        P.map(function(p){ var e=estadoL(p);
+          return '<div class="l">'+ic(SV51[p.servicio][2],15)+'<span style="flex:1;min-width:150px"><b>'+SV51[p.servicio][0]+'</b>'+(S.sedes.length>1?' · '+esc(sucDe(p.clienteId)):'')+'</span><span>'+fd(fechaDe(p))+(p.confirmada&&p.horaConf?' · '+esc(p.horaConf):'')+'</span>'+(igual?'':'<span class="tag '+e[1]+'">'+esc(e[0])+'</span>')+'</div>'; }).join('')+
+        pc.map(function(p){ var x=p.pideCambio;
+          return x.estado==='pendiente'?'<small class="n" style="color:#8a5a00"><b>Pidió '+(x.quitar?'cancelar':'cambiar a '+fd(x.fecha))+'</b> ('+esc(x.folio)+'). Logística lo revisa y le responde aquí.</small>'
+            :x.respuesta?'<small class="n">Su pedido de cambio '+esc(x.folio)+': '+esc(x.respuesta)+'</small>':''; }).join('')+
+        (P[0].cancelada||P[0].unidoA?'<small class="n">'+esc(P[0].respuesta||'')+'</small>':'<small class="n">Pedido el '+fd(P[0].fecha)+'</small>')+
+        (puede.length||conf.length?'<div class="acc">'+(puede.length?'<button class="btn sm" type="button" onclick="nqCambiar(\''+esc(g)+'\')">Cambiar</button><button class="btn sm" type="button" onclick="nqCancelar(\''+esc(g)+'\')">Cancelar</button>':'')+
+          (conf.length?'<button class="btn sm" type="button" onclick="nqPedirCambio(\''+esc(g)+'\')">Pedir un cambio</button>':'')+'</div>':'')+'</div>'; }).join('')+
+    '<div style="margin-top:12px"><button class="btn pri" type="button" onclick="queNecesita()">Pedir una visita</button></div></section>';
+}
+function editar(g,conf){
+  var P=grupoDe(g).filter(function(p){ return conf?p.confirmada&&!(p.pideCambio&&p.pideCambio.estado==='pendiente'):p.puede; }); if(!P.length) return;
+  NQ=nuevo(); NQ.edita=P.map(function(p){ return p.folio; }); NQ.pide=!!conf;
+  P.forEach(function(p){ var sv=p.servicio; NQ.srv[sv]=true; NQ.suc[sv]=NQ.suc[sv]||{}; NQ.suc[sv][p.clienteId]=true; NQ.fechas[sv]=NQ.fechas[sv]||fechaDe(p); });
+  NQ.fecha=fechaDe(P[0]); if(P.some(function(p){ return fechaDe(p)!==NQ.fecha; })) NQ.modo='cada';
+  NQ.horario=P[0].horario||'';
+  nqPintar();
+}
+window.nqCambiar=function(g){ editar(g,false); };
+window.nqPedirCambio=function(g){ editar(g,true); };
+window.nqCancelar=function(g){
+  var P=grupoDe(g).filter(function(p){ return p.puede; }); if(!P.length) return;
+  modal('<div class="qn"><h2>¿Cancelar el pedido '+esc(g)+'?</h2><div class="qn-res">'+P.map(function(p){ return '<div>'+ic(SV51[p.servicio][2],14)+' <b>'+SV51[p.servicio][0]+'</b> · '+esc(sucDe(p.clienteId))+' · '+fd(p.fechaPref)+'</div>'; }).join('')+'</div>'+
+    '<div class="campo"><label for="nq-m">¿Por qué? · opcional</label><input id="nq-m" maxlength="200" placeholder="Ej. Lo pedí dos veces por error"></div>'+
+    '<p class="qn-n">Logística recibe el aviso. Si quiere otra fecha, mejor use «Cambiar».</p><div id="qn-err" class="r-formerror" role="alert"></div><div class="pie"><button class="btn" type="button" onclick="cerrarModal()">No, dejarlo</button><button class="btn pri" type="button" id="nq-can" onclick="nqCancelarSi(\''+esc(g)+'\')">Sí, cancelar</button></div></div>');
+};
+window.nqCancelarSi=function(g){
+  var F=grupoDe(g).filter(function(p){ return p.puede; }).map(function(p){ return p.folio; }), b=$('nq-can'), e=$('qn-err'); ocupado(b,true);
+  llamar('api_ptlPedidoCancelar',SES,F,(($('nq-m')||{}).value||'').trim()).then(function(r){
+    ocupado(b,false); if(!r||!r.ok){ if(e) e.textContent=(r&&r.error)||'No se pudo cancelar.'; return; }
+    cerrarModal(); toast('Pedido cancelado. Logística ya lo sabe.'); cargar();
+  },function(){ ocupado(b,false); if(e) e.textContent='Sin conexión. Intente de nuevo.'; });
+};
+var UD='';
+window.nqUnir=function(){
+  var rec=visitas().filter(function(p){ return seVe(p)&&p.puede&&p.servicio==='recoleccion'; });
+  UD=''; NQ=nuevo(); NQ.dias='cargando';
+  var pinta=function(){ modal('<div class="qn"><h2>Unir en un solo día</h2><p class="qn-n">Pasamos por '+(S.sedes.length>1?rec.map(function(p){ return esc(sucDe(p.clienteId)); }).filter(function(x,i,a){ return a.indexOf(x)===i; }).join(' y '):'su local')+' el mismo día. ¿Cuál le queda bien?</p>'+chipsDias(UD,'nqUD','unir')+
+    '<div id="qn-err" class="r-formerror" role="alert"></div><div class="pie"><button class="btn" type="button" onclick="cerrarModal()">Cancelar</button><button class="btn pri" type="button" id="nq-un" onclick="nqUnirOk()">Unirlos</button></div></div>'); };
+  window.nqUD=function(x){ UD=x; pinta(); };
+  pinta();
+  llamar('api_ptlDiasDisponibles',SES,nivel()==='corp'?rec[0].clienteId:'').then(function(r){ NQ.dias=r||{ ok:false }; pinta(); },function(){ NQ.dias={ ok:false }; pinta(); });
+};
+window.nqUnirOk=function(){
+  var e=$('qn-err'), b=$('nq-un'); if(!UD){ if(e) e.textContent='Elija el día.'; return; }
+  var F=visitas().filter(function(p){ return seVe(p)&&p.puede&&p.servicio==='recoleccion'; }).map(function(p){ return p.folio; });
+  ocupado(b,true);
+  llamar('api_ptlPedidosUnir',SES,F,UD).then(function(r){
+    ocupado(b,false); if(!r||!r.ok){ if(e) e.textContent=(r&&r.error)||'No se pudo unir.'; return; }
+    cerrarModal(); toast('Listo: todo el '+fd(UD)+', en un solo pedido.'); cargar();
+  },function(){ ocupado(b,false); if(e) e.textContent='Sin conexión. Intente de nuevo.'; });
+};
+
+/* ═════ 3 · NUEVA SOLICITUD POR TEMA ═════ */
+var GRUPOS=[['servicio','Un servicio','Recolección o fumigación, en una o varias sucursales'],['insumos','Bolsas o envases','Van con su próxima visita'],
+  ['pagos','Facturas y pagos','Una duda, su estado de cuenta o un comprobante'],['docs','Certificados y documentos','Su certificado o papeles para el MINSA'],
+  ['asesoria','Asesoría','Capacitación, normas o una inspección'],['otro','Otra cosa','Cuéntenos con sus palabras']];
+var QUIEN={ pagos:'Le responde nuestro equipo de facturación, normalmente el mismo día hábil.', docs:'Le responde nuestro equipo en 1 día hábil.', asesoria:'Le contacta nuestro equipo de asesoría para coordinar.', otro:'Nuestro equipo lo lee y se lo pasa a quien corresponde.' };
+var Z={};
+function temas(){ return '<div class="sa-g">'+GRUPOS.map(function(g){ return '<button type="button" class="sa-t" onclick="saAbrir(\''+g[0]+'\')"><i>'+svg51(g[0])+'</i><span><b>'+g[1]+'</b><small>'+g[2]+'</small></span></button>'; }).join('')+'</div>'; }
+window.saMenu=function(){ modal('<div class="qn"><h2>¿En qué le ayudamos?</h2><p class="qn-n">Elija el tema y le mostramos solo lo que corresponde.</p>'+temas()+'<div class="pie"><button class="btn" type="button" onclick="cerrarModal()">Cerrar</button></div></div>'); };
+window.saAbrir=function(k,pre){
+  Z={ k:k, op:pre||'', fac:[], suc:'', nota:'', canal:'whatsapp' };
+  if(k==='servicio'){ cerrarModal(); return queNecesita(); }
+  if(k==='insumos'){ cerrarModal(); return pedirInsumos(); }
+  saPintar();
+};
+function cab(k){ var g=GRUPOS.find(function(x){ return x[0]===k; }); return '<div class="sa-h"><i>'+svg51(k,20)+'</i><h2>'+g[1]+'</h2></div>'; }
+function opciones(L){ return L.map(function(o){ return '<label class="sa-o'+(Z.op===o[0]?' on':'')+'"><input type="radio" name="sa-op"'+(Z.op===o[0]?' checked':'')+' onchange="saOp(\''+o[0]+'\')"><span><b>'+o[1]+'</b>'+(o[2]?'<small>'+o[2]+'</small>':'')+'</span></label>'; }).join(''); }
+function notaC(ph){ return '<div class="campo"><label for="sa-n">'+(Z.k==='otro'?'Cuéntenos qué necesita':'Cuéntenos más · opcional')+'</label><textarea id="sa-n" rows="3" maxlength="500" oninput="saNota(this.value)" placeholder="'+ph+'">'+esc(Z.nota)+'</textarea></div>'; }
+function canal(){ return '<label class="qn-l">¿Cómo prefiere que le contactemos?</label><div class="sa-cs">'+[['whatsapp','WhatsApp'],['llamada','Llamada'],['correo','Correo'],['portal','Aquí en el portal']].map(function(c){ return '<button type="button" class="'+(Z.canal===c[0]?'on':'')+'" onclick="saCanal(\''+c[0]+'\')">'+c[1]+'</button>'; }).join('')+'</div>'; }
+function sucSel(){ return S.sedes.length>1?'<div class="campo"><label for="sa-s">¿Para qué sucursal?</label><select id="sa-s" onchange="saSuc(this.value)"><option value="">Todas / no aplica</option>'+S.sedes.map(function(s){ return '<option value="'+esc(s.clienteId)+'"'+(Z.suc===s.clienteId?' selected':'')+'>'+esc(qnSuc(s))+'</option>'; }).join('')+'</select></div>':''; }
+function saPintar(){
+  var k=Z.k, h='<div class="qn">';
+  if(k==='pagos'){
+    var F=(S.facturas||[]), pend=F.filter(function(x){ return x.saldo>0.009; }), pag=F.filter(function(x){ return x.saldo<=0.009; }).slice(0,2);
+    h+=cab('pagos')+'<p class="qn-n">¿Qué necesita?</p>'+opciones([['duda','Tengo una duda con una factura','Un monto, un cargo o un dato que no cuadra'],['estado','Quiero mi estado de cuenta','Le enviamos el detalle de lo pagado y lo pendiente'],['pague','Ya pagué: subir el comprobante','Foto o PDF de su transferencia'],['dias','Necesito más días o pagar en partes','Lo conversamos sin compromiso']]);
+    if(Z.op==='duda') h+='<label class="qn-l">¿Cuál factura?</label>'+(F.length?pend.concat(pag).map(function(x){ var on=Z.fac.indexOf(x.factura)>=0; return '<label class="sa-o'+(on?' on':'')+'"><input type="checkbox"'+(on?' checked':'')+' onchange="saFac(\''+esc(x.factura)+'\',this.checked)"><span><b>'+mesDe(x.fecha)+' · N.º '+esc(nFac(x.factura))+'</b><small>'+(x.saldo>0.009?'Por pagar ':'Pagada · total ')+B(x.saldo>0.009?x.saldo:x.total)+'</small></span></label>'; }).join(''):'<p class="qn-n">No hay facturas en su cuenta todavía.</p>')+notaC('Ej. La factura de octubre trae dos visitas y solo tuvimos una.');
+    if(Z.op==='estado'||Z.op==='dias') h+=notaC(Z.op==='dias'?'Ej. Podemos pagar la mitad el 15 y el resto el 30.':'Ej. Lo necesito para nuestra auditoría.');
+  } else if(k==='docs'){
+    h+=cab('docs')+'<p class="qn-n">¿Qué documento necesita?</p>'+opciones([['cert','Mi certificado de servicio','El vigente, para el MINSA o su auditor'],['minsa','Papeles para una inspección del MINSA','Lo que suelen pedir: certificado, recibos, plan de manejo'],['otrodoc','Otro documento','']])+
+      (Z.op==='cert'&&(S.servicio||[]).length?'<div class="sa-who">Su certificado vigente ya está en <a href="#" onclick="cerrarModal();ir(\'certificados\');return false">Certificados</a>. Si necesita otro, pídalo aquí.</div>':'')+
+      (Z.op?sucSel()+notaC('Ej. La inspección es el jueves.')+'<div class="sa-who">Sus recibos de visita los descarga cuando quiera en <a href="#" onclick="cerrarModal();ir(\'recibos\');return false">Visitas</a>.</div>':'');
+  } else if(k==='asesoria'){
+    h+=cab('asesoria')+'<p class="qn-n">¿En qué le ayudamos?</p>'+opciones([['capa','Capacitación para mi personal','Cómo separar, rotular y guardar los desechos'],['norma','Una duda sobre las normas','Qué va en cada bolsa, cuánto puede guardar, etc.'],['insp','Prepararme para una inspección','Revisamos con usted lo que le van a pedir'],['otraas','Otra consulta','']])+
+      (Z.op?sucSel()+notaC('Ej. Tenemos personal nuevo en la sucursal.')+canal():'');
+  } else {
+    h+=cab('otro')+'<p class="qn-n">Escríbanos con sus palabras: nuestro equipo lo lee y se lo pasa a quien corresponde.</p>'+sucSel()+notaC('Ej. Queremos agregar una sucursal nueva.')+canal();
+  }
+  h+=(QUIEN[k]?'<div class="sa-who">'+QUIEN[k]+'</div>':'')+'<div id="qn-err" class="r-formerror" role="alert"></div><div class="pie"><button class="btn" type="button" onclick="saMenu()">Atrás</button><button class="btn pri" type="button" id="sa-env" onclick="saEnviar()">'+(k==='pagos'&&Z.op==='pague'?'Subir comprobante':k==='pagos'&&Z.op==='dias'?'Seguir':'Enviar')+'</button></div></div>';
+  modal(h);
+}
+window.saOp=function(o){ Z.op=o; saPintar(); };
+window.saNota=function(v){ Z.nota=v; };
+window.saCanal=function(c){ Z.canal=c; saPintar(); };
+window.saSuc=function(v){ Z.suc=v; };
+window.saFac=function(f,v){ Z.fac=Z.fac.filter(function(x){ return x!==f; }); if(v) Z.fac.push(f); saPintar(); };
+var CANAL={ whatsapp:'WhatsApp', llamada:'una llamada', correo:'correo', portal:'aquí en el portal' };
+window.saEnviar=function(){
+  var e=function(t){ var x=$('qn-err'); if(x) x.textContent=t; }, k=Z.k, n=Z.nota.trim(), d={ clienteId:Z.suc||'', fecha:'', horario:'' }, t='';
+  if(k==='pagos'){
+    if(!Z.op) return e('Elija qué necesita.');
+    if(Z.op==='pague'){ cerrarModal(); return comprobante(); }
+    if(Z.op==='dias'){ cerrarModal(); return ayudaPago(); }
+    if(Z.op==='duda'&&(S.facturas||[]).length&&!Z.fac.length) return e('Marque la factura.');
+    t=Z.op==='duda'?'Duda con la factura '+Z.fac.map(function(x){ return 'N.º '+nFac(x); }).join(', '):'Pide su estado de cuenta';
+    d.item='Facturas y pagos'; d.tipo='Consulta sobre mi factura o pago';
+  } else if(k==='docs'){
+    if(!Z.op) return e('Elija qué documento necesita.');
+    t={ cert:'Certificado de servicio', minsa:'Papeles para una inspección del MINSA', otrodoc:'Otro documento' }[Z.op];
+    if(Z.op==='otrodoc'&&n.length<3) return e('Cuéntenos qué documento necesita.');
+    d.item='Desechos peligrosos'; d.tipo='Consulta sobre certificado';
+  } else if(k==='asesoria'){
+    if(!Z.op) return e('Elija en qué le ayudamos.');
+    t={ capa:'Capacitación para su personal', norma:'Duda sobre las normas', insp:'Prepararse para una inspección', otraas:'Otra consulta de asesoría' }[Z.op];
+    d.item='Asesoría'; d.tipo='Asesoría';
+  } else {
+    if(n.length<3) return e('Cuéntenos qué necesita.');
+    t='Consulta'; d.item='Otro servicio'; d.tipo='Consulta';
+  }
+  d.nota=(t!=='Consulta'?t+'.':'')+(n?(t!=='Consulta'?' ':'')+n:'')+(k==='asesoria'||k==='otro'?' · Prefiere que le contacten por '+CANAL[Z.canal]+'.':'');
+  var b=$('sa-env'); ocupado(b,true);
+  llamar('api_ptlPedirServicio',SES,d).then(function(r){
+    ocupado(b,false); if(!r||!r.ok){ e((r&&r.error)||'No se pudo enviar. Intente de nuevo.'); return; }
+    modal('<div class="qn"><h2>'+ic('ok',20)+' Recibimos su solicitud</h2><p class="qn-n">Folio '+esc(r.folio)+'. '+(QUIEN[k]||'')+'</p><div class="qn-res"><div>'+svg51(k,15)+' <b>'+esc(t)+'</b>'+(Z.suc?' · '+esc(sucDe(Z.suc)):'')+'</div></div><p class="qn-n">La respuesta le llega aquí, en Solicitudes.</p><div class="pie"><button class="btn pri" type="button" onclick="cerrarModal()">Listo</button></div></div>');
+    cargar();
+  },function(){ ocupado(b,false); e('Sin conexión. Su mensaje no se envió: intente de nuevo en un momento.'); });
+};
+/* los botones de siempre (pedir, consulta de factura, certificado, servicio) abren el tema que corresponde */
+var sol0=window.solicitar;
+window.solicitar=function(tipo,serv,sede){
+  var s=String(serv||'')+' '+String(tipo||'');
+  if(/^(Cotización)$/.test(tipo||'')&&!/fumig/i.test(serv||'')) return sol0.apply(this,arguments);   /* las cotizaciones (sólidos, catálogo) siguen igual */
+  if(/peligros|fumig|recolecci|visita|cambio de fecha/i.test(s)) return queNecesita(/fumig/i.test(s)?'fumigacion':'recoleccion',sede);
+  if(/bolsa|envase|contenedor|punzo|productos/i.test(s)) return saAbrir('insumos');
+  if(/factura|pago/i.test(s)) return saAbrir('pagos');
+  if(/certificado/i.test(s)) return saAbrir('docs');
+  if(/asesor/i.test(s)) return saAbrir('asesoria');
+  return saAbrir('otro');
+};
+
+/* ═════ 4 · INICIO: botón arriba y «Lo próximo» ═════ */
+function proximos(){
+  var L=[];
+  visitas().filter(function(p){ return seVe(p)&&!p.cancelada&&!p.unidoA; }).forEach(function(p){ L.push({ f:fechaDe(p), sv:p.servicio, suc:String(p.clienteId), conf:!!p.confirmada, h:p.confirmada?p.horaConf:'' }); });
+  S.sedes.forEach(function(s){
+    ((s.confirmadas||[]).filter(function(c){ return c.fecha>=S.hoy; })).slice(0,1).forEach(function(c){ if(!L.some(function(x){ return x.f===c.fecha&&x.suc===String(s.clienteId)&&x.sv==='recoleccion'; })) L.push({ f:c.fecha, sv:'recoleccion', suc:String(s.clienteId), conf:true, h:c.hora||'' }); });
+    var fp=s.fum&&s.fum.proxima; if(fp&&fp.fecha>=S.hoy&&!L.some(function(x){ return x.f===fp.fecha&&x.suc===String(s.clienteId)&&x.sv==='fumigacion'; })) L.push({ f:fp.fecha, sv:'fumigacion', suc:String(s.clienteId), conf:true, h:fp.hora||'' });
+  });
+  return L.filter(function(x){ return x.f&&x.f>=S.hoy; }).sort(function(a,b){ return a.f.localeCompare(b.f); });
+}
+function linea(x){ var d=new Date(x.f+'T12:00:00');
+  return '<div class="in-l"><div class="d"><b>'+d.getDate()+'</b><span>'+MES[d.getMonth()]+'</span></div><div class="tx"><b>'+(x.sv==='fumigacion'?'Fumigación':'Recolección')+(S.sedes.length>1?' · '+esc(sucDe(x.suc)):'')+'</b><small>'+(x.f===S.hoy?'hoy':DS[d.getDay()])+(x.h?' · '+(x.conf?'cerca de las ':'')+esc(x.h):'')+'</small></div><span class="tag '+(x.conf?'t-ok">Confirmada':'t-info">Por confirmar')+'</span></div>'; }
+function filaFum(){
+  var s=S.sedes.find(function(x){ return x.fum&&!x.fum.proxima; }); if(!s) return '';
+  var F=s.fum, ab=visitas().find(function(p){ return !p.cerrada&&!p.cancelada&&!p.unidoA&&p.servicio==='fumigacion'&&String(p.clienteId)===String(s.clienteId); });
+  if(F.toca) return '<div class="in-l"><div class="d" style="background:#fff3df"><b style="color:#8a5a00;font-size:14px">'+ic('calendario',16)+'</b></div><div class="tx"><b>'+(ab?'Ya recibimos su pedido de fumigación':'Le toca su fumigación')+'</b><small>'+(ab?'Solicitud '+esc(ab.folio)+' · por confirmar':(F.ultima?'La última el '+f(F.ultima)+' · ':'')+esc(F.frec||''))+'</small></div>'+(ab?'':'<button class="btn sm" type="button" onclick="queNecesita(\'fumigacion\',\''+esc(s.clienteId)+'\')">Agendar</button>')+'</div>';
+  return '<div class="in-l"><div class="d" style="background:#eaf6e4"><b style="color:#2f9e44;font-size:14px">'+ic('ok',16)+'</b></div><div class="tx"><b>Fumigación al día</b><small>'+(S.sedes.length>1?esc(qnSuc(s))+' · ':'')+(F.ultima?'la última el '+f(F.ultima)+' · ':'')+esc(F.frec||'')+'</small></div></div>';
+}
+function inicio351(){
+  var m=$('main'); if(!m||(S.cuenta&&S.cuenta.estado==='suspendida')) return;
+  var q=m.querySelector('.qn-ini'); if(q) q.remove();
+  var h1=m.querySelector('h1'); if(h1&&!m.querySelector('.in-top')){
+    var baj=h1.nextElementSibling&&h1.nextElementSibling.classList.contains('bajada')?h1.nextElementSibling:null, w=document.createElement('div'), t=document.createElement('div');
+    w.className='in-top'; h1.parentNode.insertBefore(w,h1); w.appendChild(t); t.appendChild(h1); if(baj) t.appendChild(baj);
+    w.insertAdjacentHTML('beforeend','<button class="btn pri sm" type="button" onclick="queNecesita()">Pedir una visita</button>');
+  }
+  if(nivel()==='corp') return;
+  var rn=m.querySelector('.r-next'); if(!rn||rn.classList.contains('sg-hoy')||rn.classList.contains('nuevo')||rn.classList.contains('fum')) rn=null;
+  if(!rn) return;
+  var L=proximos().slice(0,3);
+  rn.outerHTML='<section class="card in-prox"><h3>Lo próximo<span class="sp"></span><a href="#" onclick="ir(\'calendario\');return false">Ver calendario</a></h3>'+
+    (L.length?L.map(linea).join(''):'<p class="qn-n" style="margin:4px 0">No tiene visitas confirmadas todavía. <a href="#" onclick="queNecesita();return false">Pedir una visita</a></p>')+filaFum()+'</section>';
+  m.querySelectorAll('.r-alert.fum, .r-next.fum').forEach(function(x){ x.remove(); });
+}
+
+/* ═════ 5 · EN CAMINO en un día sin visita ═════ */
+function enCamino351(){
+  var m=$('main'); if(!m||nivel()==='corp') return;
+  var vac=m.querySelector('.r-empty'); if(!vac||!/no tiene una recolección programada/.test(vac.textContent)) return;
+  var s=S.sedes[0]||{}, x=proximos().filter(function(y){ return y.sv==='recoleccion'; })[0], u=s.ultimaVisita, d=x?new Date(x.f+'T12:00:00'):null;
+  var st=function(k,t){ return '<div><i>'+(k==='pin'||k==='reloj'?svg51(k,18):ic(k,18))+'</i>'+t+'</div>'; };
+  var h='<section class="card in-prox"><h3>Su próxima visita</h3>'+(x?'<div class="in-l"><div class="d"><b>'+d.getDate()+'</b><span>'+MES[d.getMonth()]+'</span></div><div class="tx"><b>Recolección'+(S.sedes.length>1?' · '+esc(sucDe(x.suc)):'')+'</b><small>'+fd(x.f)+(x.h?' · cerca de las '+esc(x.h):x.conf?'':' · la fecha se la confirma Logística')+'</small></div><span class="tag '+(x.conf?'t-ok">Confirmada':'t-info">Por confirmar')+'</span></div>'
+      :'<p class="qn-n" style="margin:4px 0">No tiene visitas próximas. <a href="#" onclick="queNecesita();return false">Pedir una visita</a></p>')+
+    '<p class="qn-n" style="margin:10px 0 0">Ese día, aquí verá:</p><div class="sg-pv">'+st('camion','Salió el camión')+st('pin','Por dónde va')+st('reloj','Hora de llegada')+st('ok','Su recibo')+'</div></section>';
+  if(u&&u.fecha){ var du=new Date(u.fecha+'T12:00:00');
+    h+='<section class="card in-prox"><h3>Así fue su última visita<span class="sp"></span><a href="#" onclick="ir(\'recibos\');return false">Ver recibos</a></h3><div class="in-l"><div class="d"><b>'+du.getDate()+'</b><span>'+MES[du.getMonth()]+'</span></div><div class="tx"><b>Recolección</b><small>'+(u.recibo?'Recibo '+esc(u.recibo):fl(u.fecha))+'</small></div><button class="btn sm" type="button" onclick="ir(\'recibos\')">Ver</button></div>'+
+      '<div class="sg-ul"><div><span>Llegó</span><b>'+esc(u.desde||'—')+'</b></div><div><span>Estuvo</span><b>'+(u.minutos!=null?u.minutos+' min':'—')+'</b></div><div><span>Se llevó</span><b>'+String(u.kg||0).replace('.',',')+' kg</b></div></div></section>'; }
+  if(!VISTA&&S.sedes.length===1&&s.tieneWhats){ var a=s.aceptaWhats||'';
+    h+='<section class="card in-prox"><div class="in-l" style="border:0"><div class="d"><b>'+ic('chat',18)+'</b></div><div class="tx"><b>'+(a==='si'?'Le avisamos por WhatsApp':'¿Le avisamos por WhatsApp?')+'</b><small>Cuando su recolección quede confirmada, con el día y la hora aproximada.</small></div>'+
+      (a==='si'?'<button class="btn sm" type="button" onclick="w48(false)">No quiero avisos</button>':'<button class="btn sm pri" type="button" onclick="w48(true)">Sí, avisarme</button>')+'</div></section>'; }
+  vac.outerHTML=h;
+}
+
+/* ═════ enganche: pintar ═════ */
+var p0=window.pintar;
+window.pintar=function(){
+  p0.apply(this,arguments);
+  try{
+    if(!S) return;
+    if(V==='solicitudes'){ var m=$('main'), fr=$('r-request'), sec=fr&&fr.closest('section');
+      if(sec) sec.outerHTML='<section class="card sa-card"><h3>Nueva solicitud</h3><p class="sub">¿En qué le ayudamos? Elija el tema.</p>'+temas()+'</section>';
+      var vp=vPedidos(); if(vp&&m){ var tt=m.querySelector('.bajada')||m.querySelector('h1'); if(tt) tt.insertAdjacentHTML('afterend',vp); else m.insertAdjacentHTML('afterbegin',vp); } }
+    if(V==='inicio') inicio351();
+    if(V==='seguimiento') enCamino351();
+  }catch(e){ if(window.console) console.error(e); }
+};
+})();
+</script>
 </body>
 </html>
