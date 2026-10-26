@@ -2415,7 +2415,7 @@ function nqDias(){
   if(NQ.dias) return;
   var v=lineas().filter(function(l){ return !l.contratar; })[0]; if(!v){ NQ.dias={ ok:false }; return; }
   NQ.dias='cargando';
-  llamar('api_ptlDiasDisponibles',SES,nivel()==='corp'?v.suc:'').then(function(r){ NQ.dias=r||{ ok:false }; if(NQ.paso===3) nqPintar(); },function(){ NQ.dias={ ok:false }; if(NQ.paso===3) nqPintar(); });
+  llamar('api_ptlDiasDisponibles',SES,v.suc).then(function(r){ NQ.dias=r||{ ok:false }; if(NQ.paso===3) nqPintar(); },function(){ NQ.dias={ ok:false }; if(NQ.paso===3) nqPintar(); });
 }
 function nqPintar(){
   var h='<div class="qn">'+pasos();
@@ -2605,7 +2605,7 @@ window.nqUnir=function(){
     '<div id="qn-err" class="r-formerror" role="alert"></div><div class="pie"><button class="btn" type="button" onclick="cerrarModal()">Cancelar</button><button class="btn pri" type="button" id="nq-un" onclick="nqUnirOk()">Unirlos</button></div></div>'); };
   window.nqUD=function(x){ UD=x; pinta(); };
   pinta();
-  llamar('api_ptlDiasDisponibles',SES,nivel()==='corp'?rec[0].clienteId:'').then(function(r){ NQ.dias=r||{ ok:false }; pinta(); },function(){ NQ.dias={ ok:false }; pinta(); });
+  llamar('api_ptlDiasDisponibles',SES,rec[0].clienteId).then(function(r){ NQ.dias=r||{ ok:false }; pinta(); },function(){ NQ.dias={ ok:false }; pinta(); });
 };
 window.nqUnirOk=function(){
   var e=$('qn-err'), b=$('nq-un'); if(!UD){ if(e) e.textContent='Elija el día.'; return; }
@@ -2769,6 +2769,76 @@ window.pintar=function(){
       var vp=vPedidos(); if(vp&&m){ var tt=m.querySelector('.bajada')||m.querySelector('h1'); if(tt) tt.insertAdjacentHTML('afterend',vp); else m.insertAdjacentHTML('afterbegin',vp); } }
     if(V==='inicio') inicio351();
     if(V==='seguimiento') enCamino351();
+  }catch(e){ if(window.console) console.error(e); }
+};
+})();
+</script>
+<style id="estilo-353">
+.sd53{display:flex;gap:6px;flex-wrap:wrap;align-items:center;margin:2px 0 14px;padding:8px 10px;background:#fff;border:1px solid var(--linea,#e1e6ee);border-radius:14px}
+.sd53>span{font-size:12px;color:var(--gris,#667489);margin-right:2px}
+.sd53 button{border:1.5px solid #dfe5ec;background:#fff;border-radius:999px;padding:7px 12px;font:700 13px var(--letra,Archivo),sans-serif;color:var(--marca,#14306b);cursor:pointer}
+.sd53 button.on{background:var(--marca,#14306b);color:#fff;border-color:var(--marca,#14306b)}
+.sd53 small{flex-basis:100%;font-size:12px;color:var(--gris,#667489);margin-top:2px}
+.sd53-bien{background:#eaf6e4;border:1px solid #bfe3b0;color:#1e5b0a;border-radius:12px;padding:10px 12px;font-size:13.5px;margin:0 0 12px;display:flex;gap:10px;align-items:flex-start}
+.sd53-bien span{flex:1}.sd53-bien button{border:0;background:none;color:#1e5b0a;font:700 13px var(--letra,Archivo),sans-serif;cursor:pointer;text-decoration:underline}
+</style>
+<script id="js-353">
+/* ═══════════════════════════════════════════════════════════════════
+   api 3.53 · ADMINISTRADORA DE SEDES (aprobado por Álvaro el 26 oct; Maqueta_administradora_sedes_por_separado)
+   · Quien ECOVSA nombra administradora ve sus sedes con un selector arriba, por el NOMBRE de cada sede
+     (el de su ficha, lo que va después del guion: «San Francisco», «Costa del Este»).
+   · Inicio, Solicitudes y Pagos: «Todas» o una sede. Servicios, Calendario, En camino, Visitas y Certificados:
+     una sede a la vez (cada una tiene su frecuencia, sus fechas y sus recibos).
+   · Al elegir una sede, el portal se arma con solo esa sede: todo lo de siempre funciona igual que para un
+     cliente de una sola sede (pedir, «está lleno», avisos por WhatsApp…).
+   · Para los demás clientes (una sede, corporativo) no cambia nada.
+   ═══════════════════════════════════════════════════════════════════ */
+(function(){
+var SEG='', SEL='', FULL=null, POR_SEDE=['seguimiento','calendario','servicios','recibos','certificados'];
+try{ SEL=localStorage.getItem('ptl_sede53')||''; }catch(e){}
+function adm(){ return !!(FULL&&FULL.yo&&FULL.yo.admin&&FULL.sedes&&FULL.sedes.length>1&&nivel()!=='corp'); }
+function nom(s){ return s.sucursal||String(s.nombre||'').replace(/^.*\s-\s/,''); }
+function solo(F,s){
+  return Object.assign({},F,{ sedes:[s], _s53:1,
+    recibos:(F.recibos||[]).filter(function(r){ return r.sede===s.nombre; }),
+    certificados:(F.certificados||[]).filter(function(c){ return !c.sede||c.sede===s.nombre; }),
+    pedidos:(F.pedidos||[]).filter(function(p){ return !p.clienteId||String(p.clienteId)===String(s.clienteId); }),
+    servicio:(F.servicio||[]).filter(function(c){ return c.tipo==='cuenta'||!c.establecimiento||c.establecimiento===s.nombre; }),
+    facturas:(F.facturas||[]).filter(function(f){ return f.sedeId===s.clienteId; }) });
+}
+window.sede53=function(id){ SEL=id||''; try{ localStorage.setItem('ptl_sede53',SEL); }catch(e){} window.scrollTo(0,0); pintar(); };
+window.sede53Visto=function(){ try{ localStorage.setItem('ptl_adm53',String(FULL.yo.adminEn||'1')); }catch(e){} pintar(); };
+/* «En camino» de la sede elegida */
+var ll0=window.llamar;
+window.llamar=function(fn){ var a=[].slice.call(arguments); if(fn==='api_ptlSeguimiento'&&adm()&&a.length<3&&S&&S.sedes&&S.sedes[0]) a.push(S.sedes[0].clienteId); return ll0.apply(this,a); };
+var p0=window.pintar;
+window.pintar=function(){
+  if(!S) return p0.apply(this,arguments);
+  if(!S._s53) FULL=S;
+  if(!adm()){ S=FULL; return p0.apply(this,arguments); }
+  var porSede=POR_SEDE.indexOf(V)>=0, id=SEL||(porSede?FULL.sedes[0].clienteId:''), s=id?FULL.sedes.find(function(x){ return x.clienteId===id; }):null;
+  if(id&&!s){ SEL=''; id=porSede?FULL.sedes[0].clienteId:''; s=id?FULL.sedes[0]:null; }
+  S=s?solo(FULL,s):FULL;
+  p0.apply(this,arguments);
+  /* la sede cambió: «En camino» se vuelve a pedir para la nueva */
+  if((V==='seguimiento'||V==='inicio')&&S.sedes[0]&&SEG!==S.sedes[0].clienteId&&window.sgActualizar){ SEG=S.sedes[0].clienteId; setTimeout(sgActualizar,0); }
+  try{
+    var m=$('main'); if(!m||m.querySelector('.sd53')) return;
+    var top=m.querySelector('.in-top')||m.querySelector('h1'); if(!top) return;
+    var bj=top.nextElementSibling&&top.nextElementSibling.classList.contains('bajada')?top.nextElementSibling:top;
+    var h='<div class="sd53" role="group" aria-label="Sede"><span>Sede:</span>'+(porSede?'':'<button type="button" class="'+(!s?'on':'')+'" onclick="sede53(\'\')">Todas</button>')+
+      FULL.sedes.map(function(x){ return '<button type="button" class="'+(s&&s.clienteId===x.clienteId?'on':'')+'" onclick="sede53(\''+esc(x.clienteId)+'\')">'+esc(nom(x))+'</button>'; }).join('')+
+      (porSede?'<small>Esta pantalla se ve por sede.</small>':'')+'</div>';
+    var visto=''; try{ visto=localStorage.getItem('ptl_adm53')||''; }catch(e){}
+    if(V==='inicio'&&!VISTA&&visto!==String(FULL.yo.adminEn||'1')) h='<div class="sd53-bien"><span><b>Ya puede administrar sus '+FULL.sedes.length+' sedes</b> desde aquí, con su mismo PIN. Elija abajo cuál quiere ver.</span><button type="button" onclick="sede53Visto()">Entendido</button></div>'+h;
+    bj.insertAdjacentHTML('afterend',h);
+    if(V==='inicio'){
+      var b=m.querySelector('.bajada'); if(b) b.textContent=s?nom(s)+(s.frecuencia?' · Frecuencia '+String(s.frecuencia).toLowerCase():''):'Administradora de '+FULL.sedes.length+' sedes';
+      if(!s){ var so=m.querySelector('.so-b'); if(so&&so.parentNode) so.parentNode.removeChild(so); }   /* «Sus servicios» va por sede */
+    }
+    if(V==='facturas'&&s&&(FULL.facturas||[]).some(function(f){ return !f.sedeId; })) {
+      var t=m.querySelector('.sd53'); if(t) t.insertAdjacentHTML('afterend','<p class="qn-n" style="margin:-6px 0 12px">Las facturas a nombre de la cuenta (sin sede) se ven en «Todas».</p>');
+    }
   }catch(e){ if(window.console) console.error(e); }
 };
 })();
