@@ -2737,7 +2737,7 @@ function inicio351(){
   var L=proximos().slice(0,3);
   rn.outerHTML='<section class="card in-prox"><h3>Lo próximo<span class="sp"></span><a href="#" onclick="ir(\'calendario\');return false">Ver calendario</a></h3>'+
     (L.length?L.map(linea).join(''):'<p class="qn-n" style="margin:4px 0">No tiene visitas confirmadas todavía. <a href="#" onclick="queNecesita();return false">Pedir una visita</a></p>')+filaFum()+'</section>';
-  m.querySelectorAll('.r-alert.fum, .r-next.fum').forEach(function(x){ x.remove(); });
+  m.querySelectorAll('.r-alert.fum, .r-next').forEach(function(x){ if(!x.classList.contains('sg-hoy')&&!x.classList.contains('nuevo')) x.remove(); });   /* «Lo próximo» ya trae el pedido (3.44), la fecha confirmada y la fumigación */
 }
 
 /* ═════ 5 · EN CAMINO en un día sin visita ═════ */
