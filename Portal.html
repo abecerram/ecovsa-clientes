@@ -888,12 +888,17 @@ function vRecibos(){
   var R=S.recibos;
   return titulo('Recibos de visita','Cada visita de ECOVSA, con su recibo firmado en el establecimiento')+'<div class="card">'+(R.length?R.map(filaRec).join(''):'<p style="color:var(--gris)">Todavía no hay visitas registradas.</p>')+'</div>';
 }
+/* api 3.56 · corporativo: el informe de cada clínica por mes (no es certificado; el certificado legal es de la corporación) */
+function infMes(m){ var M=['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre']; return M[+m.slice(5,7)-1]+' '+m.slice(0,4); }
+function filasInf(I,conSede){ return I.map(function(x){ return '<div class="fila"><div class="tx"><b>Informe de '+esc(infMes(x.mes))+'</b><small>'+(conSede?esc(x.sede)+' · ':'')+x.visitas+' visita'+(x.visitas===1?'':'s')+' · '+kg(x.kg)+' kg</small></div><a class="btn sm" href="'+esc(doc(x.url))+'" target="_blank" rel="noopener">Ver</a></div>'; }).join(''); }
+function cardInf(I,conSede){ return I.length?'<div class="card" style="margin-top:14px"><h3>Informes de la clínica <span class="tag t-gris" style="margin-left:6px">no son certificados</span></h3><p style="color:var(--gris);margin:0 0 8px;font-size:13px">El certificado de tratamiento y disposición final es uno solo, de la corporación. Estos informes muestran las visitas y los kilos de cada clínica por mes.</p>'+filasInf(I,conSede)+'</div>':''; }
 function vCerts(){
   var C=S.certificados;
   return titulo('Certificados','El certificado de servicio y los de tratamiento y disposición final por periodo')+
     '<div class="card" style="margin-bottom:14px"><h3>Certificado de servicio</h3>'+certServicio()+'</div>'+
     '<div class="card"><h3>Tratamiento y disposición final</h3>'+(C.length?C.map(function(c){ return '<div class="fila"><div class="tx"><b>'+esc(c.folio)+'</b><small>'+(nivel()==='corp'?esc(c.sede)+' · ':'')+'Del '+f(c.desde)+' al '+f(c.hasta)+' · '+kg(c.kg)+' kg</small></div>'+
-      (c.cerrado?'<span class="tag t-warn" title="Se libera al confirmar el pago del periodo">🔒 Se libera al pagar</span>':'<a class="btn sm" href="'+esc(doc(c.url))+'" target="_blank" rel="noopener">Descargar</a>')+'</div>'; }).join(''):'<p style="color:var(--gris);margin:0">Todavía no hay certificados emitidos. Se emiten por periodo.</p>')+'</div>';
+      (c.cerrado?'<span class="tag t-warn" title="Se libera al confirmar el pago del periodo">🔒 Se libera al pagar</span>':'<a class="btn sm" href="'+esc(doc(c.url))+'" target="_blank" rel="noopener">Descargar</a>')+'</div>'; }).join(''):'<p style="color:var(--gris);margin:0">Todavía no hay certificados emitidos. Se emiten por periodo.</p>')+'</div>'+
+    cardInf(S.informes||[],nivel()!=='sede');   // api 3.56
 }
 
 /* ── facturas y pagos (v11) ── */
@@ -1160,6 +1165,7 @@ function vSede(id){
   h+=s.lleno&&s.lleno.abierta?'<div class="ll-card ya" style="margin-top:14px"><span class="il">'+ilu('lleno')+'</span><span class="tx"><b>Esta sede avisó que su depósito está lleno</b><small>Aviso '+esc(s.lleno.abierta.folio)+' del '+f(s.lleno.abierta.fecha)+'. Logística lo está programando.</small></span><span class="tag t-info">En proceso</span></div>':'';
   h+='<div class="grid g-ini" style="margin-top:14px"><div class="card"><h3>Últimas visitas de la sede</h3>'+(R.length?R.slice(0,5).map(filaRec).join(''):'<p style="color:var(--gris)">Todavía no hay visitas registradas.</p>')+'</div>'+
     '<div class="card"><h3>Certificados de tratamiento</h3>'+(C.length?C.slice(0,6).map(function(c){ return '<div class="fila"><div class="tx"><b>'+esc(c.folio)+'</b><small>Del '+f(c.desde)+' al '+f(c.hasta)+' · '+kg(c.kg)+' kg</small></div>'+(c.cerrado?'<span class="tag t-warn" title="Se libera al confirmar el pago del periodo">🔒 Se libera al pagar</span>':'<a class="btn sm" href="'+esc(doc(c.url))+'" target="_blank" rel="noopener">Descargar</a>')+'</div>'; }).join(''):'<p style="color:var(--gris);margin:0">Todavía no hay certificados de esta sede. Se emiten por periodo.</p>')+
+    ((S.informes||[]).some(function(x){ return x.sede===s.nombre; })?'<h3 style="margin-top:18px">Informes de la clínica <span class="tag t-gris" style="margin-left:6px">no son certificados</span></h3>'+filasInf(S.informes.filter(function(x){ return x.sede===s.nombre; }),false):'')+   // api 3.56
     '<h3 style="margin-top:18px">Quién de esta sede entra al portal</h3>'+(E.length?E.map(function(p){ return '<div class="fila"><div class="tx"><b>'+esc(p.nombre)+'</b><small>'+esc(p.cargo)+'</small></div>'+(p.estado==='activo'?'<span class="tag t-ok">Activo</span>':'<span class="tag t-warn">Invitado</span>')+'</div>'; }).join(''):'<p style="color:var(--gris);margin:0 0 8px">Nadie de esta sede tiene acceso todavía.</p>')+
     '<button class="btn sm" style="margin-top:8px" onclick="pedirPersona()">Pedir un acceso para esta sede</button></div></div>';
   setTimeout(enganchar,0);
