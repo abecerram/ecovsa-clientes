@@ -2849,5 +2849,72 @@ window.pintar=function(){
 };
 })();
 </script>
+<script id="js-364">
+/* ═══ api 3.64 · Parte 3 · «Sus servicios con ECOVSA» con lo contratado de verdad, por sede ═══
+   Cada servicio con su estado real (Contratado, con su frecuencia, o Disponible para pedirlo), lo que empieza más adelante
+   («Empieza el 3 nov») y los insumos incluidos con cada cuánto se entregan. Nunca precios. */
+(function(){
+  var CSS = '.s63 h3 small{font-weight:600;color:var(--mu,#667489);text-transform:none;letter-spacing:0;font-size:13px}' +
+    '.s63 .g3{gap:12px}.s63 .srv .tag.t-ok{background:#e6f4ea;color:#1e6b34}.s63 .srv small.pr{color:#51607a;font-size:12.5px}' +
+    '.s63 .srv .act{margin-top:auto;padding-top:6px}.s63 .srv.dis small{color:#3b5a2a}' +
+    '.s63-ins{margin-top:14px;border-top:1px solid var(--linea,#e3e9f0);padding-top:12px}' +
+    '.s63-ins h4{margin:0 0 8px;font-size:12px;letter-spacing:.6px;text-transform:uppercase;color:#5b6a80}' +
+    '.s63-it{display:flex;align-items:center;gap:12px;padding:8px 0;border-bottom:1px solid #f0f3f7}.s63-it:last-of-type{border-bottom:0}' +
+    '.s63-it .q{flex:none;min-width:34px;height:34px;border-radius:10px;background:#eef3fb;color:#0C5395;display:grid;place-items:center;font-weight:800}' +
+    '.s63-it .tx{flex:1;min-width:0}.s63-it b{display:block;font-size:14px}.s63-it small{color:#667489;font-size:12.5px}' +
+    '.s63-it .tag{flex:none}.s63-ins .pie{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-top:10px}.s63-ins .pie span{color:#667489;font-size:12.5px}' +
+    '@media (max-width:820px){.s63 .g3{grid-template-columns:minmax(0,1fr)}}';
+  var st = document.createElement('style'); st.textContent = CSS; document.head.appendChild(st);
+  function accion(t, on, k) { return '<button class="btn ' + (k || '') + '" type="button" onclick="' + on + '">' + t + '</button>'; }
+  function esNuevo() { return !(S.recibos || []).length; }
+  var MESC = ['ene', 'feb', 'mar', 'abr', 'may', 'jun', 'jul', 'ago', 'sep', 'oct', 'nov', 'dic'];
+  function fc(d) { var p = String(d || '').split('-'); return p.length === 3 ? Number(p[2]) + ' ' + MESC[Number(p[1]) - 1] : d; }
+  function caja(ico, nom, on, desde, filas, accionHtml, disTexto, disBoton) {
+    if (!on) return '<div class="srv dis"><div class="cab"><span class="ic">' + ilu(ico) + '</span><b>' + nom + '</b><span class="tag t-ok" style="background:#fff">Disponible</span></div>' +
+      '<small>' + disTexto + '</small><div class="act">' + disBoton + '</div></div>';
+    return '<div class="srv"><div class="cab"><span class="ic">' + ilu(ico) + '</span><b>' + nom + '</b><span class="tag ' + (desde ? 't-info' : 't-ok') + '">' + (desde ? 'Empieza el ' + fc(desde) : 'Contratado') + '</span></div>' +
+      '<div class="dd">' + filas.map(function (x) { return '<div><span>' + x[0] + '</span><b>' + x[1] + '</b></div>'; }).join('') + '</div>' + (accionHtml ? '<div class="act">' + accionHtml + '</div>' : '') + '</div>';
+  }
+  window.susServicios63 = function () {
+    var s = S.sedes[0] || {}, c = s.contratado || {}, k = s.contratado62 || {}, ini = k.empieza || {}, nv = esNuevo();
+    var fum = s.fum || {}, sol = k.solidos || {};
+    var h = '<div class="card so-b s63"><h3>Sus servicios con ECOVSA' + (S.sedes.length === 1 && FULLN() > 1 ? '<small> · ' + esc(s.sucursal || s.nombre || '') + '</small>' : '') + '</h3><div class="grid g3">' +
+      caja('bolsas', 'Desechos peligrosos', c.peligrosos !== false, ini.peligrosos, [['Frecuencia', esc(cap(s.frecuencia) || '—')], ['Próxima visita', nv ? 'Por coordinar' : proximaTxt(s.lleno)]],
+        accion(nv ? 'Solicitar primera recolección' : 'Hacer una solicitud', nv ? "solicitar('Primera recolección','Desechos peligrosos')" : "solicitar('Programar visita','Desechos peligrosos')", 'sm'),
+        'Recolección, transporte y tratamiento de sus desechos hospitalarios.', accion('Agregarlo a mi servicio', "pedir('Desechos peligrosos')", 'verde sm')) +
+      caja('solidos', 'Desechos sólidos', !!c.solidos, ini.solidos, [['Frecuencia', esc(cap(sol.frec || s.frecuencia) || '—')], ['Quién lo programa', 'Su ruta de sólidos']], '',
+        'Su basura común, en los días que elija. Un solo proveedor, todo en su portal.', accion('Agregarlo a mi servicio', "pedir('Desechos sólidos')", 'verde sm')) +
+      caja('fumiga', 'Fumigación', !!c.fumigacion, ini.fumigacion, [['Frecuencia', esc(fum.frec || '—')], ini.fumigacion ? ['Empieza', fc(ini.fumigacion)] : fum.toca ? ['Próxima', 'Le toca'] : fum.proxima ? ['Próxima', f(fum.proxima)] : ['Última', fum.ultima ? f(fum.ultima) : '—']],
+        ini.fumigacion ? '' : accion(fum.toca ? 'Agendar mi fumigación' : 'Pedir una fumigación', "pedir(FUM_ITEM)", 'sm'),
+        'Control de plagas en su local, con su constancia.', accion('Agregarlo a mi servicio', "pedir(FUM_ITEM)", 'verde sm')) + '</div>';
+    var L = k.insumos || [];
+    h += '<div class="s63-ins"><h4>Insumos incluidos en su servicio</h4>' + (L.length ? L.map(function (i) {
+        return '<div class="s63-it"><span class="q">' + esc(i.cantidad) + '</span><div class="tx"><b>' + esc(i.nombre) + '</b><small>' + esc(i.cada) + '</small></div>' +
+          (i.desde ? '<span class="tag t-info">Empieza el ' + fc(i.desde) + '</span>' : i.toca ? '<span class="tag t-warn">Le toca en su próxima visita</span>' : '<span class="tag t-ok">Entregado ' + esc(i.yaTxt || 'este mes') + '</span>') + '</div>';
+      }).join('') : '<p style="margin:0;color:#667489;font-size:13.5px">Su servicio no incluye insumos.</p>') +
+      ((S.insumosCat || []).length ? '<div class="pie">' + accion(L.length ? 'Pedir más' : 'Pedir bolsas o envases', 'pedirInsumos()', 'sm') + '<span>Van con su próxima visita.' + (L.length ? ' Lo que pida además de lo incluido se cobra aparte.' : '') + '</span></div>' : '') + '</div></div>';
+    return h;
+  };
+  function FULLN() { return (window.FULL && FULL.sedes) ? FULL.sedes.length : S.sedes.length; }
+  var s0 = susServicios;
+  susServicios = window.susServicios = function () { return S.sedes.length === 1 ? susServicios63() : s0.apply(this, arguments); };
+  /* el Inicio y Servicios y productos pintan su tarjeta adentro: se cambia por la nueva cuando se ve una sola sede */
+  function cambiar(h) {
+    if (S.sedes.length !== 1 || h.indexOf('so-b') < 0) return h;
+    var d = document.createElement('div'); d.innerHTML = h;
+    var c = d.querySelector('.so-b'); if (!c || c.classList.contains('s63')) return h;
+    c.outerHTML = susServicios63(); return d.innerHTML;
+  }
+  var vi0 = window.vInicio; window.vInicio = function () { return cambiar(vi0.apply(this, arguments)); };
+  /* «Servicios y productos»: lo que ya tiene no se le ofrece como nuevo */
+  var vs0 = window.vServicios;
+  window.vServicios = function () {
+    var h = cambiar(vs0.apply(this, arguments)), s = S.sedes.length === 1 ? S.sedes[0] : null;
+    if (s && s.contratado && s.contratado.solidos) h = h.replace(/<div class="sv-dest">[\s\S]*?Quiero una cotización<\/button><\/div><\/div>/, '');
+    return h;
+  };
+})();
+
+</script>
 </body>
 </html>
