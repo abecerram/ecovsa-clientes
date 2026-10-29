@@ -1596,7 +1596,7 @@ function k2tol(dias){ return Math.min(15,Math.floor((dias||30)/2)); }
 function k2cerca(L,x,tol){ return L.some(function(k){ return Math.abs((k2dt(x)-k2dt(k))/864e5)<=tol; }); }
 function k2eventos(){
   if(K2EV&&K2EVS===S) return K2EV;
-  var R=k2rango(), ev=[], multi=k2multi(), hoy=S.hoy, cp=nivel()==='corp';
+  var R=k2rango(), ev=[], multi=k2multi(), hoy=S.hoy;
   S.sedes.forEach(function(s){
     var id=s.clienteId, nom=s.nombre, rec=S.recibos.filter(function(r){ return r.sede===s.nombre&&r.fecha>=R[0]&&r.fecha<=R[1]; });
     rec.forEach(function(r){ ev.push({ site:id, name:nom, date:r.fecha, status:'realizada', kg:Number(r.kg)||0, tipo:'rec' }); });
@@ -1609,8 +1609,8 @@ function k2eventos(){
         if(dias>0){ var d=nx, k=0; while(d>R[0]&&k<400){ d=k2mas(d,-dias); k++; } for(k=0;d<=R[1]&&k<400;d=k2mas(d,dias),k++) if(d>=R[0]) F.push(d); }
         else F.push(nx);
       }
-      var conocidas=rec.map(function(r){ return r.fecha; }).concat(conf.map(function(c){ return c.fecha; })), tol=cp?Math.min(3,Math.floor((dias||30)/2)):k2tol(dias), ultC=conf.reduce(function(m,c){ return c.fecha>m?c.fecha:m; },'');
-      if(!cp&&ultC&&dias>0){ F=F.filter(function(x){ return x<ultC; }); for(var d2=k2mas(ultC,dias),k2=0;d2<=R[1]&&k2<400;d2=k2mas(d2,dias),k2++) F.push(d2); }
+      var conocidas=rec.map(function(r){ return r.fecha; }).concat(conf.map(function(c){ return c.fecha; })), tol=k2tol(dias), ultC=conf.reduce(function(m,c){ return c.fecha>m?c.fecha:m; },'');
+      if(ultC&&dias>0){ F=F.filter(function(x){ return x<ultC; }); for(var d2=k2mas(ultC,dias),k2=0;d2<=R[1]&&k2<400;d2=k2mas(d2,dias),k2++) F.push(d2); }
       F.forEach(function(fe){
         if(k2cerca(conocidas,fe,tol)) return;
         if(fe<hoy){ if(multi) ev.push({ site:id, name:nom, date:fe, status:'sinregistro', tipo:'rec' }); }
@@ -1622,7 +1622,7 @@ function k2eventos(){
     (s.fumCal||[]).forEach(function(x){ if(x.fecha>=R[0]&&x.fecha<=R[1]) fe2.push({ date:x.fecha, status:x.estado==='hecha'?'realizada':'confirmada', hora:x.hora }); });
     if(s.fum&&s.fum.proxima&&!fe2.some(function(x){ return x.date===s.fum.proxima.fecha; })) fe2.push({ date:s.fum.proxima.fecha, status:'confirmada', hora:s.fum.proxima.hora });
     fe2.forEach(function(x){ ev.push({ site:id, name:nom, date:x.date, status:x.status, hora:x.hora, tipo:'fum' }); });
-    if(s.fum&&!cp){
+    if(s.fum){
       var fd=k2fdias(s.fum.frec), ft=k2tol(fd), fk=fe2.map(function(x){ return x.date; }), base=fk.concat(s.fum.ultima?[s.fum.ultima]:[]).sort().pop()||'';
       var empieza=(s.contratado62&&s.contratado62.empieza&&s.contratado62.empieza.fumigacion)||'', pr=base?k2mas(base,fd):empieza;
       if(pr&&pr>=hoy) for(var d3=pr,k3=0;d3<=R[1]&&k3<400;d3=k2mas(d3,fd),k3++) if(!k2cerca(fk,d3,ft)) ev.push({ site:id, name:nom, date:d3, status:'estimada', tipo:'fum' });
@@ -1644,9 +1644,10 @@ function k2tieneFum(){ return S.sedes.some(function(x){ return !!x.fum; }); }
 function k2leyenda(){ return '<div class="k2-ley"><span><i class="realizada"></i>Realizada</span><span><i class="confirmada"></i>Confirmada</span><span><i class="estimada"></i>'+k2est()+'</span>'+(k2multi()?'<span><i class="sinregistro"></i>Sin registro</span>':'')+(nivel()==='corp'||k2tieneFum()?'<span><i class="fum"></i>Fumigación</span>':'')+'</div>'+k2fumAviso(); }
 /* api 3.68 · la fumigación del plan que todavía no tiene día: se avisa y se puede agendar desde aquí */
 function k2fumAviso(){
-  if(nivel()==='corp') return '';
   var tope=k2mas(S.hoy,45), L=S.sedes.filter(function(x){ return (!K2S.sede||x.clienteId===K2S.sede)&&x.fum&&x.fum.toca&&!k2eventos().some(function(e){ return e.site===x.clienteId&&e.tipo==='fum'&&e.date>=S.hoy&&e.date<=tope; }); });
   if(!L.length) return '';
+  if(nivel()==='corp'&&!K2S.sede&&L.length>1){ var nm2=L.slice(0,4).map(function(x){ return esc(String(x.nombre||'').replace(/^.*\s-\s/,'')); }).join(', ')+(L.length>4?' y '+(L.length-4)+' más':'');
+    return '<div class="k2-fn"><i></i><span><b>Le toca su fumigación en '+L.length+' sedes</b><small>Todavía no tienen día: '+nm2+'. Elija la sede arriba para agendarla.</small></span></div>'; }
   return L.map(function(x){ var pid="solicitar('Programar visita',FUM_ITEM"+(k2multi()?",'"+esc(x.clienteId)+"'":'')+")", nm=k2multi()?' · '+esc(String(x.nombre||'').replace(/^.*\s-\s/,'')):'';
     return '<div class="k2-fn"><i></i><span><b>Le toca su fumigación'+nm+'</b><small>Todavía no tiene día. Pídala y Logística le confirma la fecha.</small></span><button type="button" class="btn sm" onclick="'+pid+'">Agendar mi fumigación</button></div>'; }).join('');
 }
