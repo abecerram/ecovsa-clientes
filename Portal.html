@@ -1074,6 +1074,8 @@ ST.textContent+='.ent2.sp-noche{background:radial-gradient(ellipse at 18% 0%,#1d
 document.head.appendChild(ST);
 ICP.llave='<circle cx="8" cy="15" r="4"/><path d="M11 12l9-9M16 7l3 3M14 9l2 2"/>';
 var LOCK='<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg>';
+/* «Sin conexión» solo si de verdad no hay red o el servidor no contestó a tiempo; cualquier otra falla (excepción del servidor, 500, respuesta vacía) dice la verdad */
+function txtFalla(er){ var m=String((er&&er.message)||''); if(er&&(er.red||/tardó más/.test(m)||/Sin conexión/i.test(m))) return 'Sin conexión. Intente de nuevo.'; return 'No pudimos completar su entrada. Intente de nuevo; si sigue, escríbanos al WhatsApp 6264-1647.'; }
 function noExiste(r){ return r&&r.ok===false&&/Función no permitida/.test(String(r.error||'')); }
 function rucTxt(){ var i=$('sp-ruc'); return i?String(i.value||'').trim():''; }
 function parar(i){ if(i) i.addEventListener('keydown',function(e){ e.stopPropagation(); }); }   /* el teclado de la página no debe tomar lo que se escribe aquí */
@@ -1147,7 +1149,7 @@ function enviar(secreto,btn){
       llamar('api_ptlEntrar',String(secreto).replace(/\D/g,'')).then(function(x){ if(!x||!x.ok){ var mm=$('msg'); if(mm){ mm.className='msg'; mm.textContent='El RUC o la contraseña no son correctos.'; } return; } SES=x.sesion; ls('ptl_ses',SES); cargar(); }); return; }
     if(!r||!r.ok){ var mm=$('msg'); if(mm){ mm.className='msg'; mm.textContent=(r&&r.error)||'No se pudo entrar.'; } return; }
     guardarEntrada(r,ruc||''); cargar();
-  },function(){ ocupado(btn,false); var mm=$('msg'); if(mm){ mm.className='msg'; mm.textContent='Sin conexión. Intente de nuevo.'; } });
+  },function(er){ ocupado(btn,false); var mm=$('msg'); if(mm){ mm.className='msg'; mm.textContent=txtFalla(er); } });
 }
 function iniciar(dePortada){
   recordarQR(); desdePortada=!!dePortada;
@@ -1186,7 +1188,7 @@ pedirAcceso=function(tipo){
       escena('<h2>Solicitud recibida</h2><p class="sub">'+esc(r.mensaje||'')+'</p>'+(r.folio?'<span class="tag t-ok" style="margin-top:12px;display:inline-block">'+esc(r.folio)+'</span>':'')+
         '<p class="sub" style="font-size:13px;margin-top:12px">Cuando reciba el enlace, ábralo y cree su contraseña. Su usuario será el RUC de su empresa.</p><div style="height:12px"></div><a class="btn ancho" href="#" id="pa-ok">Volver al inicio de sesión</a>'+AYUDA,'form');
       $('pa-ok').onclick=function(e){ e.preventDefault(); iniciar(desdePortada); }; },
-      function(){ ocupado(b,false); m.textContent='Sin conexión. Intente de nuevo.'; }); };
+      function(er){ ocupado(b,false); m.textContent=txtFalla(er); }); };
 };
 
 /* ── crear la contraseña con la invitación ── */
@@ -1207,9 +1209,9 @@ invitacion=function(){
     var guardar=function(){ var b=$('sp-go'); ocupado(b,true,'Guardando…');
       llamar('api_ptlCrearAcceso',INV,$('sp-c1').value,$('sp-c2').value,'clave',ACEPTA,ls(K_AP)).then(function(x){ ocupado(b,false);
         if(x&&!x.ok&&x.legal&&window.PTL_terminos){ PTL_terminos(function(){ ACEPTA=true; guardar(); }); return; }
-        if(!x||!x.ok){ var m=$('msg'); if(m){ m.className='msg'; m.textContent=(x&&x.error)||'No se pudo'; } return; } listo(x); },function(){ ocupado(b,false); var m=$('msg'); if(m){ m.className='msg'; m.textContent='Sin conexión. Intente de nuevo.'; } }); };
+        if(!x||!x.ok){ var m=$('msg'); if(m){ m.className='msg'; m.textContent=(x&&x.error)||'No se pudo'; } return; } listo(x); },function(er){ ocupado(b,false); var m=$('msg'); if(m){ m.className='msg'; m.textContent=txtFalla(er); } }); };
     $('sp-go').onclick=guardar; $('sp-c2').addEventListener('keydown',function(e){ if(e.key==='Enter') guardar(); });
-  },function(){ toast('Sin conexión'); });
+  },function(er){ toast(txtFalla(er)); });
 };
 
 /* ── ya adentro: aviso de transición y «Mi acceso» ── */
@@ -1229,7 +1231,7 @@ function sp383Aviso(){
     $('sp-ok').onclick=function(){ var b=this; ocupado(b,true,'Guardando…');
       llamar('api_ptlConfirmar',SES,rucTxt(),'clave',$('sp-n1').value,$('sp-n2').value,ls(K_AP)).then(function(r){ ocupado(b,false);
         if(!r||!r.ok){ msg((r&&r.error)||'No se pudo guardar.'); return; }
-        if(r.aparato) ls(K_AP,r.aparato); ls(K_RUC,rucTxt()); T.pide=false; cerrarModal(); toast('Listo: su contraseña quedó guardada.'); },function(){ ocupado(b,false); msg('Sin conexión. Intente de nuevo.'); }); };
+        if(r.aparato) ls(K_AP,r.aparato); ls(K_RUC,rucTxt()); T.pide=false; cerrarModal(); toast('Listo: su contraseña quedó guardada.'); },function(er){ ocupado(b,false); msg(txtFalla(er)); }); };
     var l=$('sp-luego'); if(l) l.onclick=function(){ llamar('api_ptlPosponer',SES).then(function(){ T.pide=false; cerrarModal(); },function(){ cerrarModal(); }); };
   };
   setTimeout(function(){ intento(0); },2600);
@@ -1241,7 +1243,7 @@ window.sp383Acceso=function(){
   verClaves();
   $('sp-ok').onclick=function(){ var b=this; ocupado(b,true,'Guardando…');
     llamar('api_ptlCambiarAcceso',SES,$('sp-act').value,'clave',$('sp-n1').value,$('sp-n2').value).then(function(r){ ocupado(b,false);
-      if(!r||!r.ok){ msg((r&&r.error)||'No se pudo guardar.'); return; } cerrarModal(); toast('Listo: su contraseña quedó cambiada.'); },function(){ ocupado(b,false); msg('Sin conexión. Intente de nuevo.'); }); };
+      if(!r||!r.ok){ msg((r&&r.error)||'No se pudo guardar.'); return; } cerrarModal(); toast('Listo: su contraseña quedó cambiada.'); },function(er){ ocupado(b,false); msg(txtFalla(er)); }); };
 };
 /* la hoja «Agregar ECOVSA a mi celular» no se abre encima del aviso de seguridad: queda para la próxima entrada */
 var hojaIns0=hojaIns; hojaIns=function(){ if(document.querySelector('.sp383-mod')) return; hojaIns0.apply(this,arguments); };
