@@ -1046,6 +1046,31 @@ ST.textContent='.sp383-fila{display:flex;gap:4px 12px;align-items:center;justify
   '.sp-seg{display:block;margin-top:14px;text-align:center;background:#fff;color:#14306b;border:1.5px solid #cdd8ea;border-radius:14px;padding:12px;font-weight:800;font-size:14.5px;text-decoration:none;cursor:pointer}'+
   '.sp-pw{position:relative}.sp-pw input{padding-right:78px}.sp-ver{position:absolute;right:6px;top:50%;transform:translateY(-50%);border:0;background:transparent;color:#14306b;font-weight:700;font-size:13px;padding:8px 10px;cursor:pointer;border-radius:8px}'+
   '.sp-pie{font-size:12.5px;color:var(--gris);text-align:center;margin-top:12px}';
+
+ST.textContent+='.ent2.sp-solo .saludo{display:none}.ent2 .e2-caja.sp-peli{background:none!important;border:0!important;box-shadow:none!important;padding:0!important;max-width:none;margin-top:26px;text-align:center}'+
+  '.ent2.sp-solo .e2-marca .eco-lg{transform:scale(1.28);margin-bottom:44px}'+
+  '.sp-r{position:absolute;left:0;top:0;right:0;bottom:0;border-radius:50%;border:2px solid rgba(47,158,68,.6);opacity:0;pointer-events:none;animation:spR 1.2s ease-out both}'+
+  '.sp-p{position:absolute;left:50%;top:50%;margin:-3px 0 0 -3px;border-radius:50%;opacity:0;pointer-events:none;animation:spP 1.1s 1.7s cubic-bezier(.1,.7,.3,1) both}'+
+  '.ent2.sp-solo .e2-marca .wm{clip-path:inset(0 100% 0 0);animation:spW 1s 2.05s cubic-bezier(.2,.7,.2,1) forwards}'+
+  '.ent2.sp-solo .lema{opacity:0;letter-spacing:11px;animation:spL 1.1s 2.7s ease forwards}'+
+  '.sp-ent{display:inline-block;border:0;cursor:pointer;color:#fff;background:linear-gradient(135deg,#14306b,#2253a8);border-radius:999px;padding:14px 30px;font:800 15px var(--letra,inherit);letter-spacing:.2px;box-shadow:0 10px 26px rgba(20,48,107,.28);opacity:0;transform:translateY(16px);animation:spB .9s 3.5s cubic-bezier(.2,.8,.2,1) forwards,spG 2.6s 4.6s ease-in-out infinite}'+
+  '.ent2.sp-solo .sp-cand{opacity:0;animation:spC .6s 3.2s ease forwards}'+
+  '@keyframes spR{0%{opacity:.85;transform:scale(1)}100%{opacity:0;transform:scale(2.9)}}'+
+  '@keyframes spP{0%{opacity:1;transform:translate(0,0) scale(1)}100%{opacity:0;transform:translate(var(--dx),var(--dy)) scale(.2)}}'+
+  '@keyframes spW{to{clip-path:inset(0 0 0 0)}}@keyframes spL{to{opacity:1;letter-spacing:3px}}@keyframes spC{to{opacity:1}}'+
+  '@keyframes spB{to{opacity:1;transform:none}}@keyframes spG{0%,100%{box-shadow:0 10px 26px rgba(20,48,107,.28)}50%{box-shadow:0 10px 34px rgba(47,158,68,.42)}}'+
+  '@media (prefers-reduced-motion:reduce){.sp-r,.sp-p{display:none}.ent2.sp-solo .e2-marca .wm,.ent2.sp-solo .lema,.sp-ent,.ent2.sp-solo .sp-cand{animation:none!important;opacity:1;clip-path:none;letter-spacing:3px;transform:none}}';
+ST.textContent+='.ent2.sp-noche{background:radial-gradient(ellipse at 18% 0%,#1d3f86 0,rgba(29,63,134,0) 55%),radial-gradient(ellipse at 88% 100%,#0f4a3a 0,rgba(15,74,58,0) 55%),#07122b!important;color:#dfe8f7}'+
+  '.ent2.sp-noche .saludo{color:#a9b9d6}.ent2.sp-noche .lema{color:#8fd46a}'+
+  '.ent2.sp-noche .e2-marca .eco-lg{box-shadow:0 0 0 8px rgba(255,255,255,.07),0 0 0 9px rgba(255,255,255,.14),0 0 46px rgba(80,150,255,.35)!important}'+
+  '.ent2.sp-noche .sp-r{border-color:rgba(143,212,106,.75)}'+
+  '.ent2.sp-noche .e2-caja{background:#0f2147;border-color:#1f3a70;box-shadow:0 22px 50px rgba(0,0,0,.45)}.ent2.sp-noche .e2-caja.sp-peli{background:none!important;box-shadow:none!important}'+
+  '.ent2.sp-noche h2{color:#fff}.ent2.sp-noche .sub,.ent2.sp-noche .links,.ent2.sp-noche .sp-pie,.ent2.sp-noche .campo label{color:#a9b9d6}.ent2.sp-noche .links a{color:#9cc2ff}'+
+  '.ent2.sp-noche .campo input{background:#0a1936;border:1px solid #28457f;color:#fff}.ent2.sp-noche .sp-ver{color:#9cc2ff}'+
+  '.ent2.sp-noche .btn.pri{background:linear-gradient(135deg,#2a62c9,#3b7bf0);color:#fff}.ent2.sp-noche .sp383-fila{color:#a9b9d6}'+
+  '.ent2.sp-noche .sp-ent{background:linear-gradient(135deg,#2a62c9,#3b7bf0)}.ent2.sp-noche .sp-cand{border-color:#0f2147;background:#2a62c9}'+
+  '.ent2.sp-noche .msg{color:#ff9d92}.ent2.sp-noche .msg.ok{color:#7fe08f}.ent2.sp-noche .pista{background:#12305a;color:#cfe8c8}'+
+  '.ent2.sp-noche .sp-seg{background:#0a1936;color:#fff;border-color:#28457f}';
 document.head.appendChild(ST);
 ICP.llave='<circle cx="8" cy="15" r="4"/><path d="M11 12l9-9M16 7l3 3M14 9l2 2"/>';
 var LOCK='<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg>';
@@ -1060,17 +1085,29 @@ function campoClave(id,etq,auto){ return '<div class="campo" style="text-align:l
 function verClaves(){ var L=document.querySelectorAll('.sp-ver'); for(var k=0;k<L.length;k++) (function(b){ b.onclick=function(){ var i=$(b.getAttribute("data-ver")); if(!i) return; var t=i.type==='password'; i.type=t?'text':'password'; b.textContent=t?'Ocultar':'Ver'; b.setAttribute('aria-label',t?'Ocultar contraseña':'Mostrar contraseña'); }; parar($(b.getAttribute("data-ver"))); })(L[k]); }
 var AYUDA='<div class="links">¿Necesita ayuda? Escríbanos al WhatsApp <b>6264-1647</b></div>';
 
-function quitarCandado(){ var c=document.querySelectorAll('.sp-cand'); for(var k=0;k<c.length;k++) c[k].remove(); var em=document.querySelector('.e2-marca .eco-lg'); if(em){ em.onclick=null; em.style.cursor=''; } }
-/* ── portada: presentación general; el inicio de sesión queda en el candado del logo y en un botón secundario (opción B) ── */
+/* modo «Noche oscura»: sigue al celular o computador (prefers-color-scheme); el logo con letras blancas */
+function aplicarNoche(){
+  var e=document.querySelector('.ent2'); if(!e) return; var oscuro=false; try{ oscuro=matchMedia('(prefers-color-scheme: dark)').matches; }catch(x){}
+  e.classList.toggle('sp-noche',oscuro); var w=document.querySelector('.e2-marca .wm'); if(w) w.src=oscuro?'ecovsa-letras.png':'ecovsa-letras-azul.png';
+}
+try{ matchMedia('(prefers-color-scheme: dark)').addEventListener('change',aplicarNoche); }catch(x){}
+function quitarCandado(){ var c=document.querySelectorAll('.sp-cand,.sp-r,.sp-p'); for(var k=0;k<c.length;k++) c[k].remove(); var em=document.querySelector('.e2-marca .eco-lg'); if(em){ em.onclick=null; em.style.cursor=''; } var e=document.querySelector('.ent2'); if(e) e.classList.remove('sp-solo'); }
+/* ── portada: entrada con movimiento para quien llega a la dirección. Casi sin texto: el logo se arma, late con tres anillos, estalla en partículas,
+      aparece el nombre y el lema, y al final el botón para clientes. Con «reducir movimiento» todo queda quieto y completo. ── */
 function portada(){
-  ESTADO='portada';
-  escena('<h2>Portal de clientes</h2><p class="sub">Su información de servicio con ECOVSA, en un solo lugar.</p><ul class="sp-ls"><li><i></i>Recibos de cada visita</li><li><i></i>Certificados de servicio</li><li><i></i>Facturas y pedidos</li></ul>'+
-    '<p class="sub" style="font-size:12.5px;margin-top:12px">Acceso exclusivo para clientes de ECOVSA.</p><a class="sp-seg" href="#" id="sp-ini">Iniciar sesión</a>'+AYUDA,'form');
+  ESTADO='portada'; quitarCandado();
+  escena('<button class="sp-ent" id="sp-ini" type="button">Soy cliente · Iniciar sesión</button>','sp-peli');
+  var e=document.querySelector('.ent2'); if(e){ e.classList.remove('sp-solo'); void e.offsetWidth; e.classList.add('sp-solo'); } aplicarNoche();
   var em=document.querySelector('.e2-marca .eco-lg');
-  quitarCandado();
-  if(em){ em.style.position='relative'; em.style.cursor='pointer'; em.insertAdjacentHTML('beforeend','<span class="sp-cand" id="sp-cand" role="button" tabindex="0" aria-label="Iniciar sesión">'+LOCK+'</span>');
-    var go=function(e){ e.preventDefault(); e.stopPropagation(); iniciar(true); }; $('sp-cand').onclick=go; $('sp-cand').onkeydown=function(e){ if(e.key==='Enter'||e.key===' ') go(e); }; em.onclick=go; }
-  $('sp-ini').onclick=function(e){ e.preventDefault(); iniciar(true); };
+  if(em){ em.style.position='relative'; em.style.cursor='pointer';
+    var h='';
+    for(var a=0;a<3;a++) h+='<span class="sp-r" style="animation-delay:'+(1.15+a*.32).toFixed(2)+'s"></span>';
+    for(var k=0;k<26;k++){ var ang=k/26*6.2832+Math.random()*.3, d=90+Math.random()*95, c=k%3===0?'#3b6fd4':k%3===1?'#2f9e44':'#8fd46a', t=3+Math.random()*5;
+      h+='<span class="sp-p" style="--dx:'+Math.round(Math.cos(ang)*d)+'px;--dy:'+Math.round(Math.sin(ang)*d)+'px;width:'+t+'px;height:'+t+'px;background:'+c+'"></span>'; }
+    h+='<span class="sp-cand" id="sp-cand" role="button" tabindex="0" aria-label="Iniciar sesión">'+LOCK+'</span>';
+    em.insertAdjacentHTML('beforeend',h);
+    var go=function(ev){ ev.preventDefault(); ev.stopPropagation(); iniciar(true); }; $('sp-cand').onclick=go; $('sp-cand').onkeydown=function(ev){ if(ev.key==='Enter'||ev.key===' ') go(ev); }; em.onclick=go; }
+  $('sp-ini').onclick=function(ev){ ev.preventDefault(); iniciar(true); };
 }
 
 /* ── iniciar sesión: RUC + contraseña ── */
@@ -1082,7 +1119,7 @@ function campoRuc(){
   return '<div class="campo" style="text-align:left"><label for="sp-ruc">RUC de su empresa</label><input id="sp-ruc" autocomplete="username" autocapitalize="characters" placeholder="Ej. 155-123-45678" value="'+esc(g)+'"></div>';
 }
 function pintarEntrada(){
-  ESTADO='entrar'; quitarCandado();
+  ESTADO='entrar'; quitarCandado(); setTimeout(aplicarNoche,0);
   var qs=QC()&&QK()?'?cli='+encodeURIComponent(QC())+'&cod='+encodeURIComponent(QK()):'';
   escena('<h2>Iniciar sesión</h2><p class="sub">Escriba el RUC de su empresa y su contraseña.</p><div style="height:6px"></div>'+campoRuc()+campoClave('sp-cl2','Su contraseña','current-password')+
     '<button class="btn pri ancho" type="button" id="sp-go">Entrar</button><div class="msg" id="msg"></div>'+
