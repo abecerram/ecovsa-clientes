@@ -23,6 +23,8 @@
     var pag = DESTINO[m[1].toLowerCase()];
     if (pag) { location.replace('https://ecovsaapp.com/' + pag + q); return; }
   }
+  /* api 3.83c · la dirección sola abre la portada nueva (presentación + inicio de sesión con RUC y contraseña) que vive en Portal.html */
+  location.replace('Portal.html' + q);
 })();
 </script>
 <script src="cargador.js" data-solo></script>
