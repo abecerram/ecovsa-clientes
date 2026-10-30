@@ -655,7 +655,7 @@ function hojaIns(){
     '<li><span class="bi">'+ic('basura',20)+'</span><span><b>¿Se llenó su depósito? Un toque</b><small>Le decimos al momento si va dentro de su plan.</small></span></li>'+
     (pago?'<li><span class="bi">'+ic('pago',20)+'</span><span><b>Pague sin llamar</b><small>Vea su saldo y suba su comprobante desde ahí.</small></span></li>':'')+'</ul>'+
     '<div id="hj-p"></div><button class="btn pri gr" style="width:100%" type="button" id="hj-b">'+ic('instalar',18)+'Agregar ECOVSA a mi celular</button>'+
-    '<p class="ins-pie">Gratis · no ocupa espacio · entra con su mismo PIN</p>'+
+    '<p class="ins-pie">Gratis · no ocupa espacio · entra con su RUC y contraseña</p>'+
     '<button class="btn" type="button" style="width:100%;margin-top:4px;border:0" id="hj-n">Ahora no</button></div>';
   document.body.appendChild(d);
   $('hj-n').onclick=ahoraNo;
@@ -1030,6 +1030,191 @@ function pedirBaja(id,nom){
   modal('<h2>Quitar el acceso de '+esc(nom)+'</h2><p style="color:var(--gris)">ECOVSA lo quita al aprobar su pedido.</p><div class="pie"><button class="btn" onclick="cerrarModal()">Cancelar</button><button class="btn pri" id="pb-b">Pedir la baja</button></div>');
   $('pb-b').onclick=function(){ var b=this; ocupado(b,true); llamar('api_ptlPedirEquipo',SES,{tipo:'baja',accesoId:id}).then(function(r){ ocupado(b,false); if(!r||!r.ok){ toast((r&&r.error)||'No se pudo'); return; } cerrarModal(); toast('Pedido de baja enviado'); },function(){ ocupado(b,false); toast('Sin conexión'); }); };
 }
+
+/* ═══ api 3.83c · entrada al portal por RUC + CONTRASEÑA · claude/DISENO_seguridad_portal.md ═══
+   Va DENTRO del script principal, justo antes del arranque. Portada de presentación (opción B: candado en el logo + botón «Iniciar sesión»),
+   inicio de sesión con RUC + contraseña, «Primera vez: solicitar mi acceso» / «Olvidé mi contraseña» con el RUC verificado, crear la contraseña
+   con la invitación, aviso de transición (ya adentro) y «Mi acceso». Ninguna pantalla nueva dice «PIN». Si el servidor todavía no tiene las
+   funciones nuevas, cae a la entrada de siempre. */
+(function(){
+var K_RUC='ptl_ruc', K_AP='ptl_ap', ST=document.createElement('style');
+ST.textContent='.sp383-fila{display:flex;gap:4px 12px;align-items:center;justify-content:center;flex-wrap:wrap;font-size:13px;color:var(--gris);margin:10px 0 16px;text-align:center}'+
+  '.sp383-ok{margin:14px 0;padding:14px 16px;border-radius:12px;background:var(--azulclaro);text-align:left;font-size:15px;line-height:1.5}.sp383-ok small{display:block;color:var(--gris);font-size:12px;margin-top:8px}'+
+  '.sp383-mod .sub2{margin:0 0 14px;color:var(--gris);font-size:14px}.sp383-mod .pie{margin-top:14px}.sp383-m{font-size:13px;color:var(--bad);min-height:18px;margin:8px 0 0}'+
+  '.sp-cand svg{pointer-events:none}.sp-cand{position:absolute;right:-4px;bottom:0;width:34px;height:34px;border-radius:50%;background:#14306b;border:3px solid #fff;display:grid;place-items:center;box-shadow:0 4px 10px rgba(15,42,87,.25);z-index:3;cursor:pointer}'+
+  '.sp-ls{list-style:none;margin:14px 0 4px;padding:0;display:grid;gap:8px;text-align:left;font-size:14.5px;color:#44516a}.sp-ls li{display:flex;gap:10px;align-items:center}.sp-ls i{flex:none;width:9px;height:9px;border-radius:50%;background:#2f9e44}'+
+  '.sp-seg{display:block;margin-top:14px;text-align:center;background:#fff;color:#14306b;border:1.5px solid #cdd8ea;border-radius:14px;padding:12px;font-weight:800;font-size:14.5px;text-decoration:none;cursor:pointer}'+
+  '.sp-pw{position:relative}.sp-pw input{padding-right:78px}.sp-ver{position:absolute;right:6px;top:50%;transform:translateY(-50%);border:0;background:transparent;color:#14306b;font-weight:700;font-size:13px;padding:8px 10px;cursor:pointer;border-radius:8px}'+
+  '.sp-pie{font-size:12.5px;color:var(--gris);text-align:center;margin-top:12px}';
+document.head.appendChild(ST);
+ICP.llave='<circle cx="8" cy="15" r="4"/><path d="M11 12l9-9M16 7l3 3M14 9l2 2"/>';
+var LOCK='<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg>';
+function noExiste(r){ return r&&r.ok===false&&/Función no permitida/.test(String(r.error||'')); }
+function rucTxt(){ var i=$('sp-ruc'); return i?String(i.value||'').trim():''; }
+function parar(i){ if(i) i.addEventListener('keydown',function(e){ e.stopPropagation(); }); }   /* el teclado de la página no debe tomar lo que se escribe aquí */
+function msg(t){ var m=$('sp-m'); if(m) m.textContent=t||''; }
+function guardarEntrada(r,ruc){ SES=r.sesion; ls('ptl_ses',SES); if(r.aparato) ls(K_AP,r.aparato); if(ruc) ls(K_RUC,ruc); if(r.cli&&r.cod){ ls('ptl_cli',r.cli); ls('ptl_cod',r.cod); } }
+function recordarQR(){ if(CLI&&COD){ ls('ptl_cli',CLI); ls('ptl_cod',COD); } }   /* el enlace o el QR trae cli + cod: se recuerdan para que el RUC siga viniendo puesto */
+function QC(){ return CLI||ls('ptl_cli'); } function QK(){ return COD||ls('ptl_cod'); }
+function campoClave(id,etq,auto){ return '<div class="campo" style="text-align:left"><label for="'+id+'">'+etq+'</label><div class="sp-pw"><input id="'+id+'" type="password" autocomplete="'+auto+'" autocapitalize="off" spellcheck="false"><button type="button" class="sp-ver" data-ver="'+id+'" aria-label="Mostrar contraseña">Ver</button></div></div>'; }
+function verClaves(){ var L=document.querySelectorAll('.sp-ver'); for(var k=0;k<L.length;k++) (function(b){ b.onclick=function(){ var i=$(b.getAttribute("data-ver")); if(!i) return; var t=i.type==='password'; i.type=t?'text':'password'; b.textContent=t?'Ocultar':'Ver'; b.setAttribute('aria-label',t?'Ocultar contraseña':'Mostrar contraseña'); }; parar($(b.getAttribute("data-ver"))); })(L[k]); }
+var AYUDA='<div class="links">¿Necesita ayuda? Escríbanos al WhatsApp <b>6264-1647</b></div>';
+
+function quitarCandado(){ var c=document.querySelectorAll('.sp-cand'); for(var k=0;k<c.length;k++) c[k].remove(); var em=document.querySelector('.e2-marca .eco-lg'); if(em){ em.onclick=null; em.style.cursor=''; } }
+/* ── portada: presentación general; el inicio de sesión queda en el candado del logo y en un botón secundario (opción B) ── */
+function portada(){
+  ESTADO='portada';
+  escena('<h2>Portal de clientes</h2><p class="sub">Su información de servicio con ECOVSA, en un solo lugar.</p><ul class="sp-ls"><li><i></i>Recibos de cada visita</li><li><i></i>Certificados de servicio</li><li><i></i>Facturas y pedidos</li></ul>'+
+    '<p class="sub" style="font-size:12.5px;margin-top:12px">Acceso exclusivo para clientes de ECOVSA.</p><a class="sp-seg" href="#" id="sp-ini">Iniciar sesión</a>'+AYUDA,'form');
+  var em=document.querySelector('.e2-marca .eco-lg');
+  quitarCandado();
+  if(em){ em.style.position='relative'; em.style.cursor='pointer'; em.insertAdjacentHTML('beforeend','<span class="sp-cand" id="sp-cand" role="button" tabindex="0" aria-label="Iniciar sesión">'+LOCK+'</span>');
+    var go=function(e){ e.preventDefault(); e.stopPropagation(); iniciar(true); }; $('sp-cand').onclick=go; $('sp-cand').onkeydown=function(e){ if(e.key==='Enter'||e.key===' ') go(e); }; em.onclick=go; }
+  $('sp-ini').onclick=function(e){ e.preventDefault(); iniciar(true); };
+}
+
+/* ── iniciar sesión: RUC + contraseña ── */
+var porQR=false, mascara='', editarRuc=false, viejo=false, sinRucQR=false, desdePortada=false;   /* viejo: el servidor todavía no tiene la entrada por RUC */
+function campoRuc(){
+  if(viejo) return sinRucQR?'<p class="pista" style="margin:8px 0 14px">Su establecimiento todavía no tiene el RUC registrado. Escríbanos al WhatsApp <b>6264-1647</b> para completarlo.</p>':'';
+  var g=ls(K_RUC);
+  if(porQR&&mascara&&!editarRuc) return '<div class="sp383-fila" id="sp-fila"><span>RUC de su establecimiento: <b>'+esc(mascara)+'</b></span><a href="#" id="sp-otro">No es mi empresa</a></div>';
+  return '<div class="campo" style="text-align:left"><label for="sp-ruc">RUC de su empresa</label><input id="sp-ruc" autocomplete="username" autocapitalize="characters" placeholder="Ej. 155-123-45678" value="'+esc(g)+'"></div>';
+}
+function pintarEntrada(){
+  ESTADO='entrar'; quitarCandado();
+  var qs=QC()&&QK()?'?cli='+encodeURIComponent(QC())+'&cod='+encodeURIComponent(QK()):'';
+  escena('<h2>Iniciar sesión</h2><p class="sub">Escriba el RUC de su empresa y su contraseña.</p><div style="height:6px"></div>'+campoRuc()+campoClave('sp-cl2','Su contraseña','current-password')+
+    '<button class="btn pri ancho" type="button" id="sp-go">Entrar</button><div class="msg" id="msg"></div>'+
+    '<div class="links"><a href="#" id="sp-olv">Olvidé mi contraseña</a> · <a href="#" id="sp-pri">Primera vez: solicitar mi acceso</a></div>'+
+    '<p class="sp-pie">Si todavía usa su clave de 6 números, escríbala en «Su contraseña».</p>'+(desdePortada?'<div class="links"><a href="#" id="sp-volver">← Volver al inicio</a></div>':''),'form');
+  parar($('sp-ruc')); verClaves();
+  $('sp-go').onclick=function(){ enviar(String($('sp-cl2').value||''),$('sp-go')); };
+  $('sp-cl2').addEventListener('keydown',function(e){ if(e.key==='Enter') $('sp-go').click(); });
+  if($('sp-ruc')) $('sp-ruc').addEventListener('keydown',function(e){ if(e.key==='Enter') $('sp-cl2').focus(); });
+  var o=$('sp-otro'); if(o) o.onclick=function(e){ e.preventDefault(); editarRuc=true; pintarEntrada(); };
+  $('sp-olv').onclick=function(e){ e.preventDefault(); pedirAcceso('olvide'); };
+  $('sp-pri').onclick=function(e){ e.preventDefault(); pedirAcceso('activar'); };
+  var v=$('sp-volver'); if(v) v.onclick=function(e){ e.preventDefault(); portada(); };
+}
+function enviar(secreto,btn){
+  if(viejo){ var mm0=$('msg'); if(mm0) mm0.textContent=sinRucQR?'Escríbanos al WhatsApp 6264-1647 para completar su acceso.':''; if(sinRucQR) return; }
+  var ruc=rucTxt(), usaQR=porQR&&mascara&&!editarRuc&&!ruc;
+  if(!usaQR&&!ruc){ var m0=$('msg'); if(m0){ m0.className='msg'; m0.textContent='Escriba el RUC de su empresa.'; } return; }
+  if(!secreto){ var m1=$('msg'); if(m1){ m1.className='msg'; m1.textContent='Escriba su contraseña.'; } return; }
+  ocupado(btn,true,'Revisando…');
+  llamar('api_ptlEntrarRuc',usaQR?'':ruc,secreto,ls(K_AP),usaQR?QC():'',usaQR?QK():'').then(function(r){
+    ocupado(btn,false);
+    if(noExiste(r)){ /* servidor sin la entrada nueva: la de siempre */
+      llamar('api_ptlEntrar',String(secreto).replace(/\D/g,'')).then(function(x){ if(!x||!x.ok){ var mm=$('msg'); if(mm){ mm.className='msg'; mm.textContent='El RUC o la contraseña no son correctos.'; } return; } SES=x.sesion; ls('ptl_ses',SES); cargar(); }); return; }
+    if(!r||!r.ok){ var mm=$('msg'); if(mm){ mm.className='msg'; mm.textContent=(r&&r.error)||'No se pudo entrar.'; } return; }
+    guardarEntrada(r,ruc||''); cargar();
+  },function(){ ocupado(btn,false); var mm=$('msg'); if(mm){ mm.className='msg'; mm.textContent='Sin conexión. Intente de nuevo.'; } });
+}
+function iniciar(dePortada){
+  recordarQR(); desdePortada=!!dePortada;
+  porQR=!!(QC()&&QK()); editarRuc=false; mascara=''; sinRucQR=false;
+  pintarEntrada();
+  if(!porQR) return;
+  llamar('api_ptlRucQR',QC()||'',QK()||'').then(function(r){
+    if(noExiste(r)){ viejo=true; return; }
+    if(r&&r.ok&&r.sinRuc){ sinRucQR=true; viejo=true; if(ESTADO==='entrar') pintarEntrada(); return; }
+    if(r&&r.ok&&r.mascara){ mascara=r.mascara; if(ESTADO==='entrar'&&!$('sp-ruc')) pintarEntrada(); else if(ESTADO==='entrar'&&$('sp-ruc')&&!rucTxt()) pintarEntrada(); } },function(){});
+}
+entrar=function(){
+  recordarQR();
+  /* con el QR del establecimiento, o si ya entró antes en este aparato, va directo al inicio de sesión; en la dirección sola ve la presentación */
+  if((QC()&&QK())||ls(K_RUC)) iniciar(false); else portada();
+};
+
+/* ── primera vez / olvidé mi contraseña: el RUC se verifica antes de crear el pedido ── */
+pedirAcceso=function(tipo){
+  var olv=tipo==='olvide', qs=QC()&&QK()?'?cli='+encodeURIComponent(QC())+'&cod='+encodeURIComponent(QK()):'';
+  escena('<h2>'+(olv?'Olvidé mi contraseña':'Solicitar mi acceso')+'</h2>'+
+    '<p class="sub">'+(olv?'Pida una contraseña nueva. ':'Pida su acceso al portal. ')+'Por seguridad, ECOVSA le manda el enlace al WhatsApp registrado de su empresa.</p><div style="height:10px"></div>'+
+    '<div class="campo" style="text-align:left"><label for="pa-r">RUC de su empresa</label><input id="pa-r" autocomplete="off" autocapitalize="characters" placeholder="Ej. 155-123-45678" value="'+esc(ls(K_RUC))+'"></div>'+
+    '<div class="campo" style="text-align:left"><label for="pa-n">Su nombre</label><input id="pa-n" autocomplete="name"></div><div class="campo" style="text-align:left"><label for="pa-c">Su cargo</label><input id="pa-c" placeholder="Ej. Administradora"></div>'+
+    '<div class="campo" style="text-align:left"><label for="pa-o">Nota (opcional)</label><input id="pa-o"></div><button class="btn pri ancho" id="pa-b" type="button">Enviar mi solicitud</button><div class="msg" id="msg"></div>'+
+    '<div class="links"><a href="#" id="pa-v">Ya tengo mi contraseña</a></div>','form');
+  ['pa-r','pa-n','pa-c','pa-o'].forEach(function(i){ parar($(i)); });
+  $('pa-v').onclick=function(e){ e.preventDefault(); iniciar(desdePortada); };
+  $('pa-b').onclick=function(){ var b=this, m=$('msg'); if(m){ m.className='msg'; m.textContent=''; }
+    if(!String($('pa-r').value||'').trim()){ m.textContent='Escriba el RUC de su empresa.'; return; }
+    if(!String($('pa-n').value||'').trim()){ m.textContent='Escriba su nombre.'; return; }
+    ocupado(b,true,'Verificando…');
+    llamar('api_ptlPedirAcceso',QC()||'',QK()||'',{tipo:olv?'olvide':'activar',ruc:$('pa-r').value,nombre:$('pa-n').value,cargo:$('pa-c').value,nota:$('pa-o').value}).then(function(r){ ocupado(b,false);
+      if(!r||!r.ok){ m.textContent=(r&&r.error)||'No se pudo enviar.'; return; }
+      escena('<h2>Solicitud recibida</h2><p class="sub">'+esc(r.mensaje||'')+'</p>'+(r.folio?'<span class="tag t-ok" style="margin-top:12px;display:inline-block">'+esc(r.folio)+'</span>':'')+
+        '<p class="sub" style="font-size:13px;margin-top:12px">Cuando reciba el enlace, ábralo y cree su contraseña. Su usuario será el RUC de su empresa.</p><div style="height:12px"></div><a class="btn ancho" href="#" id="pa-ok">Volver al inicio de sesión</a>'+AYUDA,'form');
+      $('pa-ok').onclick=function(e){ e.preventDefault(); iniciar(desdePortada); }; },
+      function(){ ocupado(b,false); m.textContent='Sin conexión. Intente de nuevo.'; }); };
+};
+
+/* ── crear la contraseña con la invitación ── */
+invitacion=function(){
+  recordarQR();
+  llamar('api_ptlInvitacion',INV).then(function(r){
+    if(!r||!r.ok){ escena('<h2>Este enlace ya no sirve</h2><p class="sub">'+esc((r&&r.error)||'')+'</p><div style="height:14px"></div><a class="btn pri ancho" href="Portal.html">Iniciar sesión</a><div class="links">o escríbanos al WhatsApp <b>6264-1647</b></div>'); return; }
+    var de=r.nivel==='corp'?'<b>'+esc(r.de)+'</b> (todas las sedes)':'<b>'+esc(r.de)+'</b>', nom=esc(String(r.nombre).split(' ')[0]);
+    var listo=function(x){
+      guardarEntrada(x,x.ruc||''); history.replaceState(null,'','Portal.html'); RECIEN=true;
+      escena('<h2>Su acceso quedó listo</h2><p class="sub">Para entrar la próxima vez use:</p><div class="sp383-ok"><span style="color:var(--gris);font-size:12px">Usuario · RUC de su empresa</span><br><b>'+esc(x.ruc||'')+'</b><br><span style="color:var(--gris);font-size:12px;display:block;margin-top:10px">Contraseña</span><b>La que acaba de crear</b><small>Guarde estos datos o permita que su celular los recuerde.</small></div><button class="btn pri ancho" type="button" id="sp-go">Entrar a mi portal</button>');
+      $('sp-go').onclick=function(){ cargar(); };
+    };
+    escena('<h2>Hola, '+nom+'</h2><p class="sub">ECOVSA le invita a su portal de '+de+'. Cree su contraseña.</p><div style="height:6px"></div>'+
+      campoClave('sp-c1','Su contraseña nueva','new-password')+campoClave('sp-c2','Repítala','new-password')+
+      '<p class="pista">Mínimo 4 caracteres. Evite su RUC, su nombre o números seguidos como 1234. Es solo suya: no la comparta.</p><button class="btn pri ancho" type="button" id="sp-go">Crear mi acceso</button><div class="msg" id="msg"></div>','form');
+    verClaves();
+    var guardar=function(){ var b=$('sp-go'); ocupado(b,true,'Guardando…');
+      llamar('api_ptlCrearAcceso',INV,$('sp-c1').value,$('sp-c2').value,'clave',ACEPTA,ls(K_AP)).then(function(x){ ocupado(b,false);
+        if(x&&!x.ok&&x.legal&&window.PTL_terminos){ PTL_terminos(function(){ ACEPTA=true; guardar(); }); return; }
+        if(!x||!x.ok){ var m=$('msg'); if(m){ m.className='msg'; m.textContent=(x&&x.error)||'No se pudo'; } return; } listo(x); },function(){ ocupado(b,false); var m=$('msg'); if(m){ m.className='msg'; m.textContent='Sin conexión. Intente de nuevo.'; } }); };
+    $('sp-go').onclick=guardar; $('sp-c2').addEventListener('keydown',function(e){ if(e.key==='Enter') guardar(); });
+  },function(){ toast('Sin conexión'); });
+};
+
+/* ── ya adentro: aviso de transición y «Mi acceso» ── */
+function sp383Aviso(){
+  var T=S&&S.transicion; if(!T||!T.pide||VISTA||window.sp383Visto) return; window.sp383Visto=true;
+  var intento=function(n){
+    /* si la guía de bienvenida, la hoja de instalar o cualquier ventana está abierta, se espera a que se cierre */
+    if((window.PX&&(PX.activo||PX.bloq))||document.querySelector('.px-tapa,.hoja-f,#fondo,#dv')){ if(n<150) setTimeout(function(){ intento(n+1); },2000); return; }
+    modal('<div class="sp383-mod"><h2 style="margin:0 0 6px;color:var(--marca)">Actualización de seguridad de su acceso</h2>'+
+      '<p class="sub2">Para proteger la información de su empresa, hemos actualizado la forma de entrar al portal: ahora se entra con el RUC de su empresa y una contraseña que usted elige. Confirme su RUC y cree su contraseña.</p>'+
+      '<div class="campo"><label for="sp-ruc">RUC de su empresa</label><input id="sp-ruc" autocomplete="off" autocapitalize="characters" value="'+esc(ls(K_RUC))+'"></div>'+
+      campoClave('sp-n1','Su contraseña nueva','new-password')+campoClave('sp-n2','Repítala','new-password')+
+      '<p class="sub2" style="margin:0 0 6px;font-size:13px">Mínimo 4 caracteres. Evite su RUC, su nombre o números seguidos.</p>'+
+      '<p class="sp383-m" id="sp-m"></p><div class="pie" style="display:flex;flex-direction:column;gap:8px"><button class="btn pri ancho" type="button" id="sp-ok">Guardar y continuar</button>'+
+      (T.puedePosponer?'<button class="btn ancho" type="button" id="sp-luego" style="border:0">Recordármelo después</button>'+(T.hasta?'<p class="sub2" style="font-size:12px;text-align:center;margin:0">Podrá seguir entrando como hasta ahora hasta el '+esc(fl(T.hasta))+'.</p>':''):'<p class="sub2" style="font-size:12px;text-align:center;margin:0">Es necesario para seguir entrando.</p>')+'</div></div>');
+    verClaves(); parar($('sp-ruc'));
+    $('sp-ok').onclick=function(){ var b=this; ocupado(b,true,'Guardando…');
+      llamar('api_ptlConfirmar',SES,rucTxt(),'clave',$('sp-n1').value,$('sp-n2').value,ls(K_AP)).then(function(r){ ocupado(b,false);
+        if(!r||!r.ok){ msg((r&&r.error)||'No se pudo guardar.'); return; }
+        if(r.aparato) ls(K_AP,r.aparato); ls(K_RUC,rucTxt()); T.pide=false; cerrarModal(); toast('Listo: su contraseña quedó guardada.'); },function(){ ocupado(b,false); msg('Sin conexión. Intente de nuevo.'); }); };
+    var l=$('sp-luego'); if(l) l.onclick=function(){ llamar('api_ptlPosponer',SES).then(function(){ T.pide=false; cerrarModal(); },function(){ cerrarModal(); }); };
+  };
+  setTimeout(function(){ intento(0); },2600);
+}
+window.sp383Acceso=function(){
+  modal('<div class="sp383-mod"><h2 style="margin:0 0 6px;color:var(--marca)">Mi acceso</h2><p class="sub2">Cambie su contraseña. Necesitamos la actual.</p>'+
+    campoClave('sp-act','Su contraseña actual','current-password')+campoClave('sp-n1','Su contraseña nueva','new-password')+campoClave('sp-n2','Repítala','new-password')+
+    '<p class="sp383-m" id="sp-m"></p><div class="pie"><button class="btn" type="button" onclick="cerrarModal()">Cancelar</button><button class="btn pri" type="button" id="sp-ok">Guardar</button></div></div>');
+  verClaves();
+  $('sp-ok').onclick=function(){ var b=this; ocupado(b,true,'Guardando…');
+    llamar('api_ptlCambiarAcceso',SES,$('sp-act').value,'clave',$('sp-n1').value,$('sp-n2').value).then(function(r){ ocupado(b,false);
+      if(!r||!r.ok){ msg((r&&r.error)||'No se pudo guardar.'); return; } cerrarModal(); toast('Listo: su contraseña quedó cambiada.'); },function(){ ocupado(b,false); msg('Sin conexión. Intente de nuevo.'); }); };
+};
+/* la hoja «Agregar ECOVSA a mi celular» no se abre encima del aviso de seguridad: queda para la próxima entrada */
+var hojaIns0=hojaIns; hojaIns=function(){ if(document.querySelector('.sp383-mod')) return; hojaIns0.apply(this,arguments); };
+var pintar0=pintar;
+pintar=function(){
+  pintar0.apply(this,arguments);
+  if(VISTA) return;
+  [['.barra .pc .salir',false],['.barra .cel .salir',true]].forEach(function(p){ var s=document.querySelector(p[0]); if(!s) return;
+    var b=document.createElement('button'); b.type='button'; b.className='salir'; b.style.marginRight='8px'; b.setAttribute('aria-label','Mi acceso'); b.onclick=window.sp383Acceso; b.innerHTML=p[1]?ic('llave',15):ic('llave',14)+'Mi acceso'; s.parentNode.insertBefore(b,s); });
+  sp383Aviso();
+};
+})();
 
 /* ═══ arranque ═══ */
 (function(){
@@ -1828,7 +2013,7 @@ function PTL_terminos(listo){
   var f=document.createElement('div'); f.className='tyc-fondo';
   f.innerHTML='<div class="tyc-hoja" role="dialog" aria-modal="true" aria-labelledby="tyc-t"><div class="cb"><span class="tyc-em"><img src="'+EMB+'" alt="ECOVSA"></span><h2 id="tyc-t">Antes de empezar</h2><p>Lea y acepte las condiciones de uso de su portal.</p></div>'+
     '<div class="tyc-txt"><p>Su portal de ECOVSA le permite consultar sus recibos, certificados, facturas y pagos, y pedirnos servicios. Para usarlo, le pedimos aceptar:</p>'+
-    '<a class="tyc-doc" href="terminos.html" target="_blank" rel="noopener">'+pxIc('lista',20)+'<span><b>Términos y condiciones de uso</b><small>Cómo funciona el portal, su PIN y el uso correcto</small></span></a>'+
+    '<a class="tyc-doc" href="terminos.html" target="_blank" rel="noopener">'+pxIc('lista',20)+'<span><b>Términos y condiciones de uso</b><small>Cómo funciona el portal, su contraseña y el uso correcto</small></span></a>'+
     '<a class="tyc-doc" href="privacidad.html" target="_blank" rel="noopener">'+pxIc('escudo',20)+'<span><b>Política de privacidad</b><small>Qué datos usamos, para qué y sus derechos</small></span></a>'+
     '<p class="tyc-nota">ECOVSA usa sus datos para prestarle el servicio, facturar y comunicarse con usted. No los vendemos. Puede ejercer sus derechos escribiendo a info@ecovsa.com.</p></div>'+
     '<div class="tyc-pie"><label class="tyc-chk"><input type="checkbox" id="tyc-ac"><span>He leído y acepto los <b>Términos y condiciones</b> y la <b>Política de privacidad</b> de ECOVSA.</span></label>'+
@@ -2868,7 +3053,7 @@ window.pintar=function(){
       FULL.sedes.map(function(x){ return '<button type="button" class="'+(s&&s.clienteId===x.clienteId?'on':'')+'" onclick="sede53(\''+esc(x.clienteId)+'\')">'+esc(nom(x))+'</button>'; }).join('')+
       (porSede?'<small>Esta pantalla se ve por sede.</small>':'')+'</div>';
     var visto=''; try{ visto=localStorage.getItem('ptl_adm53')||''; }catch(e){}
-    if(V==='inicio'&&!VISTA&&visto!==String(FULL.yo.adminEn||'1')) h='<div class="sd53-bien"><span><b>Ya puede administrar sus '+FULL.sedes.length+' sedes</b> desde aquí, con su mismo PIN. Elija abajo cuál quiere ver.</span><button type="button" onclick="sede53Visto()">Entendido</button></div>'+h;
+    if(V==='inicio'&&!VISTA&&visto!==String(FULL.yo.adminEn||'1')) h='<div class="sd53-bien"><span><b>Ya puede administrar sus '+FULL.sedes.length+' sedes</b> desde aquí, con su misma contraseña. Elija abajo cuál quiere ver.</span><button type="button" onclick="sede53Visto()">Entendido</button></div>'+h;
     bj.insertAdjacentHTML('afterend',h);
     if(V==='inicio'){
       var b=m.querySelector('.bajada'); if(b) b.textContent=s?nom(s)+(s.frecuencia?' · Frecuencia '+String(s.frecuencia).toLowerCase():''):'Administradora de '+FULL.sedes.length+' sedes';
