@@ -1117,7 +1117,7 @@ function campoRuc(){
   if(viejo) return sinRucQR?'<p class="pista" style="margin:8px 0 14px">Su establecimiento todavía no tiene el RUC registrado. Escríbanos al WhatsApp <b>6264-1647</b> para completarlo.</p>':'';
   var g='';
   if(porQR&&mascara&&!editarRuc) return '<div class="sp383-fila" id="sp-fila"><span>RUC de su establecimiento: <b>'+esc(mascara)+'</b></span><a href="#" id="sp-otro">No es mi empresa</a></div>';
-  return '<div class="campo" style="text-align:left"><label for="sp-ruc">RUC de su empresa</label><input id="sp-ruc" autocomplete="username" autocapitalize="characters" placeholder="Ej. 155-123-45678" value=""></div>';
+  return '<div class="campo" style="text-align:left"><label for="sp-ruc">RUC de su empresa</label><input id="sp-ruc" autocomplete="username" autocapitalize="characters" placeholder="Escriba su RUC (con o sin guiones)" value=""></div>';
 }
 function pintarEntrada(){
   ESTADO='entrar'; quitarCandado(); setTimeout(aplicarNoche,0);
@@ -1171,7 +1171,7 @@ pedirAcceso=function(tipo){
   var olv=tipo==='olvide', qs=QC()&&QK()?'?cli='+encodeURIComponent(QC())+'&cod='+encodeURIComponent(QK()):'';
   escena('<h2>'+(olv?'Olvidé mi contraseña':'Solicitar mi acceso')+'</h2>'+
     '<p class="sub">'+(olv?'Pida una contraseña nueva. ':'Pida su acceso al portal. ')+'Por seguridad, ECOVSA le manda el enlace al WhatsApp registrado de su empresa.</p><div style="height:10px"></div>'+
-    '<div class="campo" style="text-align:left"><label for="pa-r">RUC de su empresa</label><input id="pa-r" autocomplete="off" autocapitalize="characters" placeholder="Ej. 155-123-45678" value=""></div>'+
+    '<div class="campo" style="text-align:left"><label for="pa-r">RUC de su empresa</label><input id="pa-r" autocomplete="off" autocapitalize="characters" placeholder="Escriba su RUC (con o sin guiones)" value=""></div>'+
     '<div class="campo" style="text-align:left"><label for="pa-n">Su nombre</label><input id="pa-n" autocomplete="name"></div><div class="campo" style="text-align:left"><label for="pa-c">Su cargo</label><input id="pa-c" placeholder="Ej. Administradora"></div>'+
     '<div class="campo" style="text-align:left"><label for="pa-o">Nota (opcional)</label><input id="pa-o"></div><button class="btn pri ancho" id="pa-b" type="button">Enviar mi solicitud</button><div class="msg" id="msg"></div>'+
     '<div class="links"><a href="#" id="pa-v">Ya tengo mi contraseña</a></div>','form');
