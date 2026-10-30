@@ -1080,7 +1080,8 @@ function parar(i){ if(i) i.addEventListener('keydown',function(e){ e.stopPropaga
 function msg(t){ var m=$('sp-m'); if(m) m.textContent=t||''; }
 function guardarEntrada(r,ruc){ SES=r.sesion; ls('ptl_ses',SES); if(r.aparato) ls(K_AP,r.aparato); if(ruc) ls(K_RUC,ruc); if(r.cli&&r.cod){ ls('ptl_cli',r.cli); ls('ptl_cod',r.cod); } }
 function recordarQR(){ if(CLI&&COD){ ls('ptl_cli',CLI); ls('ptl_cod',COD); } }   /* el enlace o el QR trae cli + cod: se recuerdan para que el RUC siga viniendo puesto */
-function QC(){ return CLI||ls('ptl_cli'); } function QK(){ return COD||ls('ptl_cod'); }
+/* solo el QR o el enlace de ESTA visita: lo que el aparato recuerda de visitas anteriores no decide nada ni muestra ningún RUC */
+function QC(){ return CLI; } function QK(){ return COD; }
 function campoClave(id,etq,auto){ return '<div class="campo" style="text-align:left"><label for="'+id+'">'+etq+'</label><div class="sp-pw"><input id="'+id+'" type="password" autocomplete="'+auto+'" autocapitalize="off" spellcheck="false"><button type="button" class="sp-ver" data-ver="'+id+'" aria-label="Mostrar contraseña">Ver</button></div></div>'; }
 function verClaves(){ var L=document.querySelectorAll('.sp-ver'); for(var k=0;k<L.length;k++) (function(b){ b.onclick=function(){ var i=$(b.getAttribute("data-ver")); if(!i) return; var t=i.type==='password'; i.type=t?'text':'password'; b.textContent=t?'Ocultar':'Ver'; b.setAttribute('aria-label',t?'Ocultar contraseña':'Mostrar contraseña'); }; parar($(b.getAttribute("data-ver"))); })(L[k]); }
 var AYUDA='<div class="links">¿Necesita ayuda? Escríbanos al WhatsApp <b>6264-1647</b></div>';
