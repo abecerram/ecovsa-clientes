@@ -1162,7 +1162,7 @@ entrar=function(){
   recordarQR();
   /* con el QR del establecimiento, o si ya entró antes en este aparato, va directo al inicio de sesión; en la dirección sola ve la presentación */
   /* con el QR del establecimiento va directo al inicio de sesión; con la dirección sola SIEMPRE se ve primero la presentación (aunque el aparato recuerde un RUC) */
-  if(QC()&&QK()) iniciar(false); else portada();
+  if(CLI&&COD) iniciar(false); else portada();   /* solo el QR/enlace de ESTA visita; lo recordado en el aparato no salta la presentación */
 };
 
 /* ── primera vez / olvidé mi contraseña: el RUC se verifica antes de crear el pedido ── */
