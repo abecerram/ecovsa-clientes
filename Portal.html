@@ -1098,7 +1098,7 @@ function quitarCandado(){ var c=document.querySelectorAll('.sp-cand,.sp-r,.sp-p'
 /* ── portada: entrada con movimiento para quien llega a la dirección. Casi sin texto: el logo se arma, late con tres anillos, estalla en partículas,
       aparece el nombre y el lema, y al final el botón para clientes. Con «reducir movimiento» todo queda quieto y completo. ── */
 function portada(){
-  ESTADO='portada'; quitarCandado();
+  ESTADO='portada'; window.__pt=Math.round(performance.now()); quitarCandado();   /* __pt: ms desde que abrió la página hasta que se pinta la presentación */
   escena('<button class="sp-ent" id="sp-ini" type="button">Soy cliente · Iniciar sesión</button><p class="sp-qui">Recolección, transporte, tratamiento y disposición final de desechos hospitalarios<br>WhatsApp <b>6264-1647</b></p>','sp-peli');
   var e=document.querySelector('.ent2'); if(e){ e.classList.remove('sp-solo'); void e.offsetWidth; e.classList.add('sp-solo'); } aplicarNoche();
   var em=document.querySelector('.e2-marca .eco-lg');
@@ -1268,7 +1268,7 @@ pintar=function(){
   if(INV){ invitacion(); return; }
   if((p==='activar'||p==='olvide')&&CLI&&COD){ pedirAcceso(p); return; }
   /* 3.18.2 · al abrir sin sesión también sale la entrada completa y debajo queda el PIN */
-  if(SES) cargar(); else { entrada(); entrar(); finEntrada(false); }
+  if(SES) cargar(); else { entrar(); }
 })();
 </script>
 <script>
