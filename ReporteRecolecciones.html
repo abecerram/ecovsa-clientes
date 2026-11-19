@@ -1,0 +1,153 @@
+<!doctype html><html lang="es"><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Reporte de recolecciones</title><style>
+
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Archivo',system-ui,sans-serif;background:var(--fondo);color:var(--tinta);padding-bottom:40px}
+
+.barra{position:sticky;top:0;z-index:5;display:flex;gap:9px;align-items:center;flex-wrap:wrap;
+  padding:11px 14px;background:linear-gradient(135deg,var(--azul-osc),var(--azul));
+  box-shadow:0 2px 12px rgba(20,48,107,.3)}
+.barra .ti{color:#fff;font-size:13px;font-weight:800;letter-spacing:.4px;margin-right:auto}
+.barra button{border:none;font-family:inherit;font-size:13.5px;font-weight:700;
+  padding:10px 15px;border-radius:10px;cursor:pointer;background:var(--ambar);color:#4A3300}
+.barra button:active{transform:translateY(1px)}
+
+.aviso{max-width:900px;margin:22px auto;background:#fff;border:1px solid var(--borde);
+  border-radius:12px;padding:26px;text-align:center;font-size:14px;color:var(--gris);line-height:1.6}
+
+.hoja{max-width:900px;margin:18px auto 0;background:#fff;color:#111;padding:28px 32px;
+  border:1px solid var(--borde);border-radius:8px;font-size:12px;line-height:1.5;
+  box-shadow:0 3px 16px rgba(20,48,107,.10)}
+.enc{display:flex;gap:14px;align-items:center;border-bottom:3px solid var(--azul-osc);padding-bottom:12px}
+.enc img{height:60px;width:auto}
+.enc .ti{font-size:17px;font-weight:900;color:var(--azul-osc);letter-spacing:.3px;line-height:1.2}
+.enc .su{font-size:10.5px;color:#555;letter-spacing:.6px;text-transform:uppercase}
+.cod{margin-left:auto;text-align:right;font-size:9.5px;color:#555;line-height:1.65;white-space:nowrap}
+
+.tit{background:var(--azul-osc);color:#fff;padding:11px 15px;border-radius:6px;margin:15px 0;
+  display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px}
+.tit .et{font-size:10.5px;letter-spacing:.7px;text-transform:uppercase;opacity:.85}
+.tit b{font-size:18px;display:block;letter-spacing:.3px}
+.tit .der{text-align:right;font-size:11px;line-height:1.5}
+
+.sec{font-size:10.5px;font-weight:800;text-transform:uppercase;letter-spacing:.7px;
+  color:var(--azul-osc);border-bottom:1px solid #ccc;padding-bottom:3px;margin:18px 0 9px}
+
+.cuadros{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.cuadro{border:1px solid #bbb;border-radius:6px;padding:9px 11px;border-top:3px solid var(--azul)}
+.cuadro .e{font-size:8.5px;text-transform:uppercase;letter-spacing:.5px;color:#666}
+.cuadro .v{font-size:19px;font-weight:900;color:var(--azul-osc);line-height:1.2}
+.cuadro .s{font-size:10px;color:#666}
+
+table{width:100%;border-collapse:collapse;margin-top:5px;font-size:11px}
+th{background:#EEF2F7;border:1px solid #bbb;padding:6px 7px;text-align:left;
+  font-size:8.5px;text-transform:uppercase;letter-spacing:.4px}
+td{border:1px solid #ccc;padding:5px 7px;vertical-align:top}
+td.n{text-align:right;white-space:nowrap}
+tr.tot td{background:#EEF2F7;font-weight:800;border-top:2px solid var(--azul-osc)}
+
+.firmas{display:grid;grid-template-columns:1fr 1fr;gap:28px;margin-top:34px}
+.firma{text-align:center}
+.firma .lin{border-top:1.5px solid #333;margin-top:60px;padding-top:6px;font-size:11px;line-height:1.5}
+.nota{background:#FFF8E1;border-left:4px solid var(--ambar);border-radius:6px;padding:9px 12px;margin-top:11px;font-size:10.5px;line-height:1.6;color:#6b5200}
+.pie{margin-top:24px;padding-top:10px;border-top:1px solid #ccc;font-size:9px;color:#666;line-height:1.7}
+
+@media print{
+  body{background:#fff;padding:0}
+  .barra{display:none}
+  .hoja{max-width:none;margin:0;border:none;border-radius:0;padding:0;box-shadow:none;font-size:10pt}
+  table{page-break-inside:auto} tr{page-break-inside:avoid}
+  .firmas{page-break-inside:avoid}
+  .sec{page-break-after:avoid}
+}
+@page{margin:14mm}
+
+/* ═══════════════════════════════════════════════════════════════════
+   ECOVSA · documento.css (api 3.5.1)
+   Lo común de todos los documentos (recibo, actas, propuesta, contrato,
+   certificado, solicitud, inspección, reportes, arqueo, carta):
+   · la barra: letras oficiales de ECOVSA en blanco, el nombre del
+     documento y los mismos botones en todos;
+   · el membrete: logo, empresa, RUC y DV, contacto y la franja de la
+     resolución sanitaria con el código del formulario;
+   · la hoja A4 al imprimir y la vista del celular.
+   Se carga DESPUÉS de los estilos de cada página: aquí se gana.
+   ═══════════════════════════════════════════════════════════════════ */
+:root{--doc-navy:#0f2a57;--doc-navy2:#14306b;--doc-ink:#0f2140;--doc-mu:#5d6a80;--doc-line:#dfe4ec;--doc-ok:#2f7d3a;--doc-okbg:#eaf6e4;--doc-am:#F5B301}
+
+/* ── la barra ── */
+.barra.doc-barra{position:sticky;top:0;z-index:20;display:flex;align-items:center;gap:10px;flex-wrap:wrap;
+  background:var(--doc-navy)!important;box-shadow:0 2px 10px rgba(15,33,64,.18);
+  padding:calc(9px + env(safe-area-inset-top,0px)) 16px 9px!important;border:0!important;margin:0!important}
+.doc-barra .db-marca{display:flex;align-items:center;flex:none;height:30px;padding-right:12px;margin-right:2px;border-right:1px solid rgba(255,255,255,.22)}
+.doc-barra .db-marca img{width:92px;height:auto;display:block}
+.doc-barra .ti{color:#fff!important;font-size:13.5px!important;font-weight:600!important;letter-spacing:0!important;text-transform:none!important;
+  margin-right:auto!important;min-width:0;line-height:1.3;opacity:.95}
+.doc-barra .ti .fo{color:#b9c6dd;font-weight:500;margin-left:4px}
+.doc-barra button,.doc-barra a.db-b{font:700 13px Archivo,system-ui,sans-serif!important;border-radius:9px!important;padding:8px 13px!important;
+  display:inline-flex!important;align-items:center;gap:6px;cursor:pointer;white-space:nowrap;text-decoration:none;box-shadow:none!important;
+  border:1px solid rgba(255,255,255,.28)!important;background:transparent!important;color:#fff!important;text-transform:none!important;letter-spacing:0!important;min-height:0!important}
+.doc-barra button svg,.doc-barra a.db-b svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;flex:none}
+.doc-barra button.sec,.doc-barra a.sec{line-height:1.2!important;height:auto!important;font-size:13px!important}
+.doc-barra button>span,.doc-barra a>span{display:inline!important;color:inherit!important;font:inherit!important;letter-spacing:0!important;text-transform:none!important}
+.doc-barra [hidden]{display:none!important}
+.doc-barra .db-pdf,.doc-barra button.db-pdf,.doc-barra a.db-pdf{background:#fff!important;color:var(--doc-navy2)!important;border-color:#fff!important}
+.doc-barra .db-wa,.doc-barra button.db-wa,.doc-barra a.db-wa{background:#25a244!important;border-color:#25a244!important;color:#fff!important}
+.doc-barra button:disabled{opacity:.55}
+.doc-barra .envios,.doc-barra #envios{display:contents}
+@media(max-width:640px){
+  .barra.doc-barra{padding:calc(8px + env(safe-area-inset-top,0px)) 12px 8px!important;gap:8px}
+  .doc-barra .db-marca img{width:78px}
+  .doc-barra .ti{order:5;flex-basis:100%;font-size:12.5px!important;margin:0!important}
+  .doc-barra .db-sp{display:none}
+  .doc-barra button>.db-tx-l,.doc-barra a>.db-tx-l{display:none!important}
+  /* en el celular el botón dice solo «PDF» para que todo quepa en una fila */
+  .doc-barra .db-pdf>span{font-size:0!important}
+  .doc-barra .db-pdf>span::after{content:'PDF';font-size:13px}
+}
+
+/* ── el membrete ── */
+.dm{display:flex;align-items:center;gap:16px;padding-bottom:12px;border-bottom:3px solid var(--doc-navy);color:var(--doc-ink)}
+.dm-logo{width:70px;height:70px;flex:none;object-fit:contain}
+.dm-e{min-width:0;flex:1}
+.dm-e b{display:block;font-size:16.5px;font-weight:800;letter-spacing:.3px;color:var(--doc-navy);line-height:1.2}
+.dm-e span{display:block;font-size:10.5px;color:var(--doc-mu);line-height:1.5}
+.dm-r{margin-left:auto;text-align:right;flex:none;max-width:48%}
+.dm-r small{display:block;font-size:9.5px;letter-spacing:1px;text-transform:uppercase;color:var(--doc-mu)}
+.dm-r b{display:block;font-size:17px;font-weight:800;color:var(--doc-navy);letter-spacing:.3px}
+.dm-r span{display:block;font-size:10.5px;color:var(--doc-mu)}
+.dm-res{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;align-items:center;margin:8px 0 14px;font-size:10px;color:var(--doc-mu)}
+.dm-res .ok{background:var(--doc-okbg);color:#1f6b2e;font-weight:700;border-radius:5px;padding:3px 8px;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+@media(max-width:560px){
+  .dm{flex-wrap:wrap}.dm-logo{width:54px;height:54px}.dm-r{margin-left:0;text-align:left;max-width:none;flex-basis:100%}
+}
+
+/* ── lo que no se imprime ni tapa el documento ── */
+#puente-indicador,.puente-indicador,.pte-ind,[data-puente-indicador]{display:none!important}
+@media print{
+  .barra.doc-barra,.no-imprimir{display:none!important}
+  body{background:#fff!important;padding:0!important}
+}
+
+
+@page{size:letter;margin:12mm}
+:root{--azul-osc:var(--doc-navy);--azul:var(--doc-navy2);--borde:var(--doc-line);--tinta:var(--doc-ink);--gris:var(--doc-mu);--ambar:var(--doc-am);--fondo:#eef2f7}
+body{font-family:Arial,sans-serif;background:#eef2f7;color:#0f2140;padding:0}
+.hoja.page{width:192mm;max-width:none;height:254mm;margin:18px auto;padding:0;border:0;border-radius:0;box-shadow:none;font-size:10.5px;line-height:1.4;display:block;position:relative;background:white}
+.sample{font-size:8px;font-weight:700;letter-spacing:.7px;color:#6b5200;background:#fff7dd;padding:6px 8px;margin-bottom:10px}
+.page>*{flex-shrink:0}
+.chart{--tm-navy2:#14306b;--tm-verde-marca:#4b8c34;--tm-gris:#667489;--tm-gris2:#667489;--tm-tinta:#0f2140;--tm-linea2:#eef1f5;--tm-tarjeta:#fff;--tm-ok:#2f9e44}.ca-txt{font-size:11px;fill:#667489}.ca-val{font-size:11.5px;font-weight:bold;fill:#0f2140}.chart-title{font-size:8px;display:flex;justify-content:space-between;align-items:center;color:#5d6a80;padding:1px 4px 5px}.chart-title i{display:inline-block;vertical-align:middle;width:14px;height:3px;margin:0 4px 0 9px}.chart-title i.oct{background:#14306b}.chart-title i.sep{background:#4b8c34}
+.dm{gap:12px;padding-bottom:8px}.dm-logo{width:52px;height:52px}.dm-e b{font-size:15px}.dm-e span{font-size:8px;line-height:1.45}.dm-res{font-size:7.5px;margin:6px 0 10px}.dm-res .ok{padding:3px 5px}
+.tit{padding:10px 12px;margin:0 0 13px;border-radius:5px}.tit .et{font-size:9px;letter-spacing:.6px}.tit b{font-size:22px}.tit .der{font-size:9px}
+.cuadros{gap:8px}.cuadro{padding:9px 10px}.cuadro .e{font-size:7.5px;min-height:19px}.cuadro .v{font-size:24px}.cuadro .s{font-size:8px}
+.sec{font-size:9px;margin:14px 0 7px;padding-bottom:4px}.chart{border:1px solid #dfe4ec;border-radius:6px;padding:6px 12px 1px}.chart svg{display:block;width:100%;height:151px;font-family:Arial,sans-serif}.graph-value{font-size:13px;font-weight:bold;fill:#0f2a57}.graph-label{font-size:11px;fill:#0f2140}.graph-sub{font-size:9px;fill:#5d6a80}
+.insight{padding:7px 9px;background:#f0f5fa;font-size:9px;margin-top:7px;border-radius:5px;color:#33455e}
+table{font-size:9px;margin-top:0}th{font-size:7px;letter-spacing:.25px;padding:6px 6px}td{padding:7px 6px}td.n{white-space:nowrap;text-align:right}th:not(:first-child){text-align:right}tr.tot td{font-size:9px}.page:nth-child(2) td{padding:5px 6px}
+.method{font-size:8px;color:#5d6a80;margin-top:12px;line-height:1.5}
+footer{display:flex;position:absolute;bottom:0;left:0;right:0;justify-content:space-between;gap:10px;border-top:1px solid #dfe4ec;padding-top:7px;font-size:7.5px;color:#5d6a80}
+.detailintro{background:#f0f5fa;border-radius:5px;padding:10px 12px;margin-bottom:3px}.detailintro b{display:block;font-size:13px}.detailintro span{display:block;font-size:9px;color:#5d6a80;margin-top:3px}
+.reconcile{display:grid;grid-template-columns:repeat(3,1fr);border:1px solid #dfe4ec;border-radius:6px;margin-top:14px;padding:12px}.reconcile>div+div{border-left:1px solid #dfe4ec;padding-left:12px}.reconcile span{display:block;font-size:8px;color:#5d6a80}.reconcile b{display:block;font-size:17px;margin-top:3px}
+.reading{font-size:10px;line-height:1.6}.reading p{margin:0 0 10px}.demoend{font-size:9px;padding:10px;border:1px solid #eadca7;background:#fffaf0;border-radius:5px;margin-top:12px}
+@media screen{.hoja.page{padding:10px;box-sizing:content-box}}
+@media print{.hoja.page{margin:0;padding:0;break-after:page;page-break-after:always}.hoja.page:last-child{break-after:auto;page-break-after:auto}.sample,.insight,.detailintro,.demoend,.tit,th,tr.tot td{-webkit-print-color-adjust:exact;print-color-adjust:exact}}
+
+[hidden]{display:none!important}.page{height:254mm!important;min-height:0;padding-bottom:26px!important}.r102-contenido table td{white-space:normal!important;overflow-wrap:anywhere}.r102-contenido table{table-layout:fixed;width:100%}.r102-contenido th:first-child{width:13%}.r102-contenido th:nth-child(2){width:23%}.no-imprimir{position:sticky;top:0;padding:12px;background:#0f2a57;color:#fff;z-index:10}@media print{.page{height:254mm!important;min-height:0!important}}</style><script src="documento3102.js"></script><script src="portal3102-common.js"></script><script src="portal3102-grafico.js"></script><body><div class="no-imprimir"><button onclick="window.print()">Imprimir / Guardar en PDF</button></div><main id="reporte3102"></main><script src="portal3102-reporte.js"></script></body></html>

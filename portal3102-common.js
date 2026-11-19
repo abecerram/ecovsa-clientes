@@ -1,0 +1,12 @@
+(function(w){'use strict';var C=w.Portal3102Common={};
+C.esc=s=>String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+C.correo=s=>s===String(s||'').trim()&&s.length<=254&&/^[^\s@,;<>]+@[^\s@,;<>]+\.[^\s@,;<>]+$/.test(s);
+C.fecha=s=>/^\d{4}-\d{2}-\d{2}$/.test(s||'')&&!isNaN(new Date(s+'T12:00:00Z'))&&new Date(s+'T12:00:00Z').toISOString().slice(0,10)===s;
+C.mail=function(r,correo){if(!C.correo(correo))throw Error('Escriba un solo correo válido.');if(!/^https:\/\/(clientes\.ecovsaapp\.com|ecovsaapp\.com|www\.ecovsaapp\.com|abecerram\.github\.io)\//.test(r.url||''))throw Error('No se recibió un enlace válido del portal.');
+ var texto='Estimado/a '+(r.nombre||'cliente')+':\n\nLe invitamos a activar su acceso al portal de clientes de ECOVSA'+(r.alcance?' para '+r.alcance:'')+', donde podrá consultar los documentos y servicios correspondientes a su acceso.\n\nPara activarlo, abra el siguiente enlace y cree su contraseña:\n'+r.url+'\n\nEste enlace es personal, puede utilizarse una sola vez y vence en '+(r.horas||12)+' horas'+(r.vence?' (vence el '+r.vence+', hora de Panamá)':'')+'.\n\nUna vez activado su acceso, podrá ingresar con el RUC de su empresa y su contraseña.\n\nAtentamente,\nEquipo de ECOVSA';
+ return {texto,href:'mailto:'+encodeURIComponent(correo)+'?subject='+encodeURIComponent('ECOVSA | Invitación para activar su acceso al portal de clientes')+'&body='+encodeURIComponent(texto)};
+};
+C.cargar=function(src,ready){if(ready())return Promise.resolve();return new Promise(function(ok,no){var s=document.createElement('script');s.src=src;s.onload=function(){ready()?ok():no(Error('No se pudo preparar la descarga.'));};s.onerror=function(){no(Error('No se pudo cargar '+src));};document.head.appendChild(s);});};
+C.guardar=function(blob,nombre){var u=URL.createObjectURL(blob),a=document.createElement('a');a.href=u;a.download=nombre;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(u),60000);};
+C.nombre=s=>String(s||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-zA-Z0-9_-]+/g,'_').slice(0,80)||'sede';
+})(window);
