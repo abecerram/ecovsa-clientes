@@ -3079,6 +3079,8 @@ var p0=window.pintar;
 window.pintar=function(){
   if(!S) return p0.apply(this,arguments);
   if(!S._s53) FULL=S;
+  /* 3.104: Recibos agrupa las sedes autorizadas de la administradora. Las otras pantallas conservan su selector. */
+  if(V==='recibos'){ S=FULL; return p0.apply(this,arguments); }
   if(!adm()){ S=FULL; return p0.apply(this,arguments); }
   var porSede=POR_SEDE.indexOf(V)>=0, id=SEL||(porSede?FULL.sedes[0].clienteId:''), s=id?FULL.sedes.find(function(x){ return x.clienteId===id; }):null;
   if(id&&!s){ SEL=''; id=porSede?FULL.sedes[0].clienteId:''; s=id?FULL.sedes[0]:null; }
@@ -3175,6 +3177,7 @@ window.pintar=function(){
 
 </script>
 <script src="portal3102-common.js?v=3102"></script>
-<script src="portal3102-portal.js?v=3103"></script>
+<script src="portal3102-portal.js?v=3104"></script>
+<script src="portal3104-recibos.js?v=3104"></script>
 </body>
 </html>
