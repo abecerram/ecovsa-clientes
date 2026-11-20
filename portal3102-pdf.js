@@ -1,4 +1,16 @@
 (function(w){'use strict';var RP={logo:'',firmaJpg:''};var num=v=>Number(v)||0;var hoyISO=()=>new Date().toLocaleDateString('en-CA',{timeZone:'America/Panama'});var ahoraHM=()=>new Date().toLocaleTimeString('es-PA',{timeZone:'America/Panama',hour:'2-digit',minute:'2-digit'});var recEmp_=()=>({});
+/* Solo preparación visual del PDF; nunca cambia la firma guardada. */
+function firma3103Jpg_(src){return new Promise(function(resolve,reject){
+ var im=new Image();im.onload=function(){try{
+  var c=document.createElement('canvas');c.width=im.naturalWidth;c.height=im.naturalHeight;var x=c.getContext('2d');x.drawImage(im,0,0);
+  var a=x.getImageData(0,0,c.width,c.height).data,l=c.width,t=c.height,r=-1,b=-1;
+  for(var j=0;j<c.height;j++)for(var i=0;i<c.width;i++){var n=(j*c.width+i)*4;if(a[n+3]>24&&(a[n]<235||a[n+1]<235||a[n+2]<235)){l=Math.min(l,i);r=Math.max(r,i);t=Math.min(t,j);b=Math.max(b,j);}}
+  if(r<l){l=0;t=0;r=c.width-1;b=c.height-1;}
+  var pad=Math.max(3,Math.ceil(Math.max(r-l,b-t)*.025));l=Math.max(0,l-pad);t=Math.max(0,t-pad);r=Math.min(c.width-1,r+pad);b=Math.min(c.height-1,b+pad);
+  var out=document.createElement('canvas');out.width=r-l+1;out.height=b-t+1;var q=out.getContext('2d');q.fillStyle='white';q.fillRect(0,0,out.width,out.height);q.drawImage(c,l,t,out.width,out.height,0,0,out.width,out.height);resolve(out.toDataURL('image/jpeg',.95));
+ }catch(e){reject(e);}};im.onerror=function(){reject(Error('No se pudo preparar la firma del recibo.'));};im.src=src;
+});}
+
 function recPdfDe_(D, E){
   var J = window.jspdf && window.jspdf.jsPDF; if(!J) return null;
   E = E || recEmp_();
@@ -22,10 +34,11 @@ function recPdfDe_(D, E){
   y += 6; d.setFillColor(245, 179, 1); d.rect(M, y - 3.5, 1.2, 5, "F");
   d.setFont("helvetica", "bold"); d.setFontSize(7.5); col(GRIS); txt("DESECHOS HOSPITALARIOS PELIGROSOS · DECRETO EJECUTIVO 111 DE 1999 · RESOLUCIÓN 1010 DE 2022", M + 4, y);
   var sec = function(t){ y += 7; d.setFillColor(FON[0], FON[1], FON[2]); d.roundedRect(M, y - 4.5, X2 - M, 7, 1.5, 1.5, "F"); d.setFont("helvetica", "bold"); d.setFontSize(9); col(NAVY); txt(t, M + 3, y); y += 5; };
-  var cajas = function(a, b){ var w = (X2 - M - 4) / 2; [a, b].forEach(function(k, j){ var x = M + j * (w + 4);
-      d.setDrawColor(LIN[0], LIN[1], LIN[2]); d.setLineWidth(0.3); d.roundedRect(x, y, w, 13, 1.5, 1.5, "S");
-      d.setFont("helvetica", "bold"); d.setFontSize(6.8); col(GRIS); txt(k[0].toUpperCase(), x + 3, y + 4.5);
-      d.setFontSize(10.5); col([17, 17, 17]); txt(d.splitTextToSize(String(k[1] || "—"), w - 6)[0], x + 3, y + 10); }); y += 15; };
+  var cajas = function(a,b){var w=(X2-M-4)/2;d.setFont('helvetica','bold');d.setFontSize(10.5);
+    var valores=[a,b].map(function(k){return d.splitTextToSize(String(k[1]||'—'),w-6);});
+    var h=Math.max(13,13+(Math.max(valores[0].length,valores[1].length)-1)*4.4);
+    [a,b].forEach(function(k,j){var x=M+j*(w+4);d.setDrawColor(LIN[0],LIN[1],LIN[2]);d.setLineWidth(.3);d.roundedRect(x,y,w,h,1.5,1.5,'S');
+      d.setFont('helvetica','bold');d.setFontSize(6.8);col(GRIS);txt(k[0].toUpperCase(),x+3,y+4.5);d.setFontSize(10.5);col([17,17,17]);txt(valores[j],x+3,y+10,{lineHeightFactor:1.18});});y+=h+2;};
   sec("1 · GENERADOR");
   cajas(["Establecimiento de salud", D.cliente], ["Contacto que atiende", D.contacto || "Enfermería / Personal Autorizado"]);
   sec("2 · DATOS DEL RETIRO");
@@ -50,9 +63,11 @@ function recPdfDe_(D, E){
   var hO = 9 + obs.length * 4.5; d.setDrawColor(LIN[0], LIN[1], LIN[2]); d.setLineWidth(0.3); d.roundedRect(M, y, X2 - M, hO, 1.5, 1.5, "S");
   d.setFont("helvetica", "bold"); d.setFontSize(6.8); col(GRIS); txt("OBSERVACIONES DEL RETIRO", M + 3, y + 4.5);
   d.setFont("helvetica", "italic"); d.setFontSize(10); col([17, 17, 17]); txt(obs, M + 3, y + 9.5); y += hO + 8;
+  d.setFontSize(7.8);var decl3103=d.splitTextToSize("Declaración: El generador declara que los desechos entregados corresponden a las clasificaciones y pesos anotados, segregados conforme al Decreto Ejecutivo 111 de 23 de junio de 1999. "+E.comercial+" asume el transporte seguro hasta su tratamiento y disposición final en planta autorizada.",X2-M);
+  if(y+27+17+5+(decl3103.length-1)*3.2>264){d.addPage();y=24;d.setFont('helvetica','bold');col(NAVY);d.setFontSize(10);txt('Recibo '+String(D.recibo||'')+' · continuación',M,15);}
   /* firmas */
-  var w2 = (X2 - M - 14) / 2, xa = M, xb = M + w2 + 14, yF = y + 22;
-  if(RP.firmaJpg){ try{ d.addImage(RP.firmaJpg, "JPEG", xa + w2 / 2 - 25, y, 50, 20); }catch(e){} }
+  var w2 = (X2 - M - 14) / 2, xa = M, xb = M + w2 + 14, yF = y + 27;
+  if(RP.firmaJpg){try{var p=d.getImageProperties(RP.firmaJpg),s=Math.min((w2-6)/p.width,23/p.height),ancho=p.width*s,alto=p.height*s;d.addImage(RP.firmaJpg,'JPEG',xa+(w2-ancho)/2,yF-2-alto,ancho,alto);}catch(e){}}
   else { d.setFont("helvetica", "italic"); d.setFontSize(8); col(GRIS); txt("Sin firma registrada", xa + w2 / 2, y + 16, { align: "center" }); }
   d.setFont("helvetica", "bold"); d.setFontSize(11); col(NAVY); txt(D.operador || "", xb + w2 / 2, y + 16, { align: "center" });
   d.setDrawColor(51, 51, 51); d.setLineWidth(0.4); d.line(xa, yF, xa + w2, yF); d.line(xb, yF, xb + w2, yF);
@@ -62,7 +77,7 @@ function recPdfDe_(D, E){
   y = yF + 17; d.setDrawColor(LIN[0], LIN[1], LIN[2]); d.setLineWidth(0.3); d.line(M, y, X2, y); y += 5;
   d.setFont("helvetica", "normal"); d.setFontSize(7.8); col(GRIS);
   txt(d.splitTextToSize("Declaración: El generador declara que los desechos entregados corresponden a las clasificaciones y pesos anotados, segregados conforme al Decreto Ejecutivo 111 de 23 de junio de 1999. " + E.comercial + " asume el transporte seguro hasta su tratamiento y disposición final en planta autorizada.", X2 - M), M, y);
-  d.setFontSize(7.5); txt("Comprobante digital emitido el " + hoyISO() + " " + ahoraHM() + (D.clave ? " · consulta en línea con la clave " + D.clave : ""), M, 268);
+  for(var pagina3103=1;pagina3103<=d.getNumberOfPages();pagina3103++){d.setPage(pagina3103);d.setFont('helvetica','normal');col(GRIS);d.setFontSize(7.5);txt("Comprobante digital emitido el "+hoyISO()+" "+ahoraHM()+(D.clave?" · consulta en línea con la clave "+D.clave:""),M,268);}
   var nom = "Recibo_" + String(D.recibo || "").replace(/[^A-Za-z0-9-]/g, "") + "_" + String(D.cliente || "").replace(/[^A-Za-z0-9]+/g, "_").slice(0, 30) + ".pdf";
   return { blob: d.output("blob"), nombre: nom };
 }
@@ -72,7 +87,7 @@ var fila3102=Promise.resolve();
 w.RecibosPDF3102={crear:function(d,e){var trabajo=fila3102.catch(function(){}).then(async function(){
  if(!w.jspdf)throw Error('No se cargó la biblioteca PDF.');
  RP.firmaJpg='';if(!RP.logo)RP.logo=await jpg3102('logo3102.png');
- if(d.firma){if(!/^data:image\//.test(d.firma))throw Error('La firma tiene un formato no compatible.');RP.firmaJpg=await jpg3102(d.firma);}
+ if(d.firma){if(!/^data:image\//.test(d.firma))throw Error('La firma tiene un formato no compatible.');RP.firmaJpg=await firma3103Jpg_(d.firma);}
  return recPdfDe_({recibo:d.recibo,cliente:d.cliente,contacto:d.firmante||d.contactoAtiende||d.contacto||'',fecha:d.fecha,horaInicio:d.horaInicio,horaFinal:d.horaFinal,vehiculo:d.vehiculo,operador:d.responsable,
  kgBolsas:d.kgBio,cantBolsas:d.cantBio,kgPunzo:d.kgPunzo,cantPunzo:d.cantPunzo,kgAnatomo:d.kgAnatomo,cantAnatomo:d.cantAnatomo,
  obs:(d.entregas&&d.entregas.length?'Se entregó en esta visita: '+d.entregas.map(x=>x.cantidad+' '+x.nombre).join(', ')+'. ':'')+(d.obs||'')+(d.correccion?' · Recibo corregido el '+(d.correccion.enTxt||d.correccion.en)+': '+d.correccion.motivo:''),clave:d.clave},e);
